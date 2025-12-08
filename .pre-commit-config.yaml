@@ -1,0 +1,30 @@
+# .pre-commit-config.yaml
+repos:
+  # Common, fast hygiene hooks (optional but handy)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  # Gitleaks: scan for secrets before the commit is created
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0           # use the latest stable tag in your project
+    hooks:
+      - id: gitleaks
+        name: gitleaks-staged
+        # pre-commit passes filenames by default; Gitleaks doesn't need them
+        pass_filenames: false
+        # Scan the staged (index) changes you're about to commit and redact output
+        args: [ "--staged", "--redact" ]
+        stages: [ "pre-commit" ]
+
+  # # Gitleaks: scan the whole repo for secrets on demand
+  #     - id: gitleaks
+  #       name: gitleaks-all
+  #       pass_filenames: false
+  #       args: ["--redact"]               # full repo or git defaults
+  #       stages: ["manual"]               # ← on demand only
+

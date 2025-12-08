@@ -1,0 +1,144 @@
+# Commit Message Standards
+
+This document defines the commit message conventions for this project, following the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+
+## Format
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+## Types
+
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing tests or correcting existing tests
+- **build**: Changes that affect the build system or external dependencies (example scopes: npm, bundler)
+- **ci**: Changes to CI configuration files and scripts
+- **chore**: Other changes that don't modify src or test files
+- **revert**: Reverts a previous commit
+
+## Scope (Optional)
+
+The scope should be the area of the codebase affected:
+- `components`: UI components
+- `layout`: Layout components
+- `api`: API routes
+- `config`: Configuration files
+- `docs`: Documentation
+- `workflows`: GitHub Actions workflows
+- `types`: TypeScript type definitions
+- `styles`: CSS/styling changes
+
+## Subject
+
+- Use imperative, present tense: "change" not "changed" nor "changes"
+- Don't capitalize the first letter
+- No period (.) at the end
+- Maximum 72 characters
+
+## Body (Optional)
+
+- Use imperative, present tense
+- Explain the "what" and "why" vs. the "how"
+- Can include multiple paragraphs
+- Wrap at 72 characters
+
+## Footer (Optional)
+
+- Reference issues: `Closes #123`, `Fixes #456`
+- Breaking changes: `BREAKING CHANGE: <description>`
+
+## Examples
+
+### Good Examples
+
+```
+feat(dashboard): add project cards with hover effects
+
+Implement interactive project cards with terminal-style glow effects
+on hover. Cards now use bg-card/80 with border-primary/20 for better
+visibility against dark background.
+
+- Add hover shadow effects
+- Update card styling to match design system
+- Implement group hover states
+```
+
+```
+ci: add GitHub Actions workflows for CI/CD
+
+Add comprehensive CI/CD pipeline with:
+- Lint, type-check, and build verification
+- Gitleaks security scanning
+- Branch protection setup workflow
+```
+
+```
+docs: move implementation plan to doc/ folder
+
+Reorganize documentation structure by moving implementation_plan.md
+to doc/ folder for better organization. Update all references.
+```
+
+### Bad Examples
+
+```
+❌ Updated files
+❌ Fixed stuff
+❌ WIP
+❌ feat: Added new feature
+❌ fix:bug in component
+```
+
+## Multi-line Commit Messages
+
+For complex changes, use a detailed body:
+
+```
+feat(components): implement dashboard metrics and project grid
+
+Add comprehensive dashboard components with proper TypeScript types
+and mock data structure.
+
+Components:
+- OverviewMetrics: Display activity statistics
+- ProjectsGrid: Showcase featured projects with interactive cards
+
+Infrastructure:
+- Extract mock data to src/data/mock-data.ts
+- Create TypeScript interfaces in src/types/
+- Update components to use extracted data
+
+This establishes the foundation for Phase 2 GitHub API integration.
+```
+
+## Breaking Changes
+
+Always document breaking changes:
+
+```
+feat(api): refactor GitHub stats endpoint
+
+BREAKING CHANGE: GitHub stats API now returns data in a different format.
+The response structure has changed from flat object to nested structure.
+
+Migration:
+- Update frontend components to use new response format
+- See MIGRATION.md for detailed changes
+```
+
+## References
+
+- [Conventional Commits](https://www.conventionalcommits.org/)
+- [Angular Commit Message Guidelines](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#commit)
+- [Git Commit Best Practices](https://cbea.ms/git-commit/)
+

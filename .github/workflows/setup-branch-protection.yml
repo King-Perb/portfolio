@@ -1,0 +1,43 @@
+name: Setup Branch Protection
+
+on:
+  workflow_dispatch:  # Manual trigger - run this once to set up branch protection
+
+jobs:
+  setup-protection:
+    name: Configure Branch Protection
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Setup Branch Protection for main
+        run: |
+          curl -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/branches/main/protection \
+            -d '{
+              "required_status_checks": {
+                "strict": true,
+                "contexts": [
+                  "CI / lint",
+                  "CI / type-check",
+                  "CI / build",
+                  "Gitleaks Scan / gitleaks"
+                ]
+              },
+              "enforce_admins": true,
+              "required_pull_request_reviews": {
+                "required_approving_review_count": 1,
+                "dismiss_stale_reviews": true,
+                "require_code_owner_reviews": false
+              },
+              "restrictions": null,
+              "allow_force_pushes": false,
+              "allow_deletions": false,
+              "required_linear_history": false,
+              "require_conversation_resolution": false,
+              "require_signed_commits": false,
+              "lock_branch": false
+            }'
+
