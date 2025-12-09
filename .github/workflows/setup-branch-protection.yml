@@ -22,6 +22,7 @@ jobs:
                 "contexts": [
                   "CI / lint",
                   "CI / type-check",
+                  "CI / test",
                   "CI / build",
                   "Gitleaks Scan / gitleaks"
                 ]
