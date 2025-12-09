@@ -47,6 +47,16 @@ fix:bug
 
 ## When Creating Commits
 
+**IMPORTANT**: Before creating a commit message, you MUST:
+
+1. **Analyze ALL changed files**: Run `git status` or `git status --short` to see all modified, added, and deleted files
+2. **Review staged changes**: Use `git diff --cached` to see what's staged
+3. **Review unstaged changes**: Use `git diff` to see unstaged changes
+4. **Include all changes**: The commit message must accurately represent ALL changes being committed
+5. **Group related changes**: For multi-file changes, group related changes in the body with bullet points
+
+**Never create a commit message without first reviewing all changed files.** The commit message should comprehensively cover all significant changes.
+
 - Always use the format above
 - Reference the full standards in `doc/COMMIT_STANDARDS.md` for complex commits
 - For multi-file changes, group related changes in the body with bullet points

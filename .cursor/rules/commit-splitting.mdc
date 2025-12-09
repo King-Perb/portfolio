@@ -1,0 +1,148 @@
+---
+description: When to split commits vs combine changes
+alwaysApply: true
+---
+# Commit Splitting Strategy
+
+This rule defines when to split changes into multiple commits vs. combining them into a single commit.
+
+## General Principle
+
+**One logical change = One commit**
+
+Each commit should represent a single, cohesive change that:
+- Makes sense on its own
+- Can be reviewed independently
+- Has a clear, focused purpose
+- Can be reverted without breaking other changes
+
+## When to Split Commits
+
+Split into multiple commits when changes:
+
+1. **Affect different concerns:**
+   - ✅ Rules/standards changes → Separate commit
+   - ✅ Bug fixes → Separate commit
+   - ✅ New features → Separate commit
+   - ✅ Documentation → Separate commit
+
+2. **Are unrelated:**
+   - ✅ Adding a new page + Fixing a bug in existing code → Split
+   - ✅ Updating dependencies + Adding a new component → Split
+   - ✅ Refactoring + Adding tests → Split
+
+3. **Have different scopes:**
+   - ✅ `.cursor/rules/*.mdc` changes → `feat(rules): ...`
+   - ✅ `src/components/*` changes → `feat(components): ...`
+   - ✅ `doc/*.md` changes → `docs: ...`
+
+4. **Are large and complex:**
+   - ✅ 20+ files changed → Consider splitting
+   - ✅ Multiple features in one commit → Split
+   - ✅ Mix of refactoring and new features → Split
+
+## When to Combine Commits
+
+Combine into a single commit when changes:
+
+1. **Are tightly related:**
+   - ✅ Fixing a bug + Adding a test for that bug → Combine
+   - ✅ Adding a feature + Updating types for that feature → Combine
+   - ✅ Refactoring a function + Updating all call sites → Combine
+
+2. **Are part of the same logical unit:**
+   - ✅ Adding a new page with its components → Combine
+   - ✅ Setting up testing framework (config + setup files) → Combine
+   - ✅ Adding API route + service layer + types → Combine
+
+3. **Are small and focused:**
+   - ✅ 1-5 files changed → Usually fine to combine
+   - ✅ All changes in same directory/feature → Combine
+   - ✅ Single feature implementation → Combine
+
+## Examples
+
+### ✅ Good: Split Commits
+
+```bash
+# Commit 1: Rules
+feat(rules): add git workflow and rules creation standards
+
+# Commit 2: Bug fix
+fix(metrics): use formatNumber for Projects and conditional trend for Stars
+
+# Commit 3: Feature
+feat(api): add GitHub API integration with Octokit SDK
+```
+
+### ✅ Good: Combined Commit
+
+```bash
+# Single commit for related changes
+feat(testing): add Vitest setup with React Testing Library
+
+- Add vitest.config.ts with ESM support
+- Add test setup file with Next.js mocks
+- Add test utilities and helpers
+- Update package.json with test scripts
+```
+
+### ❌ Bad: Too Many Unrelated Changes
+
+```bash
+# Don't do this
+feat: add rules, fix metrics, add API, add tests, update docs
+```
+
+### ❌ Bad: Over-Splitting
+
+```bash
+# Don't split every single file
+feat: add git-workflow.mdc
+feat: add creating-rules.mdc
+feat: update commit-standards.mdc
+```
+
+## Decision Tree
+
+Ask yourself:
+
+1. **Can I describe this in one clear sentence?**
+   - Yes → Single commit
+   - No → Split
+
+2. **Would reverting this break unrelated things?**
+   - Yes → Split
+   - No → Single commit
+
+3. **Are these changes reviewed together?**
+   - Yes → Single commit
+   - No → Split
+
+4. **Do these changes have different commit types?**
+   - Yes (feat + fix + docs) → Split
+   - No (all feat) → Consider combining
+
+## AI Guidance
+
+When helping users commit:
+
+1. **Review all changes first** (per commit-standards.mdc)
+2. **Identify logical groupings** - Group by concern, not by file
+3. **Suggest splitting** if:
+   - 20+ files changed
+   - Multiple unrelated features
+   - Mix of types (feat + fix + docs)
+4. **Suggest combining** if:
+   - All changes are part of one feature
+   - Changes are tightly coupled
+   - Small number of files (< 10)
+
+## Practical Rule
+
+**If in doubt, split.** It's easier to combine commits later (with `git rebase -i`) than to split them.
+
+## Reference
+
+- See `commit-standards.mdc` for commit message format
+- See `git-workflow.mdc` for branching strategy

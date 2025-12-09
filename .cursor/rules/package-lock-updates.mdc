@@ -1,0 +1,89 @@
+---
+description: Efficiently updating package-lock.json
+alwaysApply: false
+---
+# Package Lock Update Guidelines
+
+When updating dependencies in `package.json`, follow these efficient practices for updating `package-lock.json`.
+
+## Standard Update (Recommended)
+
+For simple dependency version changes in `package.json`:
+
+```bash
+npm install
+```
+
+This will:
+- Automatically detect changes in `package.json`
+- Update `package-lock.json` to match
+- Install/update only affected packages
+- Preserve existing dependency tree where possible
+
+**When to use:**
+- Updating a single dependency version
+- Adding a new dependency
+- Removing a dependency
+- Minor version updates
+
+## Clean Install (When Needed)
+
+Only remove `node_modules` and `package-lock.json` when:
+
+- Resolving dependency conflicts or corruption
+- After major dependency changes (multiple packages)
+- Troubleshooting build or runtime issues
+- When you want a completely fresh dependency tree
+
+```bash
+# Windows PowerShell
+Remove-Item -Recurse -Force node_modules, package-lock.json
+npm install
+
+# Unix/Mac
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## Best Practices
+
+1. **Always commit `package-lock.json`** - It ensures consistent installs across environments
+2. **Run `npm install` after `package.json` changes** - Don't manually edit `package-lock.json`
+3. **Use `npm ci` in CI/CD** - For production builds (faster, stricter)
+4. **Avoid `npm update` without version spec** - Can cause unexpected major version bumps
+
+## When NOT to Remove node_modules
+
+❌ Don't remove `node_modules` for:
+- Single dependency version updates
+- Adding new dependencies
+- Removing dependencies
+- Minor/patch version changes
+
+✅ Just run `npm install` - it's faster and sufficient.
+
+## Example Workflow
+
+```bash
+# 1. Update package.json (change version)
+# 2. Run npm install
+npm install
+
+# 3. Test locally
+npm run build
+
+# 4. Commit both files together
+git add package.json package-lock.json
+git commit -m "build(deps): update @types/node to v24"
+```
+
+## Commit Message Format
+
+When committing package-lock.json updates:
+
+```
+build(deps): update <package> to v<version>
+
+Update <package> from <old-version> to <new-version>.
+[Optional: explain why or what this enables]
+```

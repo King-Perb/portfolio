@@ -1,0 +1,78 @@
+---
+description: Commiting changes with git
+alwaysApply: false
+---
+# Git Workflow & Branching Strategy
+
+This rule defines how the AI should guide users on Git workflow and branching practices.
+
+## Branch Strategy
+
+### Primary Branches
+
+- **`main`**: Production-ready code. Always deployable. Protected by branch protection rules.
+- **`develop`**: (Optional) Integration branch for features. Use if working on multiple features simultaneously.
+
+### Feature Branches
+
+All new work should be done on feature branches:
+
+- **`feature/<description>`**: New features (e.g., `feature/github-api-integration`)
+- **`fix/<description>`**: Bug fixes (e.g., `fix/metrics-formatting`)
+- **`refactor/<description>`**: Code refactoring (e.g., `refactor/project-service`)
+- **`docs/<description>`**: Documentation updates (e.g., `docs/git-workflow`)
+- **`test/<description>`**: Test additions/improvements (e.g., `test/projects-service`)
+
+### Branch Naming Convention
+
+- Use lowercase
+- Separate words with hyphens (`-`)
+- Be descriptive but concise
+- Match commit message scope when possible
+
+**Examples:**
+- ✅ `feature/dashboard-metrics`
+- ✅ `fix/stars-trend-logic`
+- ✅ `refactor/github-api-client`
+- ❌ `new-feature`
+- ❌ `fix`
+- ❌ `my_branch`
+
+## AI Guidance Rules
+
+When helping users with Git workflow:
+
+1. **Always recommend feature branches** - Never suggest committing directly to `main`
+2. **Use appropriate branch prefixes** - Match the type of work (feature, fix, refactor, etc.)
+3. **Help create branches from current state** - If user has uncommitted changes, create branch first to preserve them
+4. **Guide PR workflow** - Remind users to push branches and create PRs, not direct pushes to main
+5. **Respect branch protection** - Remind users that `main` is protected and requires PRs
+
+## Moving Changes from Main
+
+If user has been working directly on `main`:
+
+1. **For uncommitted changes:**
+   - Create feature branch first (this moves uncommitted changes)
+   - Then commit on the feature branch
+   - Reset main to match remote
+
+2. **For committed changes:**
+   - Create feature branch from current state (includes commits)
+   - Push feature branch
+   - Reset main to match remote
+
+## Branch Protection
+
+The `main` branch is protected with:
+- Pull requests required before merging
+- CI checks must pass (lint, type-check, test, build)
+- Gitleaks scan must pass
+- At least 1 approval required
+- No force pushes allowed
+
+**Always remind users**: They cannot push directly to `main` - all changes must go through a PR.
+
+## Reference
+
+For detailed human-readable documentation, see `doc/GIT_WORKFLOW.md`.
