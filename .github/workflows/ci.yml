@@ -85,3 +85,6 @@ jobs:
 
       - name: Build project
         run: npm run build
+        env:
+          # Dummy token for build - prevents errors when server components fetch GitHub stats
+          GITHUB_TOKEN: "test-token-dummy-value"
