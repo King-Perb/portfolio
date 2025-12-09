@@ -38,6 +38,7 @@ Branch protection rules ensure that:
   - Select the following required checks:
     - ✅ **CI / lint** (from `.github/workflows/ci.yml`)
     - ✅ **CI / type-check** (from `.github/workflows/ci.yml`)
+    - ✅ **CI / test** (from `.github/workflows/ci.yml`)
     - ✅ **CI / build** (from `.github/workflows/ci.yml`)
     - ✅ **Gitleaks Scan / gitleaks** (from `.github/workflows/gitleaks.yml`)
 
@@ -57,7 +58,7 @@ Click **Create** or **Save changes** at the bottom of the page.
 Once branch protection is enabled:
 
 1. **Direct pushes to `main` are blocked** - All changes must go through pull requests
-2. **CI checks must pass** - Lint, type-check, and build must succeed
+2. **CI checks must pass** - Lint, type-check, tests, and build must succeed
 3. **Gitleaks must pass** - No secrets can be committed
 4. **PR review required** - At least one approval is needed
 5. **Force pushes are blocked** - Repository history is protected
