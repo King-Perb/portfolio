@@ -49,11 +49,13 @@ repos:
 
       - id: test
         name: Test
-        entry: bash -c 'GITHUB_TOKEN="test-token-dummy-value" npm test'
+        entry: npm test
         language: system
         stages: [pre-push]
         pass_filenames: false
         always_run: true
+        env:
+          GITHUB_TOKEN: "test-token-dummy-value"
 
       - id: build
         name: Build
