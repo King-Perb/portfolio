@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, FolderKanban, Layers, User, Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Layers, User, Github, Linkedin, Twitter } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export const USER_PROFILE = {

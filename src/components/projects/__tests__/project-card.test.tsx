@@ -57,7 +57,7 @@ describe("ProjectCard", () => {
     render(<ProjectCard project={manualProject} />);
     
     // Stars and forks should not be visible for manual projects
-    const starsElement = screen.queryByText("0");
+    // const starsElement = screen.queryByText("0");
     // Note: This might still show 0, so we check that it's a manual project
     expect(manualProject.source).toBe("manual");
   });
