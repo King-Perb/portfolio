@@ -10,6 +10,8 @@ export const MOCK_PROJECTS: Project[] = [
     forks: 42,
     status: "Active",
     statusColor: "text-primary border-primary/20 bg-primary/10",
+    source: "manual",
+    featured: true,
   },
   {
     title: "Portfolio Generator",
@@ -19,6 +21,8 @@ export const MOCK_PROJECTS: Project[] = [
     forks: 28,
     status: "Active",
     statusColor: "text-primary border-primary/20 bg-primary/10",
+    source: "manual",
+    featured: true,
   },
   {
     title: "Smart Document Parser",
@@ -28,6 +32,8 @@ export const MOCK_PROJECTS: Project[] = [
     forks: 19,
     status: "Maintained",
     statusColor: "text-blue-400 border-blue-400/20 bg-blue-400/10",
+    source: "manual",
+    featured: true,
   },
   {
     title: "Code Review Assistant",
@@ -37,6 +43,8 @@ export const MOCK_PROJECTS: Project[] = [
     forks: 67,
     status: "Beta",
     statusColor: "text-yellow-400 border-yellow-400/20 bg-yellow-400/10",
+    source: "manual",
+    featured: true,
   },
 ];
 
