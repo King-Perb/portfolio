@@ -115,17 +115,17 @@ export async function fetchGitHubStats(): Promise<GitHubStats> {
   for (const repo of repos) {
     // Extract owner from full_name
     const [owner] = repo.full_name.split("/");
-    
+
     // Fetch languages for this repo
     const repoLanguagesData = await fetchRepoLanguages(octokit, owner, repo.name);
-    
+
     // Store languages for this repo (sorted by bytes, descending, top 5)
     const repoLangArray = Object.entries(repoLanguagesData)
       .sort(([, a], [, b]) => b - a)
       .map(([lang]) => lang)
       .slice(0, 5);
     repoLanguages[repo.full_name] = repoLangArray;
-    
+
     // Aggregate languages across all repos
     for (const [lang, bytes] of Object.entries(repoLanguagesData)) {
       languages[lang] = (languages[lang] || 0) + bytes;
@@ -187,4 +187,3 @@ export function transformRepoToProject(
     featured: false, // Can be manually curated later
   };
 }
-

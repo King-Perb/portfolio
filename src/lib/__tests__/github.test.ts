@@ -1,6 +1,29 @@
-import { describe, it, expect } from "vitest";
-import { transformRepoToProject } from "../github";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Octokit } from "@octokit/rest";
+
+// Mock Octokit before importing github module
+const mockPaginate = vi.fn();
+const mockListLanguages = vi.fn();
+const mockListCommits = vi.fn();
+const mockListForAuthenticatedUser = vi.fn();
+
+vi.mock("@octokit/rest", () => {
+  return {
+    Octokit: vi.fn().mockImplementation(() => ({
+      rest: {
+        repos: {
+          listForAuthenticatedUser: mockListForAuthenticatedUser,
+          listLanguages: mockListLanguages,
+          listCommits: mockListCommits,
+        },
+      },
+      paginate: mockPaginate,
+    })),
+  };
+});
+
+// Import after mock is set up
+import { transformRepoToProject, fetchGitHubStats } from "../github";
 
 // Type alias for the repo type used in transformRepoToProject
 type GitHubRepo = Awaited<ReturnType<Octokit["rest"]["repos"]["listForAuthenticatedUser"]>>["data"][0];
@@ -129,3 +152,114 @@ describe("transformRepoToProject", () => {
   });
 });
 
+describe("fetchGitHubStats", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Set dummy token for tests
+    process.env.GITHUB_TOKEN = "test-token-dummy-value";
+  });
+
+  it("should fetch and aggregate GitHub stats", async () => {
+    const mockRepos = [
+      {
+        id: 1,
+        name: "repo1",
+        full_name: "user/repo1",
+        description: "Test repo 1",
+        html_url: "https://github.com/user/repo1",
+        homepage: null,
+        stargazers_count: 10,
+        forks_count: 5,
+        updated_at: new Date().toISOString(),
+        language: "TypeScript",
+        languages_url: "https://api.github.com/repos/user/repo1/languages",
+        private: false,
+      },
+      {
+        id: 2,
+        name: "repo2",
+        full_name: "user/repo2",
+        description: "Test repo 2",
+        html_url: "https://github.com/user/repo2",
+        homepage: null,
+        stargazers_count: 20,
+        forks_count: 10,
+        updated_at: new Date().toISOString(),
+        language: "JavaScript",
+        languages_url: "https://api.github.com/repos/user/repo2/languages",
+        private: false,
+      },
+    ];
+
+    const mockLanguages1 = { TypeScript: 1000, JavaScript: 500 };
+    const mockLanguages2 = { JavaScript: 2000, Python: 300 };
+    const mockCommits1 = [{ sha: "abc" }, { sha: "def" }];
+    const mockCommits2 = [{ sha: "ghi" }];
+
+    // Mock paginate - check which method is being called
+    mockPaginate.mockImplementation(async (method: unknown, options?: { repo?: string }) => {
+      // If method is listForAuthenticatedUser, return repos
+      if (method === mockListForAuthenticatedUser) {
+        return mockRepos;
+      }
+      // If method is listCommits, return commits based on repo
+      if (method === mockListCommits) {
+        if (options?.repo === "repo1") {
+          return mockCommits1;
+        }
+        if (options?.repo === "repo2") {
+          return mockCommits2;
+        }
+        return [];
+      }
+      return [];
+    });
+
+    // Mock listLanguages
+    mockListLanguages.mockImplementation(async ({ repo }: { owner: string; repo: string }) => {
+      if (repo === "repo1") {
+        return { data: mockLanguages1 };
+      }
+      if (repo === "repo2") {
+        return { data: mockLanguages2 };
+      }
+      return { data: {} };
+    });
+
+    const stats = await fetchGitHubStats();
+
+    expect(stats.totalRepos).toBe(2);
+    expect(stats.commitsLastMonth).toBe(3); // 2 + 1 commits
+    expect(stats.languages.TypeScript).toBe(1000);
+    expect(stats.languages.JavaScript).toBe(2500); // 500 + 2000
+    expect(stats.languages.Python).toBe(300);
+    expect(stats.repos).toEqual(mockRepos);
+    expect(stats.repoLanguages["user/repo1"]).toEqual(["TypeScript", "JavaScript"]);
+    expect(stats.repoLanguages["user/repo2"]).toEqual(["JavaScript", "Python"]);
+  });
+
+  it("should handle empty repository list", async () => {
+    mockPaginate.mockResolvedValue([]);
+
+    const stats = await fetchGitHubStats();
+
+    expect(stats.totalRepos).toBe(0);
+    expect(stats.commitsLastMonth).toBe(0);
+    expect(stats.languages).toEqual({});
+    expect(stats.repos).toEqual([]);
+    expect(stats.repoLanguages).toEqual({});
+  });
+
+  it("should handle API errors gracefully", async () => {
+    mockPaginate.mockRejectedValue(new Error("API Error"));
+
+    // Should throw if listForAuthenticatedUser fails
+    await expect(fetchGitHubStats()).rejects.toThrow("API Error");
+  });
+
+  it("should handle missing GITHUB_TOKEN", async () => {
+    delete process.env.GITHUB_TOKEN;
+
+    await expect(fetchGitHubStats()).rejects.toThrow("GITHUB_TOKEN environment variable is not set");
+  });
+});
