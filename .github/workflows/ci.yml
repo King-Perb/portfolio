@@ -63,6 +63,9 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          # Dummy token for tests - tests should mock API calls, not make real requests
+          GITHUB_TOKEN: "test-token-dummy-value"
 
   build:
     name: Build
