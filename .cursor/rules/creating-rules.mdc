@@ -1,0 +1,38 @@
+---
+description: How to create new rules and standards
+alwaysApply: true
+---
+# Creating Rules and Standards
+
+**IMPORTANT**: When the user asks about creating a standard, workflow, or long-term strategy:
+
+1. **Create or edit `.mdc` files in `.cursor/rules/`** - These are Cursor rules that guide AI behavior
+2. **Do NOT create files in `doc/`** - The `doc/` folder is for human-readable documentation only
+3. **`.mdc` files are for AI guidance** - They help the AI understand how to work with the codebase
+4. **`doc/` files are for human reference** - They document processes for developers to read
+
+## Examples
+
+- ✅ User asks: "What should be our strategy for creating git branches?" → Create/edit `.cursor/rules/git-workflow.mdc`
+- ✅ User asks: "Create a standard for code reviews" → Create/edit `.cursor/rules/code-review.mdc`
+- ✅ User asks: "What's our branching strategy?" → If creating a standard, use `.cursor/rules/git-workflow.mdc`, not `doc/`
+- ❌ User asks: "Document our git workflow" → Create `doc/GIT_WORKFLOW.md` (human documentation - this is explicitly asking for documentation)
+
+## Rule of Thumb
+
+- **"How should the AI work?"** → `.mdc` file in `.cursor/rules/`
+- **"How do humans do this?"** → `doc/` file (only when explicitly asked to document)
+
+## File Naming
+
+- Use lowercase with hyphens: `git-workflow.mdc`, `code-review.mdc`
+- Be descriptive and concise
+- Match the topic/domain of the rule
+
+## Structure
+
+All `.mdc` files should have:
+- Frontmatter with `description` and `alwaysApply` (usually `true` for workflow rules)
+- Clear sections explaining the rule
+- Examples when helpful
+- References to related `doc/` files if they exist

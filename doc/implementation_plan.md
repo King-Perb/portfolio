@@ -91,7 +91,7 @@ Use Tailwind spacing tokens consistently:
 
 #### Animation & Transitions
 - **Micro-interactions:** Use `framer-motion` for hover effects, card lifts
-- **Transitions:** 
+- **Transitions:**
   - Fast: `duration-200` (200ms)
   - Default: `duration-300` (300ms)
   - Slow: `duration-500` (500ms)
@@ -120,20 +120,42 @@ Use Tailwind spacing tokens consistently:
 - **Authentication:** GitHub Personal Access Token (stored as `GITHUB_TOKEN` env var).
 - **Scope:** Access private repositories (requires `repo` scope).
 - **Data to Fetch:**
-    - **Commit Activity:** Aggregate commits across all repos (public + private).
-        - Total commits (all time)
-        - Commits in last 30/90/365 days
-        - Commit frequency/streak data
-    - **Repository Stats:**
-        - Total repositories (public + private count)
-        - Languages used (from repository languages API)
-        - Recent activity (last commit date per repo)
+  - **Commit Activity:** Aggregate commits across all repos (public + private).
+      - Total commits (all time)
+      - Commits in last 30 days (primary metric for homepage)
+      - Commit frequency/streak data
+  - **Repository Stats:**
+      - All repositories (public + private) - fetched via `GET /user/repos?type=all&per_page=100`
+      - Total repository count
+      - Languages used (from repository languages API: `GET /repos/{owner}/{repo}/languages`)
+      - Recent activity (last commit date per repo from `updated_at`)
+      - Stars, forks, description from repo object
 - **Implementation:**
-    - **API Route:** `src/app/api/github/stats/route.ts` (Server-side only).
-    - **Caching:** ISR with 1-hour revalidation (`revalidate: 3600`).
-    - **Error Handling:** Graceful fallback to mock data if API fails.
-    - **Rate Limiting:** Respect GitHub API rate limits (5000 req/hour for authenticated).
-- **Content:** Markdown/MDX for project case studies (future enhancement).
+  - **API Route:** `src/app/api/github/stats/route.ts` (Server-side only).
+  - **Utility:** `src/lib/github.ts` - GitHub API client functions.
+  - **Service Layer:** `src/lib/projects-service.ts` - Combines GitHub repos with manual entries.
+  - **Caching:** ISR with 1-hour revalidation (`revalidate: 3600`).
+  - **Error Handling:** Graceful fallback to mock data if API fails.
+  - **Rate Limiting:** Respect GitHub API rate limits (5000 req/hour for authenticated).
+- **Data Transformation:**
+  - Transform GitHub repository objects to `Project` interface format.
+  - Support both GitHub-sourced and manual project entries.
+  - Filter featured projects for homepage display.
+- **Type Updates:**
+  - Extend `Project` interface (`src/types/project.ts`) with:
+    - `source: "github" | "manual"` - Track data source
+    - `screenshot?: string` - URL to project screenshot/image
+    - `featured?: boolean` - Flag for homepage featured section
+
+### 4.3 Manual Project Entries
+- **Purpose:** Include projects not in GitHub (e.g., WordPress sites, client work).
+- **Location:** `src/data/manual-projects.ts` (TypeScript constants).
+- **Structure:** Same `Project` interface with:
+  - `source: "manual"` field to distinguish from GitHub repos
+  - `screenshot` URL (hosted in `public/projects/` or external)
+  - `featured: boolean` flag for homepage display
+  - All standard project fields (title, description, tags, status, etc.)
+- **Integration:** Combined with GitHub repos via `projects-service.ts`.
 
 ## 5. Project Rules (Coding Standards)
 These rules ensure maintainability and "premium" code quality.
@@ -193,10 +215,55 @@ These rules ensure maintainability and "premium" code quality.
 - **Output Directory:** `.next` (default).
 - **Node Version:** 18.x or higher (specify in `package.json` or Vercel settings).
 
-## 7. Implementation Checklist
+## 7. Pages & Routes
+
+### 7.1 Homepage (`/`)
+- **Status:** ✅ Implemented
+- **Components:** OverviewMetrics, ProjectsGrid (featured projects)
+- **Data:** Currently using mock data, will integrate GitHub API
+
+### 7.2 Projects Page (`/projects`)
+- **Status:** ⏳ Planned
+- **Purpose:** Display all projects (GitHub repos + manual entries) with screenshots
+- **Layout:**
+  - Header: "All Projects" title with project count
+  - Grid: Responsive cards (1 col mobile, 2 col tablet, 3 col desktop)
+  - Each card: Screenshot image (16:9 aspect), title, description, tags, status badge
+  - Hover effects: Card lift with glow (matching homepage cards)
+- **Design:** Same card styling as homepage (`bg-card/80 backdrop-blur border border-primary/20`)
+- **Components:** `src/components/projects/project-card.tsx` (reusable)
+
+### 7.3 Stack Page (`/stack`)
+- **Status:** ⏳ Planned
+- **Purpose:** Display technology stack from GitHub repository languages
+- **Layout:**
+  - Header: "Tech Stack" title with subtitle
+  - Language cards in responsive grid
+  - Each card: Language name, usage percentage/bytes, icon/logo
+  - Optional: Group by category (Frontend, Backend, Tools)
+- **Design:** Smaller cards with progress indicators using chart color gradient
+- **Data Source:** Auto-populated from GitHub repo languages + manual additions
+- **Components:** `src/components/stack/stack-card.tsx`
+
+### 7.4 Contact Page (`/contact`)
+- **Status:** ⏳ Planned
+- **Purpose:** Display contact information and social links
+- **Layout:**
+  - Header: "Get In Touch" title
+  - Email section: Email address with copy-to-clipboard button
+  - Social links: Grid of icon buttons (GitHub, LinkedIn, Twitter, etc.)
+  - Hover effects: Scale and glow on social links
+- **Design:** Consistent spacing and typography from brand book
+- **Data:** `src/lib/constants.ts` - `CONTACT_INFO` object
+- **Components:** `src/components/contact/social-link.tsx`
+
+## 8. Implementation Checklist
 - [x] **Foundation:** Next.js + Tailwind v4 + ThemeProvider.
 - [x] **Design System:** "Hacker Mode" Palette + Mono Font.
 - [x] **Layout Shell:** Sidebar (Desktop) + Sheet (Mobile) + Main Content Area.
-- [ ] **Bento Grid:** Implement CSS Grid structure.
-- [ ] **Components:** StartCard, ProjectCard, NavItem.
-
+- [x] **Homepage:** Overview metrics and featured projects grid.
+- [ ] **GitHub API Integration:** API route, utility functions, data service.
+- [ ] **Projects Page:** All projects display with screenshots.
+- [ ] **Stack Page:** Technology stack from GitHub languages.
+- [ ] **Contact Page:** Email and social links.
+- [ ] **Manual Projects:** Support for non-GitHub projects.

@@ -45,6 +45,28 @@ jobs:
       - name: Run type check
         run: npm run type:check
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        env:
+          # Dummy token for tests - tests should mock API calls, not make real requests
+          GITHUB_TOKEN: "test-token-dummy-value"
+
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -63,5 +85,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-
-
+        env:
+          # Dummy token for build - prevents errors when server components fetch GitHub stats
+          GITHUB_TOKEN: "test-token-dummy-value"

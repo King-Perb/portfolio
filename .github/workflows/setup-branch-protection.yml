@@ -22,6 +22,7 @@ jobs:
                 "contexts": [
                   "CI / lint",
                   "CI / type-check",
+                  "CI / test",
                   "CI / build",
                   "Gitleaks Scan / gitleaks"
                 ]
@@ -40,4 +41,3 @@ jobs:
               "require_signed_commits": false,
               "lock_branch": false
             }'
-

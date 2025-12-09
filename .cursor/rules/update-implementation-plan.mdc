@@ -1,0 +1,77 @@
+---
+description: Updating implementation plan documentation
+alwaysApply: false
+---
+# Update Implementation Plan Workflow
+
+When finalizing plans in plan mode, ALWAYS update `doc/implementation_plan.md` with the detailed specifications.
+
+## When to Update
+
+Update `doc/implementation_plan.md` after:
+- Finalizing a plan in plan mode with user confirmation
+- Making architectural decisions that affect the project structure
+- Adding new features, pages, or major components
+- Changing data strategies or API integrations
+
+## What to Update
+
+1. **Expand existing sections** with detailed specifications:
+   - API integration details (endpoints, data structures, error handling)
+   - Page layouts and component specifications
+   - Data flow and service layer architecture
+
+2. **Add new sections** for:
+   - New pages/routes (section 7)
+   - New data sources (section 4)
+   - New components or utilities
+
+3. **Update Implementation Checklist** (section 8):
+   - Mark completed items with [x]
+   - Add new planned items with [ ]
+   - Group related tasks
+
+## Update Process
+
+1. **After plan confirmation:**
+   - Review the MCP plan details
+   - Extract specifications (layouts, components, data structures)
+   - Update relevant sections in `implementation_plan.md`
+
+2. **Maintain structure:**
+   - Follow existing section numbering
+   - Use consistent formatting (markdown headers, lists, code blocks)
+   - Keep design specs aligned with brand book (section 3.2)
+
+3. **Include implementation details:**
+   - File paths for new components
+   - Data structures and TypeScript interfaces
+   - Design specifications (spacing, colors, responsive breakpoints)
+   - Integration points with existing code
+
+## Example Update Pattern
+
+When adding a new page:
+```markdown
+### 7.X New Page (`/route`)
+- **Status:** ⏳ Planned (or ✅ Implemented)
+- **Purpose:** Brief description
+- **Layout:** Detailed layout specification
+- **Design:** Design system references
+- **Components:** List of component files
+- **Data:** Data source and structure
+```
+
+## Why This Matters
+
+- `doc/implementation_plan.md` is the **Single Source of Truth** (section 5.4)
+- Keeps documentation synchronized with actual implementation
+- Helps maintain project context across sessions
+- Enables better planning and estimation
+
+## Workflow Summary
+
+1. Create plan in plan mode → Get user confirmation
+2. **Update `doc/implementation_plan.md`** ← You are here
+3. Execute plan using MCP todos
+4. Update checklist as items complete

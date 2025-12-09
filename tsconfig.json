@@ -30,5 +30,6 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
+  "types": ["vitest/globals", "@testing-library/jest-dom"],
   "exclude": ["node_modules"]
 }

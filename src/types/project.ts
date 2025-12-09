@@ -1,6 +1,5 @@
-import { LucideIcon } from "lucide-react";
-
 export type ProjectStatus = "Active" | "Maintained" | "Beta" | "Archived";
+export type ProjectSource = "github" | "manual";
 
 export interface Project {
   title: string;
@@ -15,5 +14,7 @@ export interface Project {
   commitCount?: number;
   lastUpdated?: string;
   featuredImage?: string;
+  screenshot?: string;
+  source: ProjectSource;
+  featured?: boolean;
 }
-

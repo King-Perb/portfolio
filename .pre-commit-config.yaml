@@ -28,3 +28,37 @@ repos:
   #       args: ["--redact"]               # full repo or git defaults
   #       stages: ["manual"]               # ← on demand only
 
+  # Local hooks: Run lint, type-check, tests, and build before pushing
+  - repo: local
+    hooks:
+      - id: lint
+        name: Lint
+        entry: npm run lint
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+
+      - id: type-check
+        name: Type Check
+        entry: npm run type:check
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+
+      - id: test
+        name: Test
+        entry: bash -c 'GITHUB_TOKEN="test-token-dummy-value" npm test'
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
+
+      - id: build
+        name: Build
+        entry: bash -c 'GITHUB_TOKEN="test-token-dummy-value" npm run build'
+        language: system
+        stages: [pre-push]
+        pass_filenames: false
+        always_run: true
