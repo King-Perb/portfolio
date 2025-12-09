@@ -46,7 +46,7 @@ export default function DesignPage() {
             Paragraph: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <blockquote className="mt-6 border-l-2 pl-6 italic">
-            "Blockquote: The best way to predict the future is to create it."
+            &quot;Blockquote: The best way to predict the future is to create it.&quot;
           </blockquote>
         </div>
       </section>

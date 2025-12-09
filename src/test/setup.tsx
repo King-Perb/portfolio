@@ -10,13 +10,12 @@ afterEach(() => {
 
 // Mock Next.js Image component
 vi.mock("next/image", () => ({
-  default: ({ src, alt, fill, ...props }: any) => {
+  default: ({ src, alt, fill, ...props }: React.ComponentPropsWithoutRef<"img"> & { fill?: boolean }) => {
     // Remove fill prop and convert to style for regular img
-    const imgProps: any = { src, alt, ...props };
+    const imgProps: React.ComponentPropsWithoutRef<"img"> = { src, alt, ...props };
     if (fill) {
       imgProps.style = { ...imgProps.style, width: "100%", height: "100%", objectFit: "cover" };
     }
-    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     return React.createElement("img", imgProps);
   },
 }));
