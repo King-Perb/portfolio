@@ -64,3 +64,5 @@ repos:
         stages: [pre-push]
         pass_filenames: false
         always_run: true
+        env:
+          GITHUB_TOKEN: "test-token-dummy-value"
