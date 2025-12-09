@@ -21,10 +21,10 @@ async function getStackData() {
 export default async function StackPage() {
   const languages = await getStackData();
   const languageEntries = Object.entries(languages) as [string, number][];
-  
+
   // Sort by bytes (most used first)
   languageEntries.sort((a, b) => b[1] - a[1]);
-  
+
   const totalBytes = languageEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
 
   return (
@@ -59,4 +59,3 @@ export default async function StackPage() {
     </div>
   );
 }
-

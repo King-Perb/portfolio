@@ -20,13 +20,3 @@ export const MANUAL_PROJECTS: Project[] = [
   //   featured: false,
   // },
 ];
-
-
-
-
-
-
-
-
-
-

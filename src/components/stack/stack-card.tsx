@@ -12,7 +12,7 @@ interface StackCardProps {
 
 export function StackCard({ language, bytes, totalBytes, index }: StackCardProps) {
   const percentage = totalBytes > 0 ? (bytes / totalBytes) * 100 : 0;
-  
+
   // Use chart color gradient from brand book
   const chartColors = [
     "oklch(0.50 0.12 145)", // Darker green
@@ -21,7 +21,7 @@ export function StackCard({ language, bytes, totalBytes, index }: StackCardProps
     "oklch(0.80 0.10 145)",
     "oklch(0.90 0.10 145)", // Lighter green
   ];
-  
+
   const colorIndex = Math.min(index, chartColors.length - 1);
   const bgColor = chartColors[colorIndex];
 
@@ -50,13 +50,3 @@ export function StackCard({ language, bytes, totalBytes, index }: StackCardProps
     </Card>
   );
 }
-
-
-
-
-
-
-
-
-
-

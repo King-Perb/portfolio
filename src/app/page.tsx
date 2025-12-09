@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 export default function Home() {
   return (
     <div className="flex flex-col gap-8 fade-in-bottom"> {/* Added consistent gap */}
-      
+
       {/* Header section (Optional, but nice for context) */}
       <div className="flex items-center justify-between">
         <div>
@@ -16,7 +16,7 @@ export default function Home() {
         </div>
         {/* Optional: Add a 'View All' link if needed later */}
       </div>
-      
+
       <OverviewMetrics />
 
       <Separator className="my-2 opacity-50" />

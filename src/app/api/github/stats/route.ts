@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json(stats);
   } catch (error) {
     console.error("GitHub API error:", error);
-    
+
     // Return error response but don't throw - let client handle fallback
     return NextResponse.json(
       { error: "Failed to fetch GitHub stats" },
@@ -17,13 +17,3 @@ export async function GET() {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

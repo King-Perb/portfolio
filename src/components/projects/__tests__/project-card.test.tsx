@@ -55,7 +55,7 @@ describe("ProjectCard", () => {
       forks: 0,
     };
     render(<ProjectCard project={manualProject} />);
-    
+
     // Stars and forks should not be visible for manual projects
     // const starsElement = screen.queryByText("0");
     // Note: This might still show 0, so we check that it's a manual project
@@ -68,7 +68,7 @@ describe("ProjectCard", () => {
       screenshot: "/test-screenshot.jpg",
     };
     render(<ProjectCard project={projectWithScreenshot} showScreenshot={true} />);
-    
+
     const image = screen.getByAltText("Test Project");
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute("src", "/test-screenshot.jpg");
@@ -80,25 +80,25 @@ describe("ProjectCard", () => {
       screenshot: "/test-screenshot.jpg",
     };
     render(<ProjectCard project={projectWithScreenshot} showScreenshot={false} />);
-    
+
     const image = screen.queryByAltText("Test Project");
     expect(image).not.toBeInTheDocument();
   });
 
   it("should not render screenshot when screenshot is not provided", () => {
     render(<ProjectCard project={mockProject} showScreenshot={true} />);
-    
+
     const image = screen.queryByAltText("Test Project");
     expect(image).not.toBeInTheDocument();
   });
 
   it("should render GitHub link when githubUrl exists", () => {
     render(<ProjectCard project={mockProject} />);
-    
+
     // Find the GitHub link by href since it has no accessible name (only icon)
     const links = screen.getAllByRole("link");
     const githubLink = links.find(link => link.getAttribute("href") === "https://github.com/user/test-project");
-    
+
     expect(githubLink).toBeInTheDocument();
     expect(githubLink).toHaveAttribute("href", "https://github.com/user/test-project");
     expect(githubLink).toHaveAttribute("target", "_blank");
@@ -107,11 +107,11 @@ describe("ProjectCard", () => {
 
   it("should render live URL link when liveUrl exists", () => {
     render(<ProjectCard project={mockProject} />);
-    
+
     // Find the live URL link by href since it has no accessible name
     const links = screen.getAllByRole("link");
     const liveLink = links.find(link => link.getAttribute("href") === "https://example.com");
-    
+
     expect(liveLink).toBeInTheDocument();
     expect(liveLink).toHaveAttribute("href", "https://example.com");
     expect(liveLink).toHaveAttribute("target", "_blank");
@@ -124,7 +124,7 @@ describe("ProjectCard", () => {
       liveUrl: undefined,
     };
     render(<ProjectCard project={projectWithoutLiveUrl} />);
-    
+
     // Should still render GitHub link
     const links = screen.getAllByRole("link");
     const githubLink = links.find(link => link.getAttribute("href") === "https://github.com/user/test-project");
@@ -137,11 +137,10 @@ describe("ProjectCard", () => {
       githubUrl: undefined,
     };
     render(<ProjectCard project={projectWithoutGithub} />);
-    
+
     // Should still render live URL if it exists
     const links = screen.getAllByRole("link");
     const liveLink = links.find(link => link.getAttribute("href") === "https://example.com");
     expect(liveLink).toBeInTheDocument();
   });
 });
-

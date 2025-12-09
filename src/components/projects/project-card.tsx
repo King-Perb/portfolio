@@ -25,7 +25,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
           />
         </div>
       )}
-      
+
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
@@ -39,7 +39,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
           {project.description}
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent className="mt-auto pt-4">
         <div className="flex gap-2 mb-4 flex-wrap">
           {project.tags.map(tag => (
@@ -49,7 +49,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
           ))}
         </div>
       </CardContent>
-      
+
       <CardFooter className="pt-0 border-t border-border/30 mt-4 pt-4 flex items-center justify-between text-muted-foreground">
         <div className="flex items-center gap-4 text-xs font-mono">
           {project.source === "github" && (
@@ -96,13 +96,3 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
     </Card>
   );
 }
-
-
-
-
-
-
-
-
-
-

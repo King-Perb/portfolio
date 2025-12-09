@@ -18,12 +18,12 @@ When creating commit messages, ALWAYS follow the Conventional Commits specificat
 
 1. **Type**: Must be one of: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
 2. **Scope**: Optional, but recommended (e.g., components, layout, api, config, docs, workflows, types, styles)
-3. **Subject**: 
+3. **Subject**:
    - Imperative, present tense
    - Lowercase first letter
    - No period at end
    - Max 72 characters
-4. **Body**: 
+4. **Body**:
    - Explain "what" and "why", not "how"
    - Use bullet points for multiple changes
    - Wrap at 72 characters

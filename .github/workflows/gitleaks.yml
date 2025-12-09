@@ -26,5 +26,3 @@ jobs:
         with:
           # Scan the entire repository (not just staged files)
           args: --verbose --redact
-
-

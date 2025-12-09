@@ -24,4 +24,3 @@ export function useGitHubStats(): GitHubStats | null {
   // Hook implementation
 }
 ```
-

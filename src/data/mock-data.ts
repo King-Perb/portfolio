@@ -78,4 +78,3 @@ export const MOCK_METRICS: Metric[] = [
     trend: "up",
   },
 ];
-

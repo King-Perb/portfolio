@@ -91,7 +91,7 @@ Use Tailwind spacing tokens consistently:
 
 #### Animation & Transitions
 - **Micro-interactions:** Use `framer-motion` for hover effects, card lifts
-- **Transitions:** 
+- **Transitions:**
   - Fast: `duration-200` (200ms)
   - Default: `duration-300` (300ms)
   - Slow: `duration-500` (500ms)
@@ -267,4 +267,3 @@ These rules ensure maintainability and "premium" code quality.
 - [ ] **Stack Page:** Technology stack from GitHub languages.
 - [ ] **Contact Page:** Email and social links.
 - [ ] **Manual Projects:** Support for non-GitHub projects.
-

@@ -26,12 +26,12 @@ export async function getAllProjects(): Promise<Project[]> {
 
     if (response.ok) {
       const stats: GitHubStats = await response.json();
-      
+
       // Transform GitHub repos to projects
       for (const repo of stats.repos) {
         // Get languages for this repo from the per-repo language data
         // Fallback to primary language if per-repo data is missing
-        const repoLanguages = stats.repoLanguages[repo.full_name] || 
+        const repoLanguages = stats.repoLanguages[repo.full_name] ||
           (repo.language ? [repo.language] : []);
 
         const project = transformRepoToProject(repo, repoLanguages);
@@ -65,4 +65,3 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 export async function getProjectsPageProjects(): Promise<Project[]> {
   return getAllProjects();
 }
-

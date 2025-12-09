@@ -9,4 +9,3 @@ export interface Metric {
   icon: LucideIcon;
   trend: TrendType;
 }
-

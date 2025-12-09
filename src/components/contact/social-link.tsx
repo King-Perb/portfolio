@@ -32,13 +32,3 @@ export function SocialLinkComponent({ link }: SocialLinkProps) {
     </a>
   );
 }
-
-
-
-
-
-
-
-
-
-

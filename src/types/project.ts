@@ -18,4 +18,3 @@ export interface Project {
   source: ProjectSource;
   featured?: boolean;
 }
-

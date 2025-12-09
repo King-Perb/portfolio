@@ -16,7 +16,7 @@ async function getGitHubMetrics() {
         const stars = repo.stargazers_count ?? 0;
         return sum + (typeof stars === 'number' && !isNaN(stars) && stars >= 0 ? stars : 0);
       }, 0) ?? 0;
-      
+
       return {
         commits: stats.commitsLastMonth || 0,
         repos: stats.totalRepos || 0,
@@ -39,7 +39,7 @@ function formatNumber(num: number): string {
 
 export async function OverviewMetrics() {
   const githubData = await getGitHubMetrics();
-  
+
   const metrics: Metric[] = githubData
     ? [
         {

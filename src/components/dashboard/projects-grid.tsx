@@ -4,7 +4,7 @@ import { MOCK_PROJECTS } from "@/data/mock-data";
 
 export async function ProjectsGrid() {
     let projects = await getFeaturedProjects();
-    
+
     // Fallback to mock data if no featured projects
     if (projects.length === 0) {
         projects = MOCK_PROJECTS.map(p => ({ ...p, source: "manual" as const, featured: true }));

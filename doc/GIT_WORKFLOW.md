@@ -187,4 +187,3 @@ For critical production bugs:
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Git Branching Best Practices](https://www.atlassian.com/git/tutorials/comparing-workflows)
 - [GitHub Flow](https://guides.github.com/introduction/flow/)
-
