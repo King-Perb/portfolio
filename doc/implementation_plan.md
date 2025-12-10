@@ -146,6 +146,12 @@ Use Tailwind spacing tokens consistently:
     - `source: "github" | "manual"` - Track data source
     - `screenshot?: string` - URL to project screenshot/image
     - `featured?: boolean` - Flag for homepage featured section
+    - `commitCount?: number` - Total commits (GitHub: from API, Manual: from config)
+    - `deploymentCount?: number` - Total deployments (GitHub: from API, Manual: from config)
+- **Deployment Data:**
+  - **GitHub:** Fetch deployment count via GitHub API (`GET /repos/{owner}/{repo}/deployments`)
+  - **Manual:** Set `deploymentCount` in `manual-projects.ts` config
+  - **Display:** Show in project card footer alongside stars, forks, and commits
 
 ### 4.3 Manual Project Entries
 - **Purpose:** Include projects not in GitHub (e.g., WordPress sites, client work).
@@ -156,6 +162,26 @@ Use Tailwind spacing tokens consistently:
   - `featured: boolean` flag for homepage display
   - All standard project fields (title, description, tags, status, etc.)
 - **Integration:** Combined with GitHub repos via `projects-service.ts`.
+
+### 4.4 Featured Projects Selection
+- **Purpose:** Control which projects appear in the homepage featured section.
+- **Location:** `src/data/featured-projects.ts` (TypeScript constants).
+- **Mechanism:**
+  - **GitHub Repositories:** Add repository `full_name` strings (e.g., `"owner/repo-name"`) to `FEATURED_GITHUB_REPOS` array
+  - **Manual Projects:** Set `featured: true` in the project object in `manual-projects.ts`
+- **Implementation:**
+  - `transformRepoToProject()` function checks if a repo's `full_name` is in the featured list
+  - `getFeaturedProjects()` filters all projects (GitHub + manual) where `featured === true`
+  - Homepage displays up to 4 featured projects via `ProjectsGrid` component
+- **Usage:**
+  ```typescript
+  // src/data/featured-projects.ts
+  export const FEATURED_GITHUB_REPOS: string[] = [
+    "King-Perb/portfolio",
+    "King-Perb/another-repo",
+  ];
+  ```
+- **Fallback:** If no featured projects are found, homepage falls back to mock data.
 
 ## 5. Project Rules (Coding Standards)
 These rules ensure maintainability and "premium" code quality.
@@ -223,18 +249,27 @@ These rules ensure maintainability and "premium" code quality.
 - **Data:** Currently using mock data, will integrate GitHub API
 
 ### 7.2 Projects Page (`/projects`)
-- **Status:** ⏳ Planned
+- **Status:** ✅ Implemented (needs commits and deployments display)
 - **Purpose:** Display all projects (GitHub repos + manual entries) with screenshots
 - **Layout:**
   - Header: "All Projects" title with project count
   - Grid: Responsive cards (1 col mobile, 2 col tablet, 3 col desktop)
   - Each card: Screenshot image (16:9 aspect), title, description, tags, status badge
+  - **Project Stats:** Display stars, forks, commits, and deployments in card footer
   - Hover effects: Card lift with glow (matching homepage cards)
 - **Design:** Same card styling as homepage (`bg-card/80 backdrop-blur border border-primary/20`)
 - **Components:** `src/components/projects/project-card.tsx` (reusable)
+- **Project Card Stats Display:**
+  - **GitHub Projects:** Show stars ⭐, forks 🍴, commits 📝, deployments 🚀
+  - **Manual Projects:** Show commits and deployments if available (from manual data)
+  - **Layout:** Stats displayed in card footer alongside stars/forks
+  - **Icons:** Use Lucide icons (GitCommitHorizontal for commits, Rocket for deployments)
+  - **Data Sources:**
+    - **Commits:** From `commitCount` field in Project interface (GitHub: from API, Manual: from config)
+    - **Deployments:** New `deploymentCount` field in Project interface (GitHub: from API, Manual: from config)
 
 ### 7.3 Stack Page (`/stack`)
-- **Status:** ⏳ Planned
+- **Status:** ✅ Implemented (partial - needs manual technologies support)
 - **Purpose:** Display technology stack from GitHub repository languages
 - **Layout:**
   - Header: "Tech Stack" title with subtitle
@@ -242,7 +277,22 @@ These rules ensure maintainability and "premium" code quality.
   - Each card: Language name, usage percentage/bytes, icon/logo
   - Optional: Group by category (Frontend, Backend, Tools)
 - **Design:** Smaller cards with progress indicators using chart color gradient
-- **Data Source:** Auto-populated from GitHub repo languages + manual additions
+- **Data Source:** 
+  - **Auto-populated:** GitHub repo languages (from API)
+  - **Manual additions:** Config file for technologies not in GitHub repos (e.g., tools, frameworks, services)
+- **Manual Technologies Config:**
+  - **Location:** `src/data/manual-technologies.ts` (TypeScript constants)
+  - **Structure:** Array of technology objects with name and optional byte count for percentage calculation
+  - **Integration:** Combined with GitHub languages in stack page data fetching
+  - **Usage:**
+    ```typescript
+    // src/data/manual-technologies.ts
+    export const MANUAL_TECHNOLOGIES: Array<{ name: string; bytes?: number }> = [
+      { name: "Docker", bytes: 1000 },
+      { name: "Kubernetes", bytes: 500 },
+      { name: "AWS", bytes: 2000 },
+    ];
+    ```
 - **Components:** `src/components/stack/stack-card.tsx`
 
 ### 7.4 Contact Page (`/contact`)
@@ -262,8 +312,11 @@ These rules ensure maintainability and "premium" code quality.
 - [x] **Design System:** "Hacker Mode" Palette + Mono Font.
 - [x] **Layout Shell:** Sidebar (Desktop) + Sheet (Mobile) + Main Content Area.
 - [x] **Homepage:** Overview metrics and featured projects grid.
-- [ ] **GitHub API Integration:** API route, utility functions, data service.
-- [ ] **Projects Page:** All projects display with screenshots.
-- [ ] **Stack Page:** Technology stack from GitHub languages.
-- [ ] **Contact Page:** Email and social links.
-- [ ] **Manual Projects:** Support for non-GitHub projects.
+- [x] **GitHub API Integration:** API route, utility functions, data service.
+- [x] **Projects Page:** All projects display with screenshots.
+- [x] **Stack Page:** Technology stack from GitHub languages (needs manual technologies).
+- [x] **Contact Page:** Email and social links.
+- [x] **Manual Projects:** Support for non-GitHub projects.
+- [ ] **Manual Technologies:** Config file for technologies not in GitHub repos.
+- [ ] **Project Card Stats:** Display commits and deployments alongside stars/forks.
+- [ ] **Deployment Data:** Fetch deployment count from GitHub API and support manual entries.
