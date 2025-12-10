@@ -99,7 +99,7 @@ test.describe('Project Card Interactions', () => {
     const tagsContainer = firstCard.locator('[data-slot="card-content"]').or(
       firstCard.locator('[class*="flex"][class*="gap-2"]')
     );
-    const hasTags = await tagsContainer.count() > 0;
+    await expect(tagsContainer.first()).toBeVisible();
     
     // Tags should be visible as spans with text
     const tags = firstCard.locator('span[class*="font-mono"]');
@@ -123,7 +123,8 @@ test.describe('Project Card Interactions', () => {
       return styles.boxShadow !== 'none' || el.classList.toString().includes('hover');
     });
 
-    // Hover effects are applied via CSS, so we just verify the card responds
+    // Verify hover effects are applied
+    expect(hasHoverEffect).toBe(true);
     expect(firstCard).toBeVisible();
   });
 });
