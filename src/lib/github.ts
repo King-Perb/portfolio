@@ -151,7 +151,8 @@ export async function fetchGitHubStats(): Promise<GitHubStats> {
  */
 export function transformRepoToProject(
   repo: GitHubRepo,
-  languages: string[]
+  languages: string[],
+  featuredRepos?: string[]
 ): import("@/types").Project {
   // Determine status based on updated_at
   const updatedAt = repo.updated_at || new Date().toISOString();
@@ -184,6 +185,6 @@ export function transformRepoToProject(
     liveUrl: repo.homepage || undefined,
     lastUpdated: repo.updated_at || undefined,
     source: "github",
-    featured: false, // Can be manually curated later
+    featured: featuredRepos?.includes(repo.full_name) ?? false,
   };
 }

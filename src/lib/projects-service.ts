@@ -1,5 +1,6 @@
 import type { Project } from "@/types";
 import { MANUAL_PROJECTS } from "@/data/manual-projects";
+import { FEATURED_GITHUB_REPOS } from "@/data/featured-projects";
 import { transformRepoToProject } from "@/lib/github";
 import type { GitHubStats } from "@/lib/github";
 
@@ -34,7 +35,7 @@ export async function getAllProjects(): Promise<Project[]> {
         const repoLanguages = stats.repoLanguages[repo.full_name] ||
           (repo.language ? [repo.language] : []);
 
-        const project = transformRepoToProject(repo, repoLanguages);
+        const project = transformRepoToProject(repo, repoLanguages, FEATURED_GITHUB_REPOS);
         projects.push(project);
       }
     }
