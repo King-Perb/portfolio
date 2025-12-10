@@ -12,9 +12,9 @@ async function getGitHubMetrics() {
 
     if (response.ok) {
       const stats = await response.json();
-      
+
       // Calculate total deployments across all repos
-      const totalDeployments = stats.repoDeployments 
+      const totalDeployments = stats.repoDeployments
         ? Object.values(stats.repoDeployments as Record<string, number>).reduce((sum: number, count: number) => sum + (count || 0), 0)
         : 0;
 

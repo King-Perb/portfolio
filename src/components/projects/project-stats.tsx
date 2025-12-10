@@ -31,20 +31,19 @@ export function ProjectStats({ project }: ProjectStatsProps) {
         </>
       )}
       {project.commitCount !== undefined && project.commitCount > 0 && (
-        <StatItem 
-          icon={GitCommitHorizontal} 
-          value={project.commitCount} 
-          title="Total commits" 
+        <StatItem
+          icon={GitCommitHorizontal}
+          value={project.commitCount}
+          title="Total commits"
         />
       )}
       {project.deploymentCount !== undefined && project.deploymentCount > 0 && (
-        <StatItem 
-          icon={Rocket} 
-          value={project.deploymentCount} 
-          title="Total deployments" 
+        <StatItem
+          icon={Rocket}
+          value={project.deploymentCount}
+          title="Total deployments"
         />
       )}
     </div>
   );
 }
-

@@ -18,7 +18,7 @@ describe("Shell", () => {
         <div data-testid="test-content">Test Content</div>
       </Shell>
     );
-    
+
     expect(screen.getByTestId("test-content")).toBeInTheDocument();
     expect(screen.getByText("Test Content")).toBeInTheDocument();
   });
@@ -29,7 +29,7 @@ describe("Shell", () => {
         <div>Content</div>
       </Shell>
     );
-    
+
     expect(screen.getByTestId("mobile-nav")).toBeInTheDocument();
   });
 
@@ -39,7 +39,7 @@ describe("Shell", () => {
         <div>Content</div>
       </Shell>
     );
-    
+
     expect(screen.getByTestId("sidebar")).toBeInTheDocument();
   });
 
@@ -49,7 +49,7 @@ describe("Shell", () => {
         <div>Content</div>
       </Shell>
     );
-    
+
     expect(screen.getByText("MIKO'S PORTFOLIO")).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe("Shell", () => {
         <div>Content</div>
       </Shell>
     );
-    
+
     const main = container.querySelector("main");
     expect(main).toBeInTheDocument();
     expect(main).toHaveClass("flex-1", "overflow-y-auto");
@@ -71,7 +71,7 @@ describe("Shell", () => {
         <div>Content</div>
       </Shell>
     );
-    
+
     const containerDiv = container.querySelector("main > div");
     expect(containerDiv).toHaveClass("container", "max-w-5xl", "mx-auto");
   });
@@ -84,10 +84,9 @@ describe("Shell", () => {
         <div data-testid="child-3">Child 3</div>
       </Shell>
     );
-    
+
     expect(screen.getByTestId("child-1")).toBeInTheDocument();
     expect(screen.getByTestId("child-2")).toBeInTheDocument();
     expect(screen.getByTestId("child-3")).toBeInTheDocument();
   });
 });
-

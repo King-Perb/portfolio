@@ -15,4 +15,3 @@ export function getProjectClickUrl(project: Project): string | undefined {
 export function getProjectImageUrl(project: Project): string | undefined {
   return project.featuredImage || project.screenshot;
 }
-

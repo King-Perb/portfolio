@@ -22,9 +22,9 @@ describe("ProjectStats", () => {
       stars: 42,
       forks: 10,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.getByTitle("Stars")).toBeInTheDocument();
     expect(screen.getByText("42")).toBeInTheDocument();
     expect(screen.getByTitle("Forks")).toBeInTheDocument();
@@ -37,9 +37,9 @@ describe("ProjectStats", () => {
       stars: 0,
       forks: 0,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.queryByTitle("Stars")).not.toBeInTheDocument();
     expect(screen.queryByTitle("Forks")).not.toBeInTheDocument();
   });
@@ -48,9 +48,9 @@ describe("ProjectStats", () => {
     const project = createMockProject({
       commitCount: 150,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.getByTitle("Total commits")).toBeInTheDocument();
     expect(screen.getByText("150")).toBeInTheDocument();
   });
@@ -59,9 +59,9 @@ describe("ProjectStats", () => {
     const project = createMockProject({
       commitCount: undefined,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.queryByTitle("Total commits")).not.toBeInTheDocument();
   });
 
@@ -69,9 +69,9 @@ describe("ProjectStats", () => {
     const project = createMockProject({
       commitCount: 0,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.queryByTitle("Total commits")).not.toBeInTheDocument();
   });
 
@@ -79,9 +79,9 @@ describe("ProjectStats", () => {
     const project = createMockProject({
       deploymentCount: 5,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.getByTitle("Total deployments")).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument();
   });
@@ -90,9 +90,9 @@ describe("ProjectStats", () => {
     const project = createMockProject({
       deploymentCount: undefined,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.queryByTitle("Total deployments")).not.toBeInTheDocument();
   });
 
@@ -100,9 +100,9 @@ describe("ProjectStats", () => {
     const project = createMockProject({
       deploymentCount: 0,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.queryByTitle("Total deployments")).not.toBeInTheDocument();
   });
 
@@ -114,9 +114,9 @@ describe("ProjectStats", () => {
       commitCount: 500,
       deploymentCount: 10,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.getByTitle("Stars")).toBeInTheDocument();
     expect(screen.getByText("100")).toBeInTheDocument();
     expect(screen.getByTitle("Forks")).toBeInTheDocument();
@@ -133,9 +133,9 @@ describe("ProjectStats", () => {
       commitCount: 200,
       deploymentCount: 3,
     });
-    
+
     render(<ProjectStats project={project} />);
-    
+
     expect(screen.queryByTitle("Stars")).not.toBeInTheDocument();
     expect(screen.queryByTitle("Forks")).not.toBeInTheDocument();
     expect(screen.getByTitle("Total commits")).toBeInTheDocument();
@@ -144,4 +144,3 @@ describe("ProjectStats", () => {
     expect(screen.getByText("3")).toBeInTheDocument();
   });
 });
-

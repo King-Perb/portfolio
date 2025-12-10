@@ -40,9 +40,9 @@ describe("useProjectCardClick", () => {
       liveUrl: "https://live-url.com",
       githubUrl: "https://github.com/user/repo",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     expect(result.current.cardUrl).toBe("https://custom-url.com");
     expect(result.current.isClickable).toBe(true);
   });
@@ -52,9 +52,9 @@ describe("useProjectCardClick", () => {
       liveUrl: "https://live-url.com",
       githubUrl: "https://github.com/user/repo",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     expect(result.current.cardUrl).toBe("https://live-url.com");
     expect(result.current.isClickable).toBe(true);
   });
@@ -63,18 +63,18 @@ describe("useProjectCardClick", () => {
     const project = createMockProject({
       githubUrl: "https://github.com/user/repo",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     expect(result.current.cardUrl).toBe("https://github.com/user/repo");
     expect(result.current.isClickable).toBe(true);
   });
 
   it("returns undefined and isClickable false when no URLs are set", () => {
     const project = createMockProject({});
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     expect(result.current.cardUrl).toBeUndefined();
     expect(result.current.isClickable).toBe(false);
   });
@@ -83,13 +83,13 @@ describe("useProjectCardClick", () => {
     const project = createMockProject({
       clickUrl: "https://example.com",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     act(() => {
       result.current.handleClick();
     });
-    
+
     expect(mockWindowOpen).toHaveBeenCalledWith(
       "https://example.com",
       "_blank",
@@ -99,13 +99,13 @@ describe("useProjectCardClick", () => {
 
   it("does not open window when handleClick is called without URL", () => {
     const project = createMockProject({});
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     act(() => {
       result.current.handleClick();
     });
-    
+
     expect(mockWindowOpen).not.toHaveBeenCalled();
   });
 
@@ -113,18 +113,18 @@ describe("useProjectCardClick", () => {
     const project = createMockProject({
       clickUrl: "https://example.com",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     const mockEvent = {
       key: "Enter",
       preventDefault: vi.fn(),
     } as unknown as React.KeyboardEvent;
-    
+
     act(() => {
       result.current.handleKeyDown(mockEvent);
     });
-    
+
     expect(mockEvent.preventDefault).toHaveBeenCalled();
     expect(mockWindowOpen).toHaveBeenCalledWith(
       "https://example.com",
@@ -137,18 +137,18 @@ describe("useProjectCardClick", () => {
     const project = createMockProject({
       clickUrl: "https://example.com",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     const mockEvent = {
       key: " ",
       preventDefault: vi.fn(),
     } as unknown as React.KeyboardEvent;
-    
+
     act(() => {
       result.current.handleKeyDown(mockEvent);
     });
-    
+
     expect(mockEvent.preventDefault).toHaveBeenCalled();
     expect(mockWindowOpen).toHaveBeenCalledWith(
       "https://example.com",
@@ -161,38 +161,37 @@ describe("useProjectCardClick", () => {
     const project = createMockProject({
       clickUrl: "https://example.com",
     });
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     const mockEvent = {
       key: "Tab",
       preventDefault: vi.fn(),
     } as unknown as React.KeyboardEvent;
-    
+
     act(() => {
       result.current.handleKeyDown(mockEvent);
     });
-    
+
     expect(mockEvent.preventDefault).not.toHaveBeenCalled();
     expect(mockWindowOpen).not.toHaveBeenCalled();
   });
 
   it("does not call handleClick when no URL is set", () => {
     const project = createMockProject({});
-    
+
     const { result } = renderHook(() => useProjectCardClick(project));
-    
+
     const mockEvent = {
       key: "Enter",
       preventDefault: vi.fn(),
     } as unknown as React.KeyboardEvent;
-    
+
     act(() => {
       result.current.handleKeyDown(mockEvent);
     });
-    
+
     expect(mockEvent.preventDefault).not.toHaveBeenCalled();
     expect(mockWindowOpen).not.toHaveBeenCalled();
   });
 });
-

@@ -60,7 +60,7 @@ export async function getAllProjects(): Promise<Project[]> {
       // Transform GitHub repos to projects
       const excludedRepos = getExcludedRepos();
       const featuredRepos = getFeaturedRepos();
-      
+
       for (const repo of stats.repos) {
         // Skip excluded repositories (safety check - they should already be filtered in fetchGitHubStats)
         if (excludedRepos.includes(repo.full_name)) {
@@ -109,7 +109,7 @@ export async function getFeaturedProjects(): Promise<Project[]> {
  */
 export async function getProjectsPageProjects(): Promise<Project[]> {
   const projects = await getAllProjects();
-  
+
   // Sort: projects with images first, then by last updated
   return sortByImageThenDate(projects);
 }

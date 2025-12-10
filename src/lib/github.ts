@@ -148,7 +148,7 @@ export async function fetchGitHubStats(): Promise<GitHubStats> {
 
   // Fetch all repositories (with automatic pagination)
   const allRepos = await fetchAllRepos(octokit);
-  
+
   // Filter out excluded repositories
   const excludedRepos = getExcludedRepos();
   const repos = allRepos.filter((repo) => !excludedRepos.includes(repo.full_name));

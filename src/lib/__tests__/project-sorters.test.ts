@@ -22,9 +22,9 @@ describe("project-sorters", () => {
         createMockProject({ title: "New", lastUpdated: "2024-01-01T00:00:00Z" }),
         createMockProject({ title: "Middle", lastUpdated: "2023-06-01T00:00:00Z" }),
       ];
-      
+
       const sorted = sortByLastUpdated(projects);
-      
+
       expect(sorted[0].title).toBe("New");
       expect(sorted[1].title).toBe("Middle");
       expect(sorted[2].title).toBe("Old");
@@ -36,9 +36,9 @@ describe("project-sorters", () => {
         createMockProject({ title: "Recent", lastUpdated: "2024-01-01T00:00:00Z" }),
         createMockProject({ title: "Old", lastUpdated: "2023-01-01T00:00:00Z" }),
       ];
-      
+
       const sorted = sortByLastUpdated(projects);
-      
+
       expect(sorted[0].title).toBe("Recent");
       expect(sorted[1].title).toBe("Old");
       expect(sorted[2].title).toBe("No Date");
@@ -49,25 +49,25 @@ describe("project-sorters", () => {
         createMockProject({ title: "A", lastUpdated: "2023-01-01T00:00:00Z" }),
         createMockProject({ title: "B", lastUpdated: "2024-01-01T00:00:00Z" }),
       ];
-      
+
       const original = [...projects];
       const sorted = sortByLastUpdated(projects);
-      
+
       expect(sorted).not.toBe(projects);
       expect(projects).toEqual(original);
     });
 
     it("handles empty array", () => {
       const sorted = sortByLastUpdated([]);
-      
+
       expect(sorted).toEqual([]);
     });
 
     it("handles single project", () => {
       const projects = [createMockProject({ title: "Single", lastUpdated: "2024-01-01T00:00:00Z" })];
-      
+
       const sorted = sortByLastUpdated(projects);
-      
+
       expect(sorted).toHaveLength(1);
       expect(sorted[0].title).toBe("Single");
     });
@@ -81,9 +81,9 @@ describe("project-sorters", () => {
         createMockProject({ title: "No Image 2" }),
         createMockProject({ title: "With Screenshot", screenshot: "/screenshot.jpg" }),
       ];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       // Projects with images should come first
       expect(sorted[0].title).toMatch(/With (Image|Screenshot)/);
       expect(sorted[1].title).toMatch(/With (Image|Screenshot)/);
@@ -93,38 +93,38 @@ describe("project-sorters", () => {
 
     it("sorts projects with images by date when both have images", () => {
       const projects = [
-        createMockProject({ 
-          title: "Old Image", 
+        createMockProject({
+          title: "Old Image",
           featuredImage: "/old.jpg",
           lastUpdated: "2023-01-01T00:00:00Z",
         }),
-        createMockProject({ 
-          title: "New Image", 
+        createMockProject({
+          title: "New Image",
           featuredImage: "/new.jpg",
           lastUpdated: "2024-01-01T00:00:00Z",
         }),
       ];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       expect(sorted[0].title).toBe("New Image");
       expect(sorted[1].title).toBe("Old Image");
     });
 
     it("sorts projects without images by date when both lack images", () => {
       const projects = [
-        createMockProject({ 
-          title: "Old No Image", 
+        createMockProject({
+          title: "Old No Image",
           lastUpdated: "2023-01-01T00:00:00Z",
         }),
-        createMockProject({ 
-          title: "New No Image", 
+        createMockProject({
+          title: "New No Image",
           lastUpdated: "2024-01-01T00:00:00Z",
         }),
       ];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       expect(sorted[0].title).toBe("New No Image");
       expect(sorted[1].title).toBe("Old No Image");
     });
@@ -135,9 +135,9 @@ describe("project-sorters", () => {
         createMockProject({ title: "Featured", featuredImage: "/featured.jpg" }),
         createMockProject({ title: "Screenshot", screenshot: "/screenshot.jpg" }),
       ];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       expect(sorted[0].title).toMatch(/(Featured|Screenshot)/);
       expect(sorted[1].title).toMatch(/(Featured|Screenshot)/);
       expect(sorted[2].title).toBe("No Image");
@@ -145,19 +145,19 @@ describe("project-sorters", () => {
 
     it("prioritizes featuredImage over screenshot when both exist", () => {
       const projects = [
-        createMockProject({ 
-          title: "Both Images", 
+        createMockProject({
+          title: "Both Images",
           featuredImage: "/featured.jpg",
           screenshot: "/screenshot.jpg",
         }),
-        createMockProject({ 
-          title: "Only Screenshot", 
+        createMockProject({
+          title: "Only Screenshot",
           screenshot: "/screenshot.jpg",
         }),
       ];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       // Both should be treated as having images, sorted by date
       expect(sorted.length).toBe(2);
       expect(sorted.every(p => p.featuredImage || p.screenshot)).toBe(true);
@@ -168,25 +168,25 @@ describe("project-sorters", () => {
         createMockProject({ title: "A", featuredImage: "/a.jpg" }),
         createMockProject({ title: "B" }),
       ];
-      
+
       const original = [...projects];
       const sorted = sortByImageThenDate(projects);
-      
+
       expect(sorted).not.toBe(projects);
       expect(projects).toEqual(original);
     });
 
     it("handles empty array", () => {
       const sorted = sortByImageThenDate([]);
-      
+
       expect(sorted).toEqual([]);
     });
 
     it("handles single project", () => {
       const projects = [createMockProject({ title: "Single", featuredImage: "/single.jpg" })];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       expect(sorted).toHaveLength(1);
       expect(sorted[0].title).toBe("Single");
     });
@@ -197,12 +197,11 @@ describe("project-sorters", () => {
         createMockProject({ title: "A", lastUpdated: sameDate }),
         createMockProject({ title: "B", lastUpdated: sameDate }),
       ];
-      
+
       const sorted = sortByImageThenDate(projects);
-      
+
       // Should maintain relative order when dates are equal
       expect(sorted).toHaveLength(2);
     });
   });
 });
-

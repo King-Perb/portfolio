@@ -1,6 +1,6 @@
 /**
  * Unified configuration for GitHub project overrides
- * 
+ *
  * This file consolidates all GitHub project customizations in one place:
  * - Tags: Additional technologies not detected from repository languages
  * - Featured images: Custom images for project cards
@@ -8,7 +8,7 @@
  * - Click URL: Custom URL to open when the project card is clicked (overrides liveUrl/githubUrl)
  * - Featured: Whether the project should appear in the featured section
  * - Excluded: Whether the project should be excluded from all stats and displays
- * 
+ *
  * Key: GitHub repository full_name (e.g., "owner/repo-name")
  * Value: Override configuration object
  */
@@ -96,4 +96,3 @@ export function getFeaturedRepos(): string[] {
 export function getProjectOverride(repoFullName: string): GitHubProjectOverride | undefined {
   return GITHUB_PROJECT_OVERRIDES[repoFullName];
 }
-

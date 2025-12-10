@@ -9,7 +9,7 @@ async function getStackData() {
     });
 
     const githubLanguages: { [key: string]: number } = {};
-    
+
     if (response.ok) {
       const stats = await response.json();
       Object.assign(githubLanguages, stats.languages || {});
@@ -34,7 +34,7 @@ async function getStackData() {
     return allLanguages;
   } catch (error) {
     console.error("Failed to fetch stack data:", error);
-    
+
     // Fallback to manual technologies only if GitHub API fails
     const fallbackLanguages: { [key: string]: number } = {};
     MANUAL_TECHNOLOGIES.forEach((tech) => {

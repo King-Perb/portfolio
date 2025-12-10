@@ -3,7 +3,7 @@ import type { Project } from "@/types";
 /**
  * Manually curated projects not in GitHub
  * (e.g., WordPress sites, client work, etc.)
- * 
+ *
  * Technologies are specified via the `tags` array.
  * You can also set `commitCount` and `deploymentCount` for manual projects.
  */

@@ -14,20 +14,20 @@ export interface UseProjectCardClickResult {
  */
 export function useProjectCardClick(project: Project): UseProjectCardClickResult {
   const cardUrl = getProjectClickUrl(project);
-  
+
   const handleClick = useCallback(() => {
     if (cardUrl) {
       window.open(cardUrl, "_blank", "noopener,noreferrer");
     }
   }, [cardUrl]);
-  
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (cardUrl && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       handleClick();
     }
   }, [cardUrl, handleClick]);
-  
+
   return {
     cardUrl,
     handleClick,
@@ -35,4 +35,3 @@ export function useProjectCardClick(project: Project): UseProjectCardClickResult
     isClickable: !!cardUrl,
   };
 }
-

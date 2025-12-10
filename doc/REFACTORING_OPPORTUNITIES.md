@@ -82,10 +82,10 @@ function extractProjectOverrides(
 ) {
   const repoLanguages = stats.repoLanguages[repo.full_name] ||
     (repo.language ? [repo.language] : []);
-  
+
   const manualTags = override?.tags || [];
   const allTags = Array.from(new Set([...repoLanguages, ...manualTags]));
-  
+
   return {
     tags: allTags,
     commitCount: stats.repoCommits?.[repo.full_name],
@@ -147,10 +147,10 @@ export function sortByImageThenDate(projects: Project[]): Project[] {
   return [...projects].sort((a, b) => {
     const aHasImage = !!(a.featuredImage || a.screenshot);
     const bHasImage = !!(b.featuredImage || b.screenshot);
-    
+
     if (aHasImage && !bHasImage) return -1;
     if (!aHasImage && bHasImage) return 1;
-    
+
     const dateA = a.lastUpdated ? new Date(a.lastUpdated).getTime() : 0;
     const dateB = b.lastUpdated ? new Date(b.lastUpdated).getTime() : 0;
     return dateB - dateA;
@@ -199,28 +199,28 @@ export function calculateProjectStatus(
 ): { status: ProjectStatus; statusColor: string } {
   const lastUpdated = new Date(updatedAt);
   const daysSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24);
-  
+
   if (daysSinceUpdate > 365) {
     return {
       status: "Archived",
       statusColor: "text-muted-foreground border-muted-foreground/20 bg-muted-foreground/10",
     };
   }
-  
+
   if (daysSinceUpdate > 180) {
     return {
       status: "Maintained",
       statusColor: "text-blue-400 border-blue-400/20 bg-blue-400/10",
     };
   }
-  
+
   if (description?.toLowerCase().includes("beta") || description?.toLowerCase().includes("wip")) {
     return {
       status: "Beta",
       statusColor: "text-yellow-400 border-yellow-400/20 bg-yellow-400/10",
     };
   }
-  
+
   return {
     status: "Active",
     statusColor: "text-primary border-primary/20 bg-primary/10",
@@ -260,20 +260,20 @@ Extract to a custom hook or utility:
 // src/hooks/use-project-card-click.ts
 export function useProjectCardClick(project: Project) {
   const cardUrl = project.clickUrl || project.liveUrl || project.githubUrl;
-  
+
   const handleClick = useCallback(() => {
     if (cardUrl) {
       window.open(cardUrl, "_blank", "noopener,noreferrer");
     }
   }, [cardUrl]);
-  
+
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (cardUrl && (e.key === "Enter" || e.key === " ")) {
       e.preventDefault();
       handleClick();
     }
   }, [cardUrl, handleClick]);
-  
+
   return {
     cardUrl,
     handleClick,
@@ -388,17 +388,17 @@ export function ProjectStats({ project }: ProjectStatsProps) {
         </>
       )}
       {project.commitCount !== undefined && project.commitCount > 0 && (
-        <StatItem 
-          icon={GitCommitHorizontal} 
-          value={project.commitCount} 
-          title="Total commits" 
+        <StatItem
+          icon={GitCommitHorizontal}
+          value={project.commitCount}
+          title="Total commits"
         />
       )}
       {project.deploymentCount !== undefined && project.deploymentCount > 0 && (
-        <StatItem 
-          icon={Rocket} 
-          value={project.deploymentCount} 
-          title="Total deployments" 
+        <StatItem
+          icon={Rocket}
+          value={project.deploymentCount}
+          title="Total deployments"
         />
       )}
     </div>
@@ -437,7 +437,7 @@ Create a builder or factory pattern:
 // src/lib/project-builder.ts
 export class ProjectBuilder {
   private project: Partial<Project> = {};
-  
+
   fromGitHubRepo(repo: GitHubRepo): this {
     this.project = {
       title: repo.name,
@@ -450,36 +450,36 @@ export class ProjectBuilder {
     };
     return this;
   }
-  
+
   withLanguages(languages: string[]): this {
     this.project.tags = languages.slice(0, 15);
     return this;
   }
-  
+
   withStatus(status: ProjectStatus, statusColor: string): this {
     this.project.status = status;
     this.project.statusColor = statusColor;
     return this;
   }
-  
+
   withOverrides(override?: GitHubProjectOverride): this {
     if (override?.description) this.project.description = override.description;
     if (override?.featuredImage) this.project.featuredImage = override.featuredImage;
     if (override?.clickUrl) this.project.clickUrl = override.clickUrl;
     return this;
   }
-  
+
   withStats(commitCount?: number, deploymentCount?: number): this {
     this.project.commitCount = commitCount;
     this.project.deploymentCount = deploymentCount;
     return this;
   }
-  
+
   withFeatured(featuredRepos: string[], repoFullName: string): this {
     this.project.featured = featuredRepos.includes(repoFullName);
     return this;
   }
-  
+
   build(): Project {
     // Validate required fields and return
     return this.project as Project;
@@ -648,4 +648,3 @@ When refactoring, ensure:
 - Some refactorings may introduce breaking changes - plan accordingly
 - Consider creating a separate branch for refactoring work
 - Update documentation as you refactor
-

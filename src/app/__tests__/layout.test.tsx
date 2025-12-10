@@ -38,7 +38,7 @@ describe("RootLayout", () => {
         <div data-testid="test-child">Test Content</div>
       </RootLayout>
     );
-    
+
     expect(container.querySelector('[data-testid="test-child"]')).toBeInTheDocument();
     expect(container.textContent).toContain("Test Content");
   });
@@ -49,7 +49,7 @@ describe("RootLayout", () => {
         <div>Content</div>
       </RootLayout>
     );
-    
+
     // In React Testing Library, html/body are part of the document, not the container
     // We can verify the component renders without errors
     const html = document.documentElement;
@@ -64,7 +64,7 @@ describe("RootLayout", () => {
         <div>Content</div>
       </RootLayout>
     );
-    
+
     // Verify the component renders without errors
     // The actual html/body structure is handled by Next.js at runtime
     const body = document.body;
@@ -77,10 +77,10 @@ describe("RootLayout", () => {
         <div>Content</div>
       </RootLayout>
     );
-    
+
     const themeProvider = container.querySelector('[data-testid="theme-provider"]');
     expect(themeProvider).toBeInTheDocument();
-    
+
     const props = JSON.parse(themeProvider?.getAttribute("data-props") || "{}");
     expect(props.attribute).toBe("class");
     expect(props.defaultTheme).toBe("dark");
@@ -94,7 +94,7 @@ describe("RootLayout", () => {
         <div data-testid="child">Child Content</div>
       </RootLayout>
     );
-    
+
     const shell = container.querySelector('[data-testid="shell"]');
     expect(shell).toBeInTheDocument();
     expect(shell?.textContent).toContain("Child Content");
@@ -108,7 +108,7 @@ describe("RootLayout", () => {
         <div data-testid="child-3">Child 3</div>
       </RootLayout>
     );
-    
+
     expect(container.querySelector('[data-testid="child-1"]')).toBeInTheDocument();
     expect(container.querySelector('[data-testid="child-2"]')).toBeInTheDocument();
     expect(container.querySelector('[data-testid="child-3"]')).toBeInTheDocument();
@@ -120,17 +120,16 @@ describe("RootLayout", () => {
         <div>Content</div>
       </RootLayout>
     );
-    
+
     // In React Testing Library, html/body are not rendered from components
     // We test the component hierarchy that is actually rendered
     const themeProvider = container.querySelector('[data-testid="theme-provider"]');
     const shell = container.querySelector('[data-testid="shell"]');
-    
+
     expect(themeProvider).toBeInTheDocument();
     expect(shell).toBeInTheDocument();
-    
+
     // Check hierarchy: theme-provider > shell
     expect(shell?.parentElement).toBe(themeProvider);
   });
 });
-

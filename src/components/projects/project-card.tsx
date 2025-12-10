@@ -17,9 +17,9 @@ interface ProjectCardProps {
 export function ProjectCard({ project, showScreenshot = false }: ProjectCardProps) {
   const { handleClick, handleKeyDown, isClickable } = useProjectCardClick(project);
   const imageUrl = getProjectImageUrl(project);
-  
+
   return (
-    <Card 
+    <Card
       className={cn(
         "flex flex-col bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:bg-muted/5 hover:shadow-[0_0_12px] hover:shadow-primary/15 group",
         isClickable && "cursor-pointer"

@@ -57,7 +57,7 @@ describe("MobileNav", () => {
 
   it("renders the menu button trigger", () => {
     render(<MobileNav />);
-    
+
     // The Button is inside SheetTrigger, which renders it when asChild is true
     // We can find it by looking for the button element
     const buttons = screen.getAllByRole("button");
@@ -66,7 +66,7 @@ describe("MobileNav", () => {
 
   it("renders with sheet closed by default", () => {
     render(<MobileNav />);
-    
+
     const sheet = screen.getByTestId("sheet");
     expect(sheet).toHaveAttribute("data-open", "false");
   });
@@ -74,11 +74,11 @@ describe("MobileNav", () => {
   it("opens sheet when trigger button is clicked", async () => {
     const user = userEvent.setup();
     render(<MobileNav />);
-    
+
     // Click the sheet toggle button (which is rendered by our mock)
     const toggleButton = screen.getByTestId("sheet-toggle");
     await user.click(toggleButton);
-    
+
     const sheet = screen.getByTestId("sheet");
     expect(sheet).toHaveAttribute("data-open", "true");
   });
@@ -86,10 +86,10 @@ describe("MobileNav", () => {
   it("renders Sidebar component inside sheet content when open", async () => {
     const user = userEvent.setup();
     render(<MobileNav />);
-    
+
     const toggleButton = screen.getByTestId("sheet-toggle");
     await user.click(toggleButton);
-    
+
     const sidebar = screen.getByTestId("sidebar");
     expect(sidebar).toBeInTheDocument();
     expect(sidebar).toHaveAttribute("data-onclose", "true");
@@ -99,10 +99,10 @@ describe("MobileNav", () => {
   it("renders SheetTitle with correct text", async () => {
     const user = userEvent.setup();
     render(<MobileNav />);
-    
+
     const toggleButton = screen.getByTestId("sheet-toggle");
     await user.click(toggleButton);
-    
+
     const title = screen.getByTestId("sheet-title");
     expect(title).toHaveTextContent("Navigation Menu");
     expect(title).toHaveAttribute("data-classname", "sr-only");
@@ -111,17 +111,17 @@ describe("MobileNav", () => {
   it("closes sheet when onClose callback is called", async () => {
     const user = userEvent.setup();
     render(<MobileNav />);
-    
+
     // Open the sheet
     const toggleButton = screen.getByTestId("sheet-toggle");
     await user.click(toggleButton);
-    
+
     let sheet = screen.getByTestId("sheet");
     expect(sheet).toHaveAttribute("data-open", "true");
-    
+
     // Close via toggle button
     await user.click(toggleButton);
-    
+
     sheet = screen.getByTestId("sheet");
     expect(sheet).toHaveAttribute("data-open", "false");
   });
@@ -129,13 +129,12 @@ describe("MobileNav", () => {
   it("renders SheetContent with correct props", async () => {
     const user = userEvent.setup();
     render(<MobileNav />);
-    
+
     const toggleButton = screen.getByTestId("sheet-toggle");
     await user.click(toggleButton);
-    
+
     const content = screen.getByTestId("sheet-content");
     expect(content).toHaveAttribute("data-side", "left");
     expect(content).toHaveAttribute("data-classname", "p-0 w-[280px]");
   });
 });
-
