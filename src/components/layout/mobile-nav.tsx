@@ -20,7 +20,7 @@ export function MobileNav() {
             <SheetContent side="left" className="p-0 w-[280px]">
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 {/* Reuse the Sidebar component inside the sheet */}
-                <Sidebar className="w-full border-none" />
+                <Sidebar className="w-full border-none" onClose={() => setOpen(false)} />
             </SheetContent>
         </Sheet>
     );
