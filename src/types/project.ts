@@ -11,7 +11,9 @@ export interface Project {
   statusColor: string;
   githubUrl?: string;
   liveUrl?: string;
+  clickUrl?: string; // Custom URL to open when card is clicked (overrides liveUrl/githubUrl priority)
   commitCount?: number;
+  deploymentCount?: number;
   lastUpdated?: string;
   featuredImage?: string;
   screenshot?: string;

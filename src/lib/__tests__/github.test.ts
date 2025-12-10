@@ -48,7 +48,7 @@ describe("transformRepoToProject", () => {
 
   it("should transform GitHub repo to Project with correct basic fields", () => {
     const languages = ["TypeScript", "JavaScript"];
-    const project = transformRepoToProject(mockRepo, languages);
+    const project = transformRepoToProject(mockRepo, { languages });
 
     expect(project.title).toBe("test-repo");
     expect(project.description).toBe("A test repository");
@@ -65,7 +65,7 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       description: null,
     } as GitHubRepo;
-    const project = transformRepoToProject(repoWithoutDescription, []);
+    const project = transformRepoToProject(repoWithoutDescription, { languages: [] });
 
     expect(project.description).toBe("No description available");
   });
@@ -75,7 +75,7 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       updated_at: new Date().toISOString(), // Today
     } as GitHubRepo;
-    const project = transformRepoToProject(recentRepo, []);
+    const project = transformRepoToProject(recentRepo, { languages: [] });
 
     expect(project.status).toBe("Active");
   });
@@ -88,7 +88,7 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       updated_at: oldDate.toISOString(),
     } as GitHubRepo;
-    const project = transformRepoToProject(oldRepo, []);
+    const project = transformRepoToProject(oldRepo, { languages: [] });
 
     expect(project.status).toBe("Archived");
   });
@@ -101,7 +101,7 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       updated_at: sixMonthsAgo.toISOString(),
     } as GitHubRepo;
-    const project = transformRepoToProject(maintainedRepo, []);
+    const project = transformRepoToProject(maintainedRepo, { languages: [] });
 
     expect(project.status).toBe("Maintained");
   });
@@ -112,7 +112,7 @@ describe("transformRepoToProject", () => {
       description: "This is a beta project",
       updated_at: new Date().toISOString(),
     } as GitHubRepo;
-    const project = transformRepoToProject(betaRepo, []);
+    const project = transformRepoToProject(betaRepo, { languages: [] });
 
     expect(project.status).toBe("Beta");
   });
@@ -123,16 +123,16 @@ describe("transformRepoToProject", () => {
       description: "WIP project - work in progress",
       updated_at: new Date().toISOString(),
     } as GitHubRepo;
-    const project = transformRepoToProject(wipRepo, []);
+    const project = transformRepoToProject(wipRepo, { languages: [] });
 
     expect(project.status).toBe("Beta");
   });
 
-  it("should limit tags to 5 languages", () => {
-    const manyLanguages = ["Lang1", "Lang2", "Lang3", "Lang4", "Lang5", "Lang6", "Lang7"];
-    const project = transformRepoToProject(mockRepo, manyLanguages);
+  it("should limit tags to 15 languages", () => {
+    const manyLanguages = ["Lang1", "Lang2", "Lang3", "Lang4", "Lang5", "Lang6", "Lang7", "Lang8", "Lang9", "Lang10", "Lang11", "Lang12", "Lang13", "Lang14", "Lang15", "Lang16", "Lang17"];
+    const project = transformRepoToProject(mockRepo, { languages: manyLanguages });
 
-    expect(project.tags.length).toBe(5);
+    expect(project.tags.length).toBe(15);
   });
 
   it("should handle repos without homepage", () => {
@@ -140,13 +140,13 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       homepage: null,
     } as GitHubRepo;
-    const project = transformRepoToProject(repoWithoutHomepage, []);
+    const project = transformRepoToProject(repoWithoutHomepage, { languages: [] });
 
     expect(project.liveUrl).toBeUndefined();
   });
 
   it("should set featured to false by default", () => {
-    const project = transformRepoToProject(mockRepo, []);
+    const project = transformRepoToProject(mockRepo, { languages: [] });
 
     expect(project.featured).toBe(false);
   });

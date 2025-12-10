@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { MOCK_METRICS } from "@/data/mock-data";
-import { GitCommitHorizontal, FolderGit2, BookOpen, Star } from "lucide-react";
+import { GitCommitHorizontal, FolderGit2, Rocket } from "lucide-react";
 import type { Metric } from "@/types";
 
 async function getGitHubMetrics() {
@@ -12,15 +12,17 @@ async function getGitHubMetrics() {
 
     if (response.ok) {
       const stats = await response.json();
-      const starsSum = stats.repos?.reduce((sum: number, repo: { stargazers_count?: number }) => {
-        const stars = repo.stargazers_count ?? 0;
-        return sum + (typeof stars === 'number' && !isNaN(stars) && stars >= 0 ? stars : 0);
-      }, 0) ?? 0;
+
+      // Calculate total deployments across all repos
+      const totalDeployments = stats.repoDeployments
+        ? Object.values(stats.repoDeployments as Record<string, number>).reduce((sum: number, count: number) => sum + (count || 0), 0)
+        : 0;
 
       return {
         commits: stats.commitsLastMonth || 0,
         repos: stats.totalRepos || 0,
-        stars: typeof starsSum === 'number' && !isNaN(starsSum) ? starsSum : 0,
+        totalCommits: (stats.totalCommits as number) || 0,
+        totalDeployments: totalDeployments,
       };
     }
   } catch (error) {
@@ -43,13 +45,6 @@ export async function OverviewMetrics() {
   const metrics: Metric[] = githubData
     ? [
         {
-          label: "Commits",
-          value: formatNumber(githubData.commits),
-          subtext: `Last 30 days`,
-          icon: GitCommitHorizontal,
-          trend: githubData.commits > 0 ? "up" : "neutral",
-        },
-        {
           label: "Projects",
           value: formatNumber(githubData.repos),
           subtext: "Total repositories",
@@ -57,28 +52,50 @@ export async function OverviewMetrics() {
           trend: "neutral",
         },
         {
-          label: "Articles",
-          value: "28", // Keep mock for now
-          subtext: "+3 this month",
-          icon: BookOpen,
-          trend: "up",
+          label: "Deployments",
+          value: formatNumber(githubData.totalDeployments),
+          subtext: "Total deployments",
+          icon: Rocket,
+          trend: githubData.totalDeployments > 0 ? "up" : "neutral",
         },
         {
-          label: "Stars",
-          value: formatNumber(githubData.stars),
-          subtext: "Across all repos",
-          icon: Star,
-          trend: githubData.stars > 0 ? "up" : "neutral",
+          label: "Total Commits",
+          value: formatNumber(githubData.totalCommits),
+          subtext: "All time",
+          icon: GitCommitHorizontal,
+          trend: githubData.totalCommits > 0 ? "up" : "neutral",
         },
+        {
+          label: "Commits",
+          value: formatNumber(githubData.commits),
+          subtext: `Last 30 days`,
+          icon: GitCommitHorizontal,
+          trend: githubData.commits > 0 ? "up" : "neutral",
+        },
+        // Commented out: Articles and Stars
+        // {
+        //   label: "Articles",
+        //   value: "28", // Keep mock for now
+        //   subtext: "+3 this month",
+        //   icon: BookOpen,
+        //   trend: "up",
+        // },
+        // {
+        //   label: "Stars",
+        //   value: formatNumber(githubData.stars),
+        //   subtext: "Across all repos",
+        //   icon: Star,
+        //   trend: githubData.stars > 0 ? "up" : "neutral",
+        // },
       ]
     : MOCK_METRICS;
 
     return (
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {metrics.map((metric: Metric, index: number) => (
-                <Card key={index} className="bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:shadow-[0_0_12px] hover:shadow-primary/15">
+                <Card key={index} className="bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:shadow-[0_0_12px] hover:shadow-primary/15 group">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium text-muted-foreground font-mono">
+                        <CardTitle className="text-sm font-medium text-muted-foreground font-mono group-hover:text-primary transition-colors">
                             {metric.label.toUpperCase()}
                         </CardTitle>
                         <metric.icon className="h-4 w-4 text-primary" />

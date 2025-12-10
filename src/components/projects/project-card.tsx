@@ -1,10 +1,13 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, GitFork, ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import type { Project } from "@/types";
+import { ProjectStats } from "./project-stats";
+import { useProjectCardClick } from "@/hooks/use-project-card-click";
+import { getProjectImageUrl } from "@/lib/project-utils";
 
 interface ProjectCardProps {
   project: Project;
@@ -12,15 +15,27 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, showScreenshot = false }: ProjectCardProps) {
+  const { handleClick, handleKeyDown, isClickable } = useProjectCardClick(project);
+  const imageUrl = getProjectImageUrl(project);
+
   return (
-    <Card className="flex flex-col bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:bg-muted/5 hover:shadow-[0_0_12px] hover:shadow-primary/15 group cursor-pointer">
-      {showScreenshot && project.screenshot && (
-        <div className="relative w-full h-48 overflow-hidden rounded-t-xl">
+    <Card
+      className={cn(
+        "flex flex-col bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:bg-muted/5 hover:shadow-[0_0_12px] hover:shadow-primary/15 group",
+        isClickable && "cursor-pointer"
+      )}
+      onClick={isClickable ? handleClick : undefined}
+      role={isClickable ? "button" : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onKeyDown={isClickable ? handleKeyDown : undefined}
+    >
+      {showScreenshot && imageUrl && (
+        <div className="relative w-full h-48 overflow-hidden rounded-t-xl -mt-6 mb-6 hidden md:block">
           <Image
-            src={project.screenshot}
+            src={imageUrl}
             alt={project.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
@@ -51,20 +66,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
       </CardContent>
 
       <CardFooter className="pt-0 border-t border-border/30 mt-4 pt-4 flex items-center justify-between text-muted-foreground">
-        <div className="flex items-center gap-4 text-xs font-mono">
-          {project.source === "github" && (
-            <>
-              <div className="flex items-center gap-1 hover:text-foreground">
-                <Star className="h-3 w-3" />
-                {project.stars}
-              </div>
-              <div className="flex items-center gap-1 hover:text-foreground">
-                <GitFork className="h-3 w-3" />
-                {project.forks}
-              </div>
-            </>
-          )}
-        </div>
+        <ProjectStats project={project} />
         <div className="flex items-center gap-2">
           {project.githubUrl && (
             <a

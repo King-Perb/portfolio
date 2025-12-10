@@ -32,6 +32,8 @@ describe("GET /api/github/stats", () => {
       languages: { TypeScript: 5000, JavaScript: 3000 },
       repos: [],
       repoLanguages: {},
+      repoCommits: {},
+      repoDeployments: {},
     };
 
     vi.mocked(github.fetchGitHubStats).mockResolvedValueOnce(mockStats);
@@ -107,6 +109,12 @@ describe("GET /api/github/stats", () => {
       ],
       repoLanguages: {
         "user/test-repo": ["TypeScript", "JavaScript"],
+      },
+      repoCommits: {
+        "user/test-repo": 50,
+      },
+      repoDeployments: {
+        "user/test-repo": 3,
       },
     };
 

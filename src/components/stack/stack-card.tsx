@@ -26,9 +26,9 @@ export function StackCard({ language, bytes, totalBytes, index }: StackCardProps
   const bgColor = chartColors[colorIndex];
 
   return (
-    <Card className="bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:shadow-[0_0_12px] hover:shadow-primary/15">
+    <Card className="bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:shadow-[0_0_12px] hover:shadow-primary/15 group">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-bold text-foreground font-mono">
+        <CardTitle className="text-lg font-bold text-foreground font-mono group-hover:text-primary transition-colors">
           {language}
         </CardTitle>
       </CardHeader>

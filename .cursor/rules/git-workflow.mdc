@@ -1,6 +1,5 @@
 ---
-description: Commiting changes with git
-alwaysApply: false
+alwaysApply: true
 ---
 # Git Workflow & Branching Strategy
 
@@ -47,6 +46,7 @@ When helping users with Git workflow:
 3. **Help create branches from current state** - If user has uncommitted changes, create branch first to preserve them
 4. **Guide PR workflow** - Remind users to push branches and create PRs, not direct pushes to main
 5. **Respect branch protection** - Remind users that `main` is protected and requires PRs
+6. **Update implementation plan** - After each commit, update `doc/implementation_plan.md` with a summary of what changed in that commit
 
 ## Moving Changes from Main
 
@@ -72,6 +72,54 @@ The `main` branch is protected with:
 - No force pushes allowed
 
 **Always remind users**: They cannot push directly to `main` - all changes must go through a PR.
+
+## Implementation Plan Updates
+
+**IMPORTANT**: After each commit, the AI must update `doc/implementation_plan.md` to document what changed.
+
+### When to Update
+
+- After creating a commit (before or immediately after)
+- When committing changes that affect features, components, or functionality
+- When adding new features, fixing bugs, or refactoring code
+
+### What to Document
+
+1. **Feature additions**: New components, pages, API routes, or functionality
+2. **Bug fixes**: Issues resolved and how they were fixed
+3. **Refactoring**: Code structure improvements or reorganization
+4. **Configuration changes**: New config files, environment variables, or settings
+5. **Documentation updates**: Changes to docs, README, or comments
+
+### How to Update
+
+1. Read the current `doc/implementation_plan.md` to understand its structure
+2. Add a new entry in the appropriate section (or create a new section if needed)
+3. Include:
+   - Brief description of what changed
+   - Files affected (if significant)
+   - Impact on existing features
+   - Any breaking changes or migration notes
+4. Update the implementation checklist if applicable
+5. Keep entries concise but informative
+
+### Format Example
+
+```markdown
+## Recent Changes
+
+### [Date/Commit] - Feature: Clickable Project Cards
+- Added `clickUrl` field to `Project` interface and `GitHubProjectOverride`
+- Updated `ProjectCard` component to be clickable with configurable URLs
+- Priority: `clickUrl` > `liveUrl` > `githubUrl`
+- Files: `src/types/project.ts`, `src/components/projects/project-card.tsx`, `src/data/github-project-overrides.ts`
+```
+
+## Related Rules
+
+- **Test Maintenance**: See `test-maintenance.mdc` for rules on updating tests when editing code
+- **Commit Standards**: See `commit-standards.mdc` for commit message format
+- **Commit Splitting**: See `commit-splitting.mdc` for when to split vs combine commits
 
 ## Reference
 

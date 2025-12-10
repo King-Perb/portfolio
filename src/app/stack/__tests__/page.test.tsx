@@ -12,6 +12,11 @@ vi.mock("@/components/stack/stack-card", () => ({
   ),
 }));
 
+// Mock manual technologies
+vi.mock("@/data/manual-technologies", () => ({
+  MANUAL_TECHNOLOGIES: [],
+}));
+
 describe("StackPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -91,6 +96,7 @@ describe("StackPage", () => {
     const component = await StackPage();
     render(component);
 
+    // When API fails and no manual technologies, show empty state
     expect(screen.getByText("No stack data available.")).toBeInTheDocument();
   });
 
@@ -103,6 +109,7 @@ describe("StackPage", () => {
     const component = await StackPage();
     render(component);
 
+    // When API fails and no manual technologies, show empty state
     expect(screen.getByText("No stack data available.")).toBeInTheDocument();
   });
 });

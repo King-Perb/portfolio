@@ -1,0 +1,156 @@
+---
+description: Always update tests when editing code files
+alwaysApply: true
+---
+# Test Maintenance Rule
+
+**IMPORTANT**: When editing code files, always update or add corresponding tests to ensure test coverage stays current with code changes.
+
+## Workflow
+
+### Step 1: Make Code Changes
+1. Edit the implementation files as requested
+2. Ensure code compiles and has no syntax errors
+
+### Step 2: Fix Type and Linter Errors
+**CRITICAL**: Before updating tests, you MUST:
+1. **Run type checking**: `npm run type:check` (or equivalent)
+2. **Run linting**: `npm run lint` (or equivalent)
+3. **Fix all errors**: Resolve any TypeScript errors and ESLint warnings
+4. **Verify build**: Ensure `npm run build` succeeds (if applicable)
+
+**Do NOT proceed to test updates until all type and linter errors are resolved.**
+
+### Step 3: Update or Add Tests
+After code is error-free, update tests:
+
+1. **Identify test files**: Find corresponding test files for edited code
+   - Component files: `src/components/**/__tests__/*.test.tsx`
+   - Service/utility files: `src/lib/__tests__/*.test.ts`
+   - API routes: `src/app/api/**/__tests__/*.test.ts`
+   - Pages: `src/app/**/__tests__/*.test.tsx`
+   - Hooks: `src/hooks/__tests__/*.test.ts`
+
+2. **Update existing tests**:
+   - Update test cases to match new behavior
+   - Fix broken tests due to API/interface changes
+   - Add test cases for new functionality
+   - Remove or update tests for removed features
+
+3. **Add new tests** (if test file doesn't exist):
+   - Create test file in appropriate `__tests__` directory
+   - Follow existing test patterns and structure
+   - Use same testing framework (Vitest + React Testing Library)
+
+4. **Ensure tests pass**: Run `npm test` to verify all tests pass
+
+## When to Update Tests
+
+### Always Update Tests When:
+- ✅ **Adding new functions/methods** - Add tests for new functionality
+- ✅ **Changing function signatures** - Update tests to match new parameters
+- ✅ **Modifying component props** - Update component tests
+- ✅ **Changing return types** - Update test expectations
+- ✅ **Adding new features** - Add comprehensive tests
+- ✅ **Fixing bugs** - Add regression tests to prevent recurrence
+- ✅ **Refactoring code** - Ensure tests still pass and cover refactored logic
+
+### May Skip Test Updates When:
+- ⚠️ **Pure configuration changes** (e.g., constants, config files)
+- ⚠️ **Documentation-only changes** (comments, README)
+- ⚠️ **Styling-only changes** (CSS classes, no logic changes)
+- ⚠️ **Type-only changes** (adding types without logic changes)
+
+**When in doubt, add or update tests.**
+
+## Test File Naming Convention
+
+- Component tests: `src/components/**/__tests__/[component-name].test.tsx`
+- Service/utility tests: `src/lib/__tests__/[service-name].test.ts`
+- API route tests: `src/app/api/**/__tests__/route.test.ts`
+- Page tests: `src/app/**/__tests__/page.test.tsx`
+- Hook tests: `src/hooks/__tests__/[hook-name].test.ts`
+
+## Examples
+
+### Example 1: Adding a New Function
+
+```typescript
+// src/lib/utils.ts - Added new function
+export function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+```
+
+**Action**: Create `src/lib/__tests__/utils.test.ts` with tests for `formatDate`
+
+### Example 2: Modifying Component Props
+
+```typescript
+// src/components/project-card.tsx - Added new prop
+interface ProjectCardProps {
+  project: Project;
+  showScreenshot?: boolean; // NEW
+  onClick?: () => void; // NEW
+}
+```
+
+**Action**: Update `src/components/projects/__tests__/project-card.test.tsx` to:
+- Test new `showScreenshot` prop behavior
+- Test new `onClick` callback
+- Update existing tests if needed
+
+### Example 3: Changing API Response Format
+
+```typescript
+// src/lib/github.ts - Changed return type
+export async function fetchGitHubStats(): Promise<GitHubStats> {
+  // Now returns { repos, languages, repoCommits, repoDeployments }
+}
+```
+
+**Action**: Update `src/lib/__tests__/github.test.ts` to:
+- Update mock data structure
+- Update test expectations
+- Add tests for new fields (repoCommits, repoDeployments)
+
+## Test Quality Standards
+
+When updating tests, ensure:
+
+1. **Coverage**: Tests cover new/changed functionality
+2. **Edge cases**: Test boundary conditions and error cases
+3. **Integration**: Test how changes interact with existing code
+4. **Regression**: Ensure existing functionality still works
+5. **Clarity**: Test names clearly describe what is being tested
+
+## Workflow Summary
+
+```
+1. Edit code files
+   ↓
+2. Fix type errors (npm run type:check)
+   ↓
+3. Fix linter errors (npm run lint)
+   ↓
+4. Verify build (npm run build)
+   ↓
+5. Update/add tests
+   ↓
+6. Run tests (npm test)
+   ↓
+7. Ensure all tests pass
+```
+
+## Integration with Other Rules
+
+- **Commit Standards**: Test updates should be included in the same commit as code changes (see `commit-splitting.mdc`)
+- **Git Workflow**: Test updates are part of the feature implementation
+- **Implementation Plan**: Document test additions in `doc/implementation_plan.md`
+
+## Reference
+
+- See `src/test/README.md` for testing guidelines
+- See existing test files for patterns and examples
+- Vitest documentation: https://vitest.dev/
+- React Testing Library: https://testing-library.com/react/

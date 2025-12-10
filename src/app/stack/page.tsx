@@ -1,4 +1,5 @@
 import { StackCard } from "@/components/stack/stack-card";
+import { MANUAL_TECHNOLOGIES } from "@/data/manual-technologies";
 
 async function getStackData() {
   try {
@@ -7,15 +8,40 @@ async function getStackData() {
       next: { revalidate: 3600 },
     });
 
+    const githubLanguages: { [key: string]: number } = {};
+
     if (response.ok) {
       const stats = await response.json();
-      return stats.languages || {};
+      Object.assign(githubLanguages, stats.languages || {});
     }
+
+    // Combine GitHub languages with manual technologies
+    const allLanguages: { [key: string]: number } = { ...githubLanguages };
+
+    // Add manual technologies
+    // If bytes not provided, calculate a default based on average GitHub language size
+    const avgGitHubBytes = Object.values(githubLanguages).length > 0
+      ? Object.values(githubLanguages).reduce((sum, bytes) => sum + bytes, 0) / Object.values(githubLanguages).length
+      : 1000; // Default fallback
+
+    MANUAL_TECHNOLOGIES.forEach((tech) => {
+      // Use provided bytes or calculate default
+      const bytes = tech.bytes ?? Math.max(100, avgGitHubBytes * 0.5);
+      // If technology already exists from GitHub, add to it; otherwise set it
+      allLanguages[tech.name] = (allLanguages[tech.name] || 0) + bytes;
+    });
+
+    return allLanguages;
   } catch (error) {
     console.error("Failed to fetch stack data:", error);
-  }
 
-  return {};
+    // Fallback to manual technologies only if GitHub API fails
+    const fallbackLanguages: { [key: string]: number } = {};
+    MANUAL_TECHNOLOGIES.forEach((tech) => {
+      fallbackLanguages[tech.name] = tech.bytes ?? 1000;
+    });
+    return fallbackLanguages;
+  }
 }
 
 export default async function StackPage() {
