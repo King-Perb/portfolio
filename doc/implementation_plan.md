@@ -10,6 +10,10 @@ Create a high-performance "Developer Dashboard" portfolio that communicates tech
 - **Theme:** `next-themes` (Default: Dark "Hacker Mode").
 - **Icons:** `lucide-react`.
 - **Animation:** `framer-motion` (Micro-interactions, not layout shifts).
+- **Testing:**
+  - **Unit/Component:** Vitest + React Testing Library
+  - **E2E:** Playwright (Chromium, Firefox, WebKit, Mobile Chrome, Mobile Safari)
+- **CI/CD:** GitHub Actions + Pre-push hooks (pre-commit framework)
 
 ## 3. Design Concept: "The Command Center"
 Instead of a scrolling brochure, the site acts as a functional dashboard.
@@ -25,6 +29,16 @@ Instead of a scrolling brochure, the site acts as a functional dashboard.
     - **Top Bar:** Branding + Hamburger Menu.
     - **Navigation:** Slide-out Sheet (Right or Left).
     - **Grid:** Collapses to single-column vertical scroll.
+- **Navigation Animation:**
+    - **Sidebar Edge Animation:** When user selects a navigation option:
+        - Sidebar right edge animates horizontally to the right (slide-out effect)
+        - Duration: ~200-250ms
+        - Then slides back left to reveal the newly loaded section
+        - Duration: ~200-250ms
+        - Total animation: ~400-500ms with smooth easing
+        - Implementation: Use `framer-motion` or CSS transitions on sidebar container
+        - Visual effect: Creates a "reveal" transition between page sections
+        - Applied to: Desktop sidebar navigation only (mobile uses sheet which already has slide animation)
 
 ### 3.2 Design System (Brand Book)
 
@@ -97,6 +111,11 @@ Use Tailwind spacing tokens consistently:
   - Slow: `duration-500` (500ms)
 - **Easing:** Default Tailwind easing (`ease-in-out`)
 - **Sheet/Dialog:** `data-[state=open]:duration-500`, `data-[state=closed]:duration-300`
+- **Navigation Animation:** When user selects a navigation option, the sidebar edge animates horizontally:
+  - Edge moves right (slide-out) to reveal transition
+  - Then slides back left to reveal new loaded section
+  - Duration: ~400-500ms total with smooth easing
+  - Use `framer-motion` or CSS transitions for smooth animation
 
 ## 4. Data Strategy
 
@@ -148,6 +167,7 @@ Use Tailwind spacing tokens consistently:
     - `featured?: boolean` - Flag for homepage featured section
     - `commitCount?: number` - Total commits (GitHub: from API, Manual: from config)
     - `deploymentCount?: number` - Total deployments (GitHub: from API, Manual: from config)
+    - `private?: boolean` - Flag for private GitHub repositories (prevents link opening)
 - **Deployment Data:**
   - **GitHub:** Fetch deployment count via GitHub API (`GET /repos/{owner}/{repo}/deployments`)
   - **Manual:** Set `deploymentCount` in `manual-projects.ts` config
@@ -211,13 +231,22 @@ These rules ensure maintainability and "premium" code quality.
 - **Complexity:** Cyclomatic complexity should be low. Early returns over nested `if`.
 
 ### 5.6 Testing Strategy
-- **Unit:** Test utility functions (`src/lib/*.ts`) with Vitest.
+- **Unit Tests:** Test utility functions (`src/lib/*.ts`) with Vitest.
+- **Component Tests:** Test React components with Vitest + React Testing Library.
+- **Integration Tests:** Test API routes and page components with Vitest.
+- **End-to-End Tests:** Full browser testing with Playwright for critical user flows.
+  - **Coverage:** Navigation, project interactions, mobile navigation, responsive design, contact page, stack page
+  - **Browsers:** Chromium (Desktop) + Mobile Chrome (for responsive testing)
+  - **Test Suites:** 9 test files covering 76 passing tests
+  - **CI Integration:** E2E tests run automatically in GitHub Actions
 - **Visual:** Use `/design` route to verify component states manually properly.
 
 ### 5.7 Pre-Merge Checklist (Definition of Done)
 *Run this before marking any task as [x]*
 - [ ] **Lint:** `npm run lint` passes?
 - [ ] **Type:** `tsc --noEmit` passes with no `any`?
+- [ ] **Tests:** `npm test` passes (unit + component tests)?
+- [ ] **E2E Tests:** `npm run test:e2e` passes (if applicable)?
 - [ ] **Size:** Is the file under 200 lines?
 - [ ] **Mobile:** Did I check the layout on a 375px width (DevTools)?
 - [ ] **Theme:** Does it look good in both "Hacker Mode" and Light Mode?
@@ -240,6 +269,22 @@ These rules ensure maintainability and "premium" code quality.
 - **Build Command:** `npm run build` (default).
 - **Output Directory:** `.next` (default).
 - **Node Version:** 18.x or higher (specify in `package.json` or Vercel settings).
+- **SWC Dependencies:** Lockfile includes all platform-specific SWC binaries for Linux (Vercel) and Windows (local dev).
+
+### 6.4 CI/CD Pipeline
+- **Pre-push Hooks:** Automatically run lint, type-check, tests, and build before pushing (via pre-commit framework).
+- **GitHub Actions Workflow:** `.github/workflows/ci.yml` includes:
+  - **Lint Job:** ESLint validation
+  - **Type Check Job:** TypeScript compilation check
+  - **Test Job:** Unit and component tests with Vitest
+  - **E2E Test Job:** Playwright end-to-end tests (Chromium + Mobile Chrome)
+  - **Build Job:** Production build verification
+- **Branch Protection:** Main branch requires:
+  - All CI checks to pass (lint, type-check, test, e2e, build)
+  - Gitleaks scan to pass
+  - At least 1 PR approval
+  - No force pushes allowed
+- **Test Artifacts:** Playwright test reports uploaded as GitHub Actions artifacts (30-day retention).
 
 ## 7. Pages & Routes
 
@@ -247,9 +292,17 @@ These rules ensure maintainability and "premium" code quality.
 - **Status:** ✅ Implemented
 - **Components:** OverviewMetrics, ProjectsGrid (featured projects)
 - **Data:** Currently using mock data, will integrate GitHub API
+- **Easter Egg Feature:**
+  - **"Don't Click This" Button:**
+    - Location: Under Activity Overview section (first section)
+    - Behavior: When clicked, opens a popover/dialog containing a video player
+    - Video: Plays `Portfolio_Presentation.mp4` from `public/` directory
+    - Implementation: Use shadcn/ui Dialog or Popover component with video element
+    - Styling: Match "Hacker Mode" aesthetic with green accents
+    - Animation: Smooth popover entrance/exit transitions
 
 ### 7.2 Projects Page (`/projects`)
-- **Status:** ✅ Implemented (needs commits and deployments display)
+- **Status:** ✅ Implemented
 - **Purpose:** Display all projects (GitHub repos + manual entries) with screenshots
 - **Layout:**
   - Header: "All Projects" title with project count
@@ -259,17 +312,35 @@ These rules ensure maintainability and "premium" code quality.
   - Hover effects: Card lift with glow (matching homepage cards)
 - **Design:** Same card styling as homepage (`bg-card/80 backdrop-blur border border-primary/20`)
 - **Components:** `src/components/projects/project-card.tsx` (reusable)
-- **Project Card Stats Display:**
+- **Project Card Stats Display:** ✅ Implemented
+  - **Component:** `ProjectStats` component (`src/components/projects/project-stats.tsx`)
   - **GitHub Projects:** Show stars ⭐, forks 🍴, commits 📝, deployments 🚀
   - **Manual Projects:** Show commits and deployments if available (from manual data)
   - **Layout:** Stats displayed in card footer alongside stars/forks
   - **Icons:** Use Lucide icons (GitCommitHorizontal for commits, Rocket for deployments)
   - **Data Sources:**
-    - **Commits:** From `commitCount` field in Project interface (GitHub: from API, Manual: from config)
-    - **Deployments:** New `deploymentCount` field in Project interface (GitHub: from API, Manual: from config)
+    - **Commits:** From `commitCount` field in Project interface (GitHub: from API via `fetchRepoTotalCommits`, Manual: from config)
+    - **Deployments:** From `deploymentCount` field in Project interface (GitHub: from API via `fetchRepoDeployments`, Manual: from config)
+- **Project Image Enhancements:** ✅ Implemented
+  - **Green Overlay:** Subtle green overlay applied to project images (featuredImage/screenshot)
+    - Overlay color: `bg-primary/20` (semi-transparent green) with `mix-blend-overlay` blend mode
+    - Position: Absolute positioned div over image with `absolute inset-0`
+    - Hover: Overlay intensity increases to `bg-primary/30` on hover for interactive feedback
+    - Implementation: Overlay div added in `ProjectCard` component image container (line 41)
+- **Private Repository Handling:**
+  - **Private Repo Detection:** Check `private: true` field from GitHub API response
+  - **Click Behavior:** When user clicks a private repo project card:
+    - **Do NOT open any link** (prevent default navigation)
+    - Show a popover/tooltip with message: "This is a private repository"
+    - Use shadcn/ui Popover or Tooltip component
+    - Position: Near the clicked card or centered
+    - Styling: Match "Hacker Mode" aesthetic with green accents
+    - Animation: Smooth popover entrance/exit
+  - **Visual Indicator (Optional):** Consider adding a small lock icon or badge to private repo cards
+  - **Implementation:** Update `useProjectCardClick` hook to check `project.private` before opening link
 
 ### 7.3 Stack Page (`/stack`)
-- **Status:** ✅ Implemented (partial - needs manual technologies support)
+- **Status:** ✅ Implemented
 - **Purpose:** Display technology stack from GitHub repository languages
 - **Layout:**
   - Header: "Tech Stack" title with subtitle
@@ -280,10 +351,11 @@ These rules ensure maintainability and "premium" code quality.
 - **Data Source:**
   - **Auto-populated:** GitHub repo languages (from API)
   - **Manual additions:** Config file for technologies not in GitHub repos (e.g., tools, frameworks, services)
-- **Manual Technologies Config:**
+- **Manual Technologies Config:** ✅ Implemented
   - **Location:** `src/data/manual-technologies.ts` (TypeScript constants)
   - **Structure:** Array of technology objects with name and optional byte count for percentage calculation
-  - **Integration:** Combined with GitHub languages in stack page data fetching
+  - **Integration:** Combined with GitHub languages in `src/app/stack/page.tsx` data fetching
+  - **Current Technologies:** Docker, Kubernetes, AWS, Vercel
   - **Usage:**
     ```typescript
     // src/data/manual-technologies.ts
@@ -291,6 +363,7 @@ These rules ensure maintainability and "premium" code quality.
       { name: "Docker", bytes: 1000 },
       { name: "Kubernetes", bytes: 500 },
       { name: "AWS", bytes: 2000 },
+      { name: "Vercel", bytes: 1500 },
     ];
     ```
 - **Components:** `src/components/stack/stack-card.tsx`
@@ -314,9 +387,16 @@ These rules ensure maintainability and "premium" code quality.
 - [x] **Homepage:** Overview metrics and featured projects grid.
 - [x] **GitHub API Integration:** API route, utility functions, data service.
 - [x] **Projects Page:** All projects display with screenshots.
-- [x] **Stack Page:** Technology stack from GitHub languages (needs manual technologies).
+- [x] **Stack Page:** Technology stack from GitHub languages + manual technologies.
 - [x] **Contact Page:** Email and social links.
 - [x] **Manual Projects:** Support for non-GitHub projects.
-- [ ] **Manual Technologies:** Config file for technologies not in GitHub repos.
-- [ ] **Project Card Stats:** Display commits and deployments alongside stars/forks.
-- [ ] **Deployment Data:** Fetch deployment count from GitHub API and support manual entries.
+- [x] **E2E Testing Setup:** Playwright configuration with 76 passing tests covering navigation, projects, contact, stack, and responsive design.
+- [x] **CI/CD Integration:** GitHub Actions workflow includes E2E test job with Playwright browser installation and test execution.
+- [x] **SWC Dependencies:** Fixed package-lock.json to include all platform-specific SWC binaries (resolves Vercel deployment warnings).
+- [x] **Manual Technologies:** Config file for technologies not in GitHub repos (`src/data/manual-technologies.ts`), integrated in Stack page.
+- [x] **Project Card Stats:** Display commits and deployments alongside stars/forks (`ProjectStats` component with icons).
+- [x] **Deployment Data:** Fetch deployment count from GitHub API (`fetchRepoDeployments`) and support manual entries.
+- [x] **Project Image Green Overlay:** Add subtle green overlay to project images for "Hacker Mode" aesthetic (`bg-primary/20` with `mix-blend-overlay`, increases to `bg-primary/30` on hover).
+- [ ] **Navigation Sidebar Animation:** Implement horizontal slide animation on sidebar edge when navigating.
+- [ ] **Private Repository Popover:** Show popover message when clicking private repo cards, prevent link opening.
+- [x] **Easter Egg Video Button:** Add "Don't Click This" button under Activity Overview that plays Portfolio_Presentation.mp4 in dialog.
