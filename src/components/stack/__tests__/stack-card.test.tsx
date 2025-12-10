@@ -42,4 +42,3 @@ describe("StackCard", () => {
     expect(progressBar?.getAttribute("style")).toMatch(/oklch\(0\.9.*0\.1.*145\)/);
   });
 });
-

@@ -122,4 +122,3 @@ describe("GET /api/github/stats", () => {
     expect(data.repoLanguages).toHaveProperty("user/test-repo");
   });
 });
-

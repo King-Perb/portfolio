@@ -10,4 +10,3 @@ export const FEATURED_GITHUB_REPOS: string[] = [
   // "King-Perb/another-repo",
   // Add your featured repository full names here
 ];
-

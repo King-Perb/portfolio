@@ -114,4 +114,3 @@ describe("OverviewMetrics", () => {
     expect(screen.getByText("STARS")).toBeInTheDocument();
   });
 });
-

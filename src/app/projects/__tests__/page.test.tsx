@@ -27,8 +27,8 @@ describe("ProjectsPage", () => {
 
   it("displays project count", async () => {
     const mockProjects = [
-      { 
-        title: "Project 1", 
+      {
+        title: "Project 1",
         description: "Test project 1",
         tags: ["TypeScript"],
         stars: 0,
@@ -37,8 +37,8 @@ describe("ProjectsPage", () => {
         statusColor: "text-primary border-primary/20 bg-primary/10",
         source: "github" as const,
       },
-      { 
-        title: "Project 2", 
+      {
+        title: "Project 2",
         description: "Test project 2",
         tags: ["JavaScript"],
         stars: 0,
@@ -58,8 +58,8 @@ describe("ProjectsPage", () => {
   });
 
   it("displays singular form for one project", async () => {
-    const mockProjects = [{ 
-      title: "Project 1", 
+    const mockProjects = [{
+      title: "Project 1",
       description: "Test project",
       tags: ["TypeScript"],
       stars: 0,
@@ -79,8 +79,8 @@ describe("ProjectsPage", () => {
 
   it("renders all projects", async () => {
     const mockProjects = [
-      { 
-        title: "Project 1", 
+      {
+        title: "Project 1",
         description: "Test project 1",
         tags: ["TypeScript"],
         stars: 0,
@@ -89,8 +89,8 @@ describe("ProjectsPage", () => {
         statusColor: "text-primary border-primary/20 bg-primary/10",
         source: "github" as const,
       },
-      { 
-        title: "Project 2", 
+      {
+        title: "Project 2",
         description: "Test project 2",
         tags: ["JavaScript"],
         stars: 0,
@@ -99,8 +99,8 @@ describe("ProjectsPage", () => {
         statusColor: "text-primary border-primary/20 bg-primary/10",
         source: "manual" as const,
       },
-      { 
-        title: "Project 3", 
+      {
+        title: "Project 3",
         description: "Test project 3",
         tags: ["Python"],
         stars: 0,
@@ -130,4 +130,3 @@ describe("ProjectsPage", () => {
     expect(screen.getByText("No projects found.")).toBeInTheDocument();
   });
 });
-

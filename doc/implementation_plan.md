@@ -277,7 +277,7 @@ These rules ensure maintainability and "premium" code quality.
   - Each card: Language name, usage percentage/bytes, icon/logo
   - Optional: Group by category (Frontend, Backend, Tools)
 - **Design:** Smaller cards with progress indicators using chart color gradient
-- **Data Source:** 
+- **Data Source:**
   - **Auto-populated:** GitHub repo languages (from API)
   - **Manual additions:** Config file for technologies not in GitHub repos (e.g., tools, frameworks, services)
 - **Manual Technologies Config:**

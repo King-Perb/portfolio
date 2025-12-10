@@ -43,4 +43,3 @@ If the `GITHUB_TOKEN` is not set or invalid, the API will return a 500 error wit
   "error": "Failed to fetch GitHub stats"
 }
 ```
-

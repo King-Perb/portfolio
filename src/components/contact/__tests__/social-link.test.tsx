@@ -46,4 +46,3 @@ describe("SocialLinkComponent", () => {
     expect(screen.getByRole("link")).toHaveAttribute("href", "https://linkedin.com/in/test");
   });
 });
-

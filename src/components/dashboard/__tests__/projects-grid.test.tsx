@@ -115,4 +115,3 @@ describe("ProjectsGrid", () => {
     expect(container.querySelector("section")).toBeInTheDocument();
   });
 });
-

@@ -49,7 +49,7 @@ describe("ContactPage", () => {
 
     const copyButton = screen.getByText("Copy Email");
     expect(copyButton).toBeInTheDocument();
-    
+
     await user.click(copyButton);
 
     // Verify the button click triggers the copy function
@@ -111,4 +111,3 @@ describe("ContactPage", () => {
     consoleSpy.mockRestore();
   });
 });
-

@@ -106,4 +106,3 @@ describe("StackPage", () => {
     expect(screen.getByText("No stack data available.")).toBeInTheDocument();
   });
 });
-
