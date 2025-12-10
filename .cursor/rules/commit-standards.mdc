@@ -155,6 +155,14 @@ Migration:
 - Always use the format above
 - For multi-file changes, group related changes in the body with bullet points
 
+## Commit Workflow
+
+**IMPORTANT**: When the user requests multiple commits:
+
+- **Stop after each commit** - Do NOT proceed to the next commit automatically
+- Wait for user confirmation or explicit request before creating the next commit
+- This allows the user to review each commit before moving to the next one
+
 ## References
 
 - [Conventional Commits](https://www.conventionalcommits.org/)
