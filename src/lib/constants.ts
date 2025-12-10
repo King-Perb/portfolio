@@ -3,10 +3,10 @@ import { LayoutDashboard, FolderKanban, Layers, User, Github, Linkedin, Twitter 
 import type { LucideIcon } from "lucide-react";
 
 export const USER_PROFILE = {
-    name: "Siddharth Bharath", // Placeholder from screenshot, user can update
-    handle: "@siddharthb",
+    name: "Miko", // Placeholder from screenshot, user can update
+    handle: "@King-Perb",
     bio: "Developer & AI builder exploring the future of human-computer interaction",
-    avatarUrl: "https://github.com/shadcn.png", // Fallback
+    avatarUrl: "/portfolio-logo-small.png",
     status: "Building in public",
 };
 
@@ -40,21 +40,21 @@ export interface SocialLink {
 }
 
 export const CONTACT_INFO = {
-    email: "your-email@example.com", // Update with your email
+    email: "mikolajlech@gmail.com",
     socialLinks: [
         {
             platform: "GitHub",
-            url: "https://github.com/yourusername", // Update with your GitHub
+            url: "https://github.com/King-Perb",
             icon: Github,
         },
         {
             platform: "LinkedIn",
-            url: "https://linkedin.com/in/yourusername", // Update with your LinkedIn
+            url: "https://linkedin.com/in/mikolajlech",
             icon: Linkedin,
         },
         {
             platform: "Twitter",
-            url: "https://twitter.com/yourusername", // Update with your Twitter
+            url: "https://twitter.com/suiperb",
             icon: Twitter,
         },
     ] as SocialLink[],

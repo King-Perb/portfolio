@@ -50,7 +50,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
                 {NAV_ITEMS.map((item) => {
                     const isActive = pathname === item.href;
                     return (
-                        <Link key={item.href} href={item.href} onClick={onClose}>
+                        <Link key={item.href} href={item.href} onClick={() => onClose?.()}>
                             <Button
                                 variant="ghost"
                                 className={cn(

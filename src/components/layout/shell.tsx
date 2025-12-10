@@ -13,7 +13,7 @@ export function Shell({ children }: ShellProps) {
             {/* Mobile Top Bar */}
             <div className="md:hidden flex items-center justify-between p-4 border-b sticky top-0 bg-background/80 backdrop-blur-md z-50">
                 <div className="font-bold font-mono tracking-tighter text-lg">
-                    SB_PORTFOLIO
+                    MIKO&apos;S PORTFOLIO
                 </div>
                 <MobileNav />
             </div>
