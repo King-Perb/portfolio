@@ -67,11 +67,16 @@ describe("ProjectCard", () => {
       ...mockProject,
       screenshot: "/test-screenshot.jpg",
     };
-    render(<ProjectCard project={projectWithScreenshot} showScreenshot={true} />);
+    const { container } = render(<ProjectCard project={projectWithScreenshot} showScreenshot={true} />);
 
     const image = screen.getByAltText("Test Project");
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute("src", "/test-screenshot.jpg");
+    
+    // Verify green overlay is present
+    const overlay = container.querySelector(".mix-blend-overlay");
+    expect(overlay).toBeInTheDocument();
+    expect(overlay).toHaveClass("bg-primary/30");
   });
 
   it("should not render screenshot when showScreenshot is false", () => {
