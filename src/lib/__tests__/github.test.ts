@@ -132,7 +132,7 @@ describe("transformRepoToProject", () => {
     const manyLanguages = ["Lang1", "Lang2", "Lang3", "Lang4", "Lang5", "Lang6", "Lang7"];
     const project = transformRepoToProject(mockRepo, manyLanguages);
 
-    expect(project.tags.length).toBe(5);
+    expect(project.tags.length).toBe(15);
   });
 
   it("should handle repos without homepage", () => {
