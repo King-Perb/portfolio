@@ -25,6 +25,11 @@ describe("OverviewMetrics", () => {
     const mockStats = {
       commitsLastMonth: 42,
       totalRepos: 10,
+      totalCommits: 500,
+      repoDeployments: {
+        "user/repo1": 5,
+        "user/repo2": 3,
+      },
       repos: [
         { stargazers_count: 5 },
         { stargazers_count: 3 },
@@ -43,14 +48,18 @@ describe("OverviewMetrics", () => {
     // Should render metrics from GitHub
     expect(screen.getByText("COMMITS")).toBeInTheDocument();
     expect(screen.getByText("PROJECTS")).toBeInTheDocument();
-    expect(screen.getByText("ARTICLES")).toBeInTheDocument();
-    expect(screen.getByText("STARS")).toBeInTheDocument();
+    expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
+    expect(screen.getByText("DEPLOYMENTS")).toBeInTheDocument();
   });
 
   it("formats large numbers with 'k' suffix", async () => {
     const mockStats = {
       commitsLastMonth: 1500,
       totalRepos: 2500,
+      totalCommits: 5000,
+      repoDeployments: {
+        "user/repo1": 100,
+      },
       repos: [{ stargazers_count: 5000 }],
     };
 
@@ -91,14 +100,15 @@ describe("OverviewMetrics", () => {
     expect(zeroValues.length).toBeGreaterThan(0);
   });
 
-  it("handles invalid star counts gracefully", async () => {
+  it("handles zero deployments gracefully", async () => {
     const mockStats = {
       commitsLastMonth: 10,
       totalRepos: 2,
+      totalCommits: 100,
+      repoDeployments: {},
       repos: [
-        { stargazers_count: null },
-        { stargazers_count: "invalid" },
-        { stargazers_count: -5 },
+        { stargazers_count: 5 },
+        { stargazers_count: 3 },
       ],
     };
 
@@ -110,7 +120,10 @@ describe("OverviewMetrics", () => {
     const component = await OverviewMetrics();
     render(component);
 
-    // Should not crash and should display 0 for stars
-    expect(screen.getByText("STARS")).toBeInTheDocument();
+    // Should not crash and should display metrics
+    expect(screen.getByText("COMMITS")).toBeInTheDocument();
+    expect(screen.getByText("PROJECTS")).toBeInTheDocument();
+    expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
+    expect(screen.getByText("DEPLOYMENTS")).toBeInTheDocument();
   });
 });

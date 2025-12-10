@@ -1,4 +1,4 @@
-import { GitCommitHorizontal, FolderGit2, BookOpen, Star } from "lucide-react";
+import { GitCommitHorizontal, FolderGit2, Rocket } from "lucide-react";
 import type { Project, Metric } from "@/types";
 
 export const MOCK_PROJECTS: Project[] = [
@@ -50,13 +50,6 @@ export const MOCK_PROJECTS: Project[] = [
 
 export const MOCK_METRICS: Metric[] = [
   {
-    label: "Commits",
-    value: "2,542",
-    subtext: "+124 this week",
-    icon: GitCommitHorizontal,
-    trend: "up",
-  },
-  {
     label: "Projects",
     value: "14",
     subtext: "2 active",
@@ -64,17 +57,39 @@ export const MOCK_METRICS: Metric[] = [
     trend: "neutral",
   },
   {
-    label: "Articles",
-    value: "28",
-    subtext: "+3 this month",
-    icon: BookOpen,
+    label: "Deployments",
+    value: "42",
+    subtext: "Total deployments",
+    icon: Rocket,
     trend: "up",
   },
   {
-    label: "Stars",
-    value: "1.2k",
-    subtext: "Across all repos",
-    icon: Star,
+    label: "Total Commits",
+    value: "15.2k",
+    subtext: "All time",
+    icon: GitCommitHorizontal,
     trend: "up",
   },
+  {
+    label: "Commits",
+    value: "2,542",
+    subtext: "+124 this week",
+    icon: GitCommitHorizontal,
+    trend: "up",
+  },
+  // Commented out: Articles and Stars
+  // {
+  //   label: "Articles",
+  //   value: "28",
+  //   subtext: "+3 this month",
+  //   icon: BookOpen,
+  //   trend: "up",
+  // },
+  // {
+  //   label: "Stars",
+  //   value: "1.2k",
+  //   subtext: "Across all repos",
+  //   icon: Star,
+  //   trend: "up",
+  // },
 ];
