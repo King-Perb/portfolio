@@ -24,7 +24,11 @@ export async function ProjectsGrid() {
     return (
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
             {projects.slice(0, 4).map((project) => (
-                <ProjectCard key={getProjectKey(project)} project={project} showScreenshot={false} />
+                <ProjectCard 
+                    key={getProjectKey(project)} 
+                    project={project} 
+                    showScreenshot={!!(project.featuredImage || project.screenshot)} 
+                />
             ))}
         </section>
     );
