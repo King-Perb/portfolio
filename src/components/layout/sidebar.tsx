@@ -10,9 +10,10 @@ import { USER_PROFILE, NAV_ITEMS } from "@/lib/constants";
 
 interface SidebarProps {
     className?: string;
+    onClose?: () => void;
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, onClose }: SidebarProps) {
     const pathname = usePathname();
 
     return (
@@ -49,7 +50,7 @@ export function Sidebar({ className }: SidebarProps) {
                 {NAV_ITEMS.map((item) => {
                     const isActive = pathname === item.href;
                     return (
-                        <Link key={item.href} href={item.href}>
+                        <Link key={item.href} href={item.href} onClick={() => onClose?.()}>
                             <Button
                                 variant="ghost"
                                 className={cn(

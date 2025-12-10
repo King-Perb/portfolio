@@ -1,0 +1,75 @@
+{
+  "info": {
+    "name": "Portfolio API",
+    "description": "API collection for Portfolio application endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GitHub Stats",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/github/stats",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "github", "stats"]
+        },
+        "description": "Fetches GitHub statistics including repositories, languages, and commit activity."
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/github/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "github", "stats"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"totalCommits\": 0,\n  \"commitsLastMonth\": 42,\n  \"totalRepos\": 10,\n  \"languages\": {\n    \"TypeScript\": 50000,\n    \"JavaScript\": 30000,\n    \"Python\": 20000\n  },\n  \"repos\": [],\n  \"repoLanguages\": {}\n}"
+        },
+        {
+          "name": "Error Response",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/github/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "github", "stats"]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"error\": \"Failed to fetch GitHub stats\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}
