@@ -1,8 +1,7 @@
 import type { Project } from "@/types";
 import { MANUAL_PROJECTS } from "@/data/manual-projects";
 import { getExcludedRepos, getFeaturedRepos, getProjectOverride, type GitHubProjectOverride } from "@/data/github-project-overrides";
-import { transformRepoToProject } from "@/lib/github";
-import type { GitHubStats, GitHubRepo } from "@/lib/github";
+import { transformRepoToProject, fetchGitHubStats, type GitHubStats, type GitHubRepo } from "@/lib/github";
 import { sortByLastUpdated, sortByImageThenDate } from "@/lib/project-sorters";
 
 /**
@@ -48,43 +47,37 @@ export async function getAllProjects(): Promise<Project[]> {
 
   // Try to fetch GitHub projects
   try {
-    // Use absolute URL for server-side fetching
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const response = await fetch(`${baseUrl}/api/github/stats`, {
-      next: { revalidate: 3600 },
-    });
+    // Call the function directly instead of going through API route
+    // This works during build time and in production
+    const stats = await fetchGitHubStats();
 
-    if (response.ok) {
-      const stats: GitHubStats = await response.json();
+    // Transform GitHub repos to projects
+    const excludedRepos = getExcludedRepos();
+    const featuredRepos = getFeaturedRepos();
 
-      // Transform GitHub repos to projects
-      const excludedRepos = getExcludedRepos();
-      const featuredRepos = getFeaturedRepos();
-
-      for (const repo of stats.repos) {
-        // Skip excluded repositories (safety check - they should already be filtered in fetchGitHubStats)
-        if (excludedRepos.includes(repo.full_name)) {
-          continue;
-        }
-
-        // Get override configuration for this repo
-        const override = getProjectOverride(repo.full_name);
-
-        // Extract all override data
-        const overrideData = extractProjectOverrides(repo, stats, override);
-
-        // Transform repo to project
-        const project = transformRepoToProject(repo, {
-          languages: overrideData.tags,
-          featuredRepos,
-          commitCount: overrideData.commitCount,
-          deploymentCount: overrideData.deploymentCount,
-          featuredImage: overrideData.featuredImage,
-          customDescription: overrideData.customDescription,
-          clickUrl: overrideData.clickUrl,
-        });
-        projects.push(project);
+    for (const repo of stats.repos) {
+      // Skip excluded repositories (safety check - they should already be filtered in fetchGitHubStats)
+      if (excludedRepos.includes(repo.full_name)) {
+        continue;
       }
+
+      // Get override configuration for this repo
+      const override = getProjectOverride(repo.full_name);
+
+      // Extract all override data
+      const overrideData = extractProjectOverrides(repo, stats, override);
+
+      // Transform repo to project
+      const project = transformRepoToProject(repo, {
+        languages: overrideData.tags,
+        featuredRepos,
+        commitCount: overrideData.commitCount,
+        deploymentCount: overrideData.deploymentCount,
+        featuredImage: overrideData.featuredImage,
+        customDescription: overrideData.customDescription,
+        clickUrl: overrideData.clickUrl,
+      });
+      projects.push(project);
     }
   } catch (error) {
     console.error("Failed to fetch GitHub projects:", error);

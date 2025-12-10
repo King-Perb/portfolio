@@ -1,19 +1,13 @@
 import { StackCard } from "@/components/stack/stack-card";
 import { MANUAL_TECHNOLOGIES } from "@/data/manual-technologies";
+import { fetchGitHubStats } from "@/lib/github";
 
 async function getStackData() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const response = await fetch(`${baseUrl}/api/github/stats`, {
-      next: { revalidate: 3600 },
-    });
-
-    const githubLanguages: { [key: string]: number } = {};
-
-    if (response.ok) {
-      const stats = await response.json();
-      Object.assign(githubLanguages, stats.languages || {});
-    }
+    // Call the function directly instead of going through API route
+    // This works during build time and in production
+    const stats = await fetchGitHubStats();
+    const githubLanguages: { [key: string]: number } = stats.languages || {};
 
     // Combine GitHub languages with manual technologies
     const allLanguages: { [key: string]: number } = { ...githubLanguages };
