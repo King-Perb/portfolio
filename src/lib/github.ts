@@ -5,9 +5,10 @@
 
 import { Octokit } from "@octokit/rest";
 import { getExcludedRepos } from "@/data/github-project-overrides";
+import { calculateProjectStatus } from "./project-status";
 
 // Type aliases for Octokit response types
-type GitHubRepo = Awaited<ReturnType<Octokit["rest"]["repos"]["listForAuthenticatedUser"]>>["data"][0];
+export type GitHubRepo = Awaited<ReturnType<Octokit["rest"]["repos"]["listForAuthenticatedUser"]>>["data"][0];
 type GitHubLanguage = Awaited<ReturnType<Octokit["rest"]["repos"]["listLanguages"]>>["data"];
 
 export interface GitHubStats {
@@ -212,41 +213,43 @@ export async function fetchGitHubStats(): Promise<GitHubStats> {
 }
 
 /**
+ * Options for transforming a GitHub repository to a Project
+ */
+export interface TransformRepoOptions {
+  languages: string[];
+  featuredRepos?: string[];
+  commitCount?: number;
+  deploymentCount?: number;
+  featuredImage?: string;
+  customDescription?: string;
+  clickUrl?: string;
+}
+
+/**
  * Transform GitHub repository to Project interface
  */
 export function transformRepoToProject(
   repo: GitHubRepo,
-  languages: string[],
-  featuredRepos?: string[],
-  commitCount?: number,
-  deploymentCount?: number,
-  featuredImage?: string,
-  customDescription?: string,
-  clickUrl?: string
+  options: TransformRepoOptions
 ): import("@/types").Project {
+  const {
+    languages,
+    featuredRepos,
+    commitCount,
+    deploymentCount,
+    featuredImage,
+    customDescription,
+    clickUrl,
+  } = options;
+
   // Determine status based on updated_at
   const updatedAt = repo.updated_at || new Date().toISOString();
-  const lastUpdated = new Date(updatedAt);
-  const daysSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24);
-
-  let status: import("@/types").ProjectStatus = "Active";
-  let statusColor = "text-primary border-primary/20 bg-primary/10";
-
-  if (daysSinceUpdate > 365) {
-    status = "Archived";
-    statusColor = "text-muted-foreground border-muted-foreground/20 bg-muted-foreground/10";
-  } else if (daysSinceUpdate > 180) {
-    status = "Maintained";
-    statusColor = "text-blue-400 border-blue-400/20 bg-blue-400/10";
-  } else if (repo.description?.toLowerCase().includes("beta") || repo.description?.toLowerCase().includes("wip")) {
-    status = "Beta";
-    statusColor = "text-yellow-400 border-yellow-400/20 bg-yellow-400/10";
-  }
+  const { status, statusColor } = calculateProjectStatus(updatedAt, customDescription || repo.description);
 
   return {
     title: repo.name,
     description: customDescription || repo.description || "No description available",
-    tags: languages.slice(0, 15), // Top 5 languages
+    tags: languages.slice(0, 15), // Top 15 languages
     stars: repo.stargazers_count,
     forks: repo.forks_count,
     status,

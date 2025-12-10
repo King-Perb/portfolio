@@ -29,14 +29,14 @@ export interface GitHubProjectOverride {
 
 export const GITHUB_PROJECT_OVERRIDES: Record<string, GitHubProjectOverride> = {
   "King-Perb/portfolio": {
-    tags: ["Next.js", "Vercel", "Tailwind", "Shadcn", "React", "TypeScript"],
+    tags: ["Next.js", "Vercel", "Tailwind", "Shadcn", "React", "TypeScript", "Vitest", "Playwright", "Git", "Cursor"],
     featuredImage: "/screenshots/portfolio-dektop-wide.png",
     description: "A modern portfolio website showcasing my projects and skills",
     clickUrl: "https://portfolio-henna-eight-14.vercel.app",
     featured: true,
   },
   "King-Perb/suiperb-main": {
-    tags: ["Web3", "Move", "Node.js", "PostreSQL", "React", "Next.js", "Vercel", "Tailwind", "Redux", "GCP", "Docker"],
+    tags: ["Web3", "Move", "Node.js", "PostreSQL", "React", "Next.js", "Vercel", "Tailwind", "Redux", "GCP", "Docker", "Git", "Cursor", "Postman"],
     featuredImage: "/screenshots/desktop-wide.png",
     description: "A Web3 platform allowing creators minting NFTs and competing in meme contests",
     clickUrl: "https://suiperb.com",
