@@ -115,6 +115,12 @@ The `main` branch is protected with:
 - Files: `src/types/project.ts`, `src/components/projects/project-card.tsx`, `src/data/github-project-overrides.ts`
 ```
 
+## Related Rules
+
+- **Test Maintenance**: See `test-maintenance.mdc` for rules on updating tests when editing code
+- **Commit Standards**: See `commit-standards.mdc` for commit message format
+- **Commit Splitting**: See `commit-splitting.mdc` for when to split vs combine commits
+
 ## Reference
 
 For detailed human-readable documentation, see `doc/GIT_WORKFLOW.md`.
