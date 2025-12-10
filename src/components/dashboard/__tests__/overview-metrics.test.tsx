@@ -38,7 +38,7 @@ describe("OverviewMetrics", () => {
     });
 
     const component = await OverviewMetrics();
-    const { container } = render(component);
+    render(component);
 
     // Should render metrics from GitHub
     expect(screen.getByText("COMMITS")).toBeInTheDocument();
