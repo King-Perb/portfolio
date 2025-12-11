@@ -34,8 +34,11 @@ test.describe('Mobile Navigation', () => {
     const navSheet = page.locator('[role="dialog"][data-state="open"]');
     await expect(navSheet).toBeVisible();
 
-    // Click on Projects link
-    const projectsLink = page.getByRole('link', { name: /projects/i });
+    // Wait for sheet to fully open
+    await page.waitForTimeout(500);
+
+    // Click on Projects link inside the mobile nav sheet
+    const projectsLink = navSheet.getByRole('link', { name: /projects/i });
     await projectsLink.click();
 
     // Should navigate to projects page

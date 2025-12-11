@@ -16,11 +16,14 @@ test.describe('Navigation', () => {
     }
 
     // Navigate to Projects
-    const projectsLink = page.getByRole('link', { name: /projects/i }).first();
-    
-    // On mobile, wait for navigation sheet to be ready
+    // On mobile, get link from inside the nav sheet; on desktop, get from sidebar
+    let projectsLink;
     if (isMobile) {
+      const navSheet = page.locator('[role="dialog"][data-state="open"]');
       await page.waitForTimeout(500); // Give sheet time to fully open
+      projectsLink = navSheet.getByRole('link', { name: /projects/i });
+    } else {
+      projectsLink = page.getByRole('link', { name: /projects/i }).first();
     }
     
     await projectsLink.click();
