@@ -6,9 +6,18 @@ import { USER_PROFILE, NAV_ITEMS } from "@/lib/constants";
 
 // Mock usePathname with a function that can be changed per test
 const mockUsePathname = vi.fn(() => "/");
+const mockUseRouter = vi.fn(() => ({
+  push: vi.fn(),
+  replace: vi.fn(),
+  prefetch: vi.fn(),
+  back: vi.fn(),
+  forward: vi.fn(),
+  refresh: vi.fn(),
+}));
 
 vi.mock("next/navigation", () => ({
   usePathname: () => mockUsePathname(),
+  useRouter: () => mockUseRouter(),
 }));
 
 // Mock Next.js Link
@@ -98,11 +107,22 @@ describe("Sidebar", () => {
     expect(projectsLink).toBeInTheDocument();
   });
 
-  it("applies custom className when provided", () => {
-    const { container } = render(<Sidebar className="custom-class" />);
+  it("applies custom className when provided", async () => {
+    render(<Sidebar className="custom-class" />);
 
-    const aside = container.querySelector("aside");
-    expect(aside).toHaveClass("custom-class");
+    // The sidebar renders in a portal to document.body when mounted
+    // Wait for it to appear and check for the className
+    await vi.waitFor(() => {
+      const aside = document.body.querySelector("aside");
+      expect(aside).toBeTruthy();
+      return aside;
+    });
+
+    const aside = document.body.querySelector("aside");
+    expect(aside).toBeTruthy();
+    if (aside) {
+      expect(aside).toHaveClass("custom-class");
+    }
   });
 
   it("renders footer with copyright year and first name", () => {

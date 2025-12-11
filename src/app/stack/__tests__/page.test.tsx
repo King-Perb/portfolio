@@ -2,8 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import StackPage from "../page";
 
-// Mock fetch globally
-global.fetch = vi.fn();
+// Mock fetchGitHubStats
+const mockFetchGitHubStats = vi.fn();
+vi.mock("@/lib/github", () => ({
+  fetchGitHubStats: () => mockFetchGitHubStats(),
+}));
 
 // Mock StackCard
 vi.mock("@/components/stack/stack-card", () => ({
@@ -24,10 +27,7 @@ describe("StackPage", () => {
   });
 
   it("renders page title and subtitle", async () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ languages: {} }),
-    });
+    mockFetchGitHubStats.mockResolvedValueOnce({ languages: {} });
 
     const component = await StackPage();
     render(component);
@@ -43,10 +43,7 @@ describe("StackPage", () => {
       Python: 2000,
     };
 
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ languages: mockLanguages }),
-    });
+    mockFetchGitHubStats.mockResolvedValueOnce({ languages: mockLanguages });
 
     const component = await StackPage();
     render(component);
@@ -63,10 +60,7 @@ describe("StackPage", () => {
       JavaScript: 3000,
     };
 
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ languages: mockLanguages }),
-    });
+    mockFetchGitHubStats.mockResolvedValueOnce({ languages: mockLanguages });
 
     const component = await StackPage();
     const { container } = render(component);
@@ -78,10 +72,7 @@ describe("StackPage", () => {
   });
 
   it("displays empty state when no languages", async () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ languages: {} }),
-    });
+    mockFetchGitHubStats.mockResolvedValueOnce({ languages: {} });
 
     const component = await StackPage();
     render(component);
@@ -91,7 +82,7 @@ describe("StackPage", () => {
   });
 
   it("handles API error gracefully", async () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("API Error"));
+    mockFetchGitHubStats.mockRejectedValueOnce(new Error("API Error"));
 
     const component = await StackPage();
     render(component);
@@ -101,10 +92,7 @@ describe("StackPage", () => {
   });
 
   it("handles non-ok response", async () => {
-    (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      ok: false,
-      json: async () => ({}),
-    });
+    mockFetchGitHubStats.mockRejectedValueOnce(new Error("API Error"));
 
     const component = await StackPage();
     render(component);
