@@ -12,12 +12,15 @@ vi.mock("@/components/ui/dialog", () => ({
     dialogOnOpenChange = onOpenChange;
 
     const childrenArray = React.Children.toArray(children);
-    const trigger = childrenArray.find((child: React.ReactElement) =>
-      child?.type && (typeof child.type === 'function' && child.type.name === "DialogTrigger" ||
-      (child?.props && 'asChild' in child.props))
-    );
-    const content = childrenArray.find((child: React.ReactElement) =>
-      child?.type && typeof child.type === 'function' && child.type.name === "DialogContent"
+    const trigger = childrenArray.find((child): child is React.ReactElement => {
+      if (!React.isValidElement(child)) return false;
+      if (typeof child.type === 'function' && child.type.name === "DialogTrigger") return true;
+      if (child.props && typeof child.props === 'object' && child.props !== null && 'asChild' in child.props) return true;
+      return false;
+    });
+    const content = childrenArray.find((child): child is React.ReactElement =>
+      React.isValidElement(child) &&
+      typeof child.type === 'function' && child.type.name === "DialogContent"
     );
 
     return (
