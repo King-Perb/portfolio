@@ -144,6 +144,11 @@ Migration:
 
 **IMPORTANT**: Before creating a commit message, you MUST:
 
+0. **MANDATORY: Check and create feature branch if needed** (See `git-workflow.mdc`)
+   - Run `git branch --show-current` or check `git status` to see current branch
+   - **If on `main`**: MUST create feature branch first (`git checkout -b <branch-name>`)
+   - **If on feature branch**: Proceed to step 1
+   - **Exception**: Only if user explicitly requests committing to main (very rare)
 1. **Analyze ALL changed files**: Run `git status` or `git status --short` to see all modified, added, and deleted files
 2. **Review staged changes**: Use `git diff --cached` to see what's staged
 3. **Review unstaged changes**: Use `git diff` to see unstaged changes
@@ -151,7 +156,7 @@ Migration:
 5. **Group related changes**: For multi-file changes, group related changes in the body with bullet points
 6. **Update implementation plan** (if applicable): For commits involving architectural changes, new features, major refactoring, or data strategy changes, update `doc/implementation_plan.md` before committing. See `update-implementation-plan.mdc` for details.
 
-**Never create a commit message without first reviewing all changed files.** The commit message should comprehensively cover all significant changes.
+**Never create a commit message without first reviewing all changed files and ensuring you're on a feature branch (not main).** The commit message should comprehensively cover all significant changes.
 
 - Always use the format above
 - For multi-file changes, group related changes in the body with bullet points
@@ -166,6 +171,7 @@ Migration:
 
 ## References
 
+- **Branch Strategy**: See `git-workflow.mdc` for mandatory feature branch creation before commits
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Angular Commit Message Guidelines](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#commit)
 - [Git Commit Best Practices](https://cbea.ms/git-commit/)

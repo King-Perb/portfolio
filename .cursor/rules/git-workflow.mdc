@@ -41,12 +41,29 @@ All new work should be done on feature branches:
 
 When helping users with Git workflow:
 
-1. **Always recommend feature branches** - Never suggest committing directly to `main`
+1. **MANDATORY: Always create feature branch before committing** - NEVER commit directly to `main`
+   - **Before ANY commit**: Check current branch with `git branch --show-current` or `git status`
+   - **If on `main`**: MUST create a feature branch first, then commit to that branch
+   - **If already on feature branch**: Proceed with commit
+   - **Exception**: Only if user explicitly requests committing to main (very rare)
 2. **Use appropriate branch prefixes** - Match the type of work (feature, fix, refactor, etc.)
 3. **Help create branches from current state** - If user has uncommitted changes, create branch first to preserve them
 4. **Guide PR workflow** - Remind users to push branches and create PRs, not direct pushes to main
 5. **Respect branch protection** - Remind users that `main` is protected and requires PRs
 6. **Update implementation plan** - After each commit, update `doc/implementation_plan.md` with a summary of what changed in that commit
+
+## Pre-Commit Checklist (MANDATORY)
+
+**BEFORE creating ANY commit, the AI MUST:**
+
+1. **Check current branch**: Run `git branch --show-current` or check `git status`
+2. **If on `main` branch**:
+   - **STOP** - Do NOT commit
+   - Determine appropriate branch name based on commit type (feature/fix/refactor/test/docs)
+   - Create feature branch: `git checkout -b <branch-name>`
+   - **THEN** proceed with commit
+3. **If on feature branch**: Proceed with commit
+4. **After commit**: Update `doc/implementation_plan.md` if applicable
 
 ## Moving Changes from Main
 
