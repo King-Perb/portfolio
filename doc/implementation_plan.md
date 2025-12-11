@@ -29,16 +29,22 @@ Instead of a scrolling brochure, the site acts as a functional dashboard.
     - **Top Bar:** Branding + Hamburger Menu.
     - **Navigation:** Slide-out Sheet (Right or Left).
     - **Grid:** Collapses to single-column vertical scroll.
-- **Navigation Animation:**
+- **Navigation Animation:** ✅ Implemented
     - **Sidebar Edge Animation:** When user selects a navigation option:
-        - Sidebar right edge animates horizontally to the right (slide-out effect)
-        - Duration: ~200-250ms
-        - Then slides back left to reveal the newly loaded section
-        - Duration: ~200-250ms
-        - Total animation: ~400-500ms with smooth easing
-        - Implementation: Use `framer-motion` or CSS transitions on sidebar container
+        - Animated vertical line moves from sidebar right edge (280px) to viewport right edge
+        - Duration: 500ms with smooth easing `[0.4, 0, 0.2, 1]`
+        - Animated wrapper expands from sidebar width (280px) to full viewport width (100vw) as line reaches right edge
+        - After content loads, line and wrapper animate back to sidebar width
+        - Total animation: ~1000ms (500ms out + 500ms back) with content loading detection
+        - Implementation: 
+          - `AnimatedLine` component: Renders vertical line using `framer-motion` and `createPortal`
+          - `AnimatedWrapper` component: Renders expanding wrapper using `framer-motion` and `createPortal`
+          - `useSidebarAnimation` hook: Manages animation state and timing
+          - `sidebar/constants.ts`: Centralized animation config (duration, delays, dimensions)
         - Visual effect: Creates a "reveal" transition between page sections
         - Applied to: Desktop sidebar navigation only (mobile uses sheet which already has slide animation)
+        - **Mobile Fix:** AnimatedWrapper only renders on desktop (viewport >= 768px) to prevent blocking mobile interactions
+        - **Pointer Events:** AnimatedWrapper uses `pointer-events-none`, SidebarContent uses `pointer-events-auto` for proper interaction handling
 
 ### 3.2 Design System (Brand Book)
 
@@ -397,6 +403,19 @@ These rules ensure maintainability and "premium" code quality.
 - [x] **Project Card Stats:** Display commits and deployments alongside stars/forks (`ProjectStats` component with icons).
 - [x] **Deployment Data:** Fetch deployment count from GitHub API (`fetchRepoDeployments`) and support manual entries.
 - [x] **Project Image Green Overlay:** Add subtle green overlay to project images for "Hacker Mode" aesthetic (`bg-primary/20` with `mix-blend-overlay`, increases to `bg-primary/30` on hover).
-- [ ] **Navigation Sidebar Animation:** Implement horizontal slide animation on sidebar edge when navigating.
+- [x] **Navigation Sidebar Animation:** Implement horizontal slide animation on sidebar edge when navigating.
+  - **Implementation:** Refactored sidebar into modular components with animation system
+  - **Components Created:**
+    - `src/components/layout/sidebar/constants.ts`: Centralized config (dimensions, animation timing, types)
+    - `src/components/layout/sidebar/sidebar-content.tsx`: Reusable sidebar content component
+    - `src/components/layout/sidebar/animated-line.tsx`: Portal-based animated vertical line
+    - `src/components/layout/sidebar/animated-wrapper.tsx`: Portal-based animated wrapper for reveal effect
+    - `src/hooks/use-sidebar-animation.ts`: Animation state management and timing logic
+  - **Features:**
+    - Animation waits for content to load before returning (prevents jarring transitions)
+    - Desktop-only animation (mobile uses sheet, no animation wrapper needed)
+    - Proper pointer events handling (wrapper doesn't block interactions)
+    - SSR-safe with client-side hydration detection
+    - Reduced main sidebar component from 321 lines to 118 lines (63% reduction)
 - [ ] **Private Repository Popover:** Show popover message when clicking private repo cards, prevent link opening.
 - [x] **Easter Egg Video Button:** Add "Don't Click This" button under Activity Overview that plays Portfolio_Presentation.mp4 in dialog.
