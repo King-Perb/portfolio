@@ -42,9 +42,15 @@ describe("ProjectCard", () => {
   });
 
   it("should render GitHub stats for github projects", () => {
-    render(<ProjectCard project={mockProject} />);
-    expect(screen.getByText("42")).toBeInTheDocument(); // stars
-    expect(screen.getByText("10")).toBeInTheDocument(); // forks
+    const projectWithStats: Project = {
+      ...mockProject,
+      commitCount: 150,
+      deploymentCount: 5,
+    };
+    render(<ProjectCard project={projectWithStats} />);
+    // Stars and forks are commented out, but commits and deployments should still render
+    expect(screen.getByText("150")).toBeInTheDocument(); // commits
+    expect(screen.getByText("5")).toBeInTheDocument(); // deployments
   });
 
   it("should not render GitHub stats for manual projects", () => {

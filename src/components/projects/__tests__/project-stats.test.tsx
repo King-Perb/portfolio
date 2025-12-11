@@ -16,7 +16,7 @@ describe("ProjectStats", () => {
     ...overrides,
   });
 
-  it("renders stars and forks for GitHub projects", () => {
+  it("does not render stars and forks (commented out)", () => {
     const project = createMockProject({
       source: "github",
       stars: 42,
@@ -25,10 +25,9 @@ describe("ProjectStats", () => {
 
     render(<ProjectStats project={project} />);
 
-    expect(screen.getByTitle("Stars")).toBeInTheDocument();
-    expect(screen.getByText("42")).toBeInTheDocument();
-    expect(screen.getByTitle("Forks")).toBeInTheDocument();
-    expect(screen.getByText("10")).toBeInTheDocument();
+    // Stars and forks are commented out in the component
+    expect(screen.queryByTitle("Stars")).not.toBeInTheDocument();
+    expect(screen.queryByTitle("Forks")).not.toBeInTheDocument();
   });
 
   it("does not render stars and forks for manual projects", () => {
@@ -106,7 +105,7 @@ describe("ProjectStats", () => {
     expect(screen.queryByTitle("Total deployments")).not.toBeInTheDocument();
   });
 
-  it("renders all stats for GitHub project with commits and deployments", () => {
+  it("renders commits and deployments for GitHub project (stars and forks commented out)", () => {
     const project = createMockProject({
       source: "github",
       stars: 100,
@@ -117,10 +116,10 @@ describe("ProjectStats", () => {
 
     render(<ProjectStats project={project} />);
 
-    expect(screen.getByTitle("Stars")).toBeInTheDocument();
-    expect(screen.getByText("100")).toBeInTheDocument();
-    expect(screen.getByTitle("Forks")).toBeInTheDocument();
-    expect(screen.getByText("25")).toBeInTheDocument();
+    // Stars and forks are commented out in the component
+    expect(screen.queryByTitle("Stars")).not.toBeInTheDocument();
+    expect(screen.queryByTitle("Forks")).not.toBeInTheDocument();
+    // But commits and deployments should still render
     expect(screen.getByTitle("Total commits")).toBeInTheDocument();
     expect(screen.getByText("500")).toBeInTheDocument();
     expect(screen.getByTitle("Total deployments")).toBeInTheDocument();
