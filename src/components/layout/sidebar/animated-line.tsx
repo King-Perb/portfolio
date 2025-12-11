@@ -23,20 +23,20 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
   const isMovingRight = animationPhase === ANIMATION_PHASE.MOVING_RIGHT;
   const isMovingBack = animationPhase === ANIMATION_PHASE.MOVING_BACK;
   const isAnimating = isMovingRight || isMovingBack;
-  
+
   // Width: thin in idle, thick during animation (controlled by CSS transition with offset timing)
   const idleWidth = isMobile ? 0.5 : 1; // px
   const animatingWidth = isMobile ? 1.5 : 4; // px - thinner on mobile, thicker on desktop
-  
+
   // Opacity: matches project card default (20%) in idle, increases during animation
   const idleOpacity = 0.2; // 20% - matches bg-primary/20
   const animatingOpacity = 0.5; // 50% - more visible during animation
-  
+
   // Calculate x position based on phase
   const xPosition = isMovingRight
     ? `calc(100vw - ${SIDEBAR_CONFIG.WIDTH}px)`
     : 0;
-  
+
   // Generate keyframes for width and opacity based on animation phase
   // MOVING_RIGHT: thin → thick → thick → thin (returns thin at 80%)
   // MOVING_BACK: starts thick (already at right edge), stays thick, returns thin at 80%
@@ -62,7 +62,7 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
     : isMovingBack
     ? [0, 0.8, 1] // Start thick, stay thick, return thin at 80%
     : undefined;
-  
+
   const lineElement = (
     <motion.div
       className="fixed top-0 h-screen bg-primary"
@@ -72,7 +72,7 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
         zIndex: isMobile ? 100 : SIDEBAR_CONFIG.Z_INDEX,
         pointerEvents: "none",
       }}
-      initial={{ 
+      initial={{
         width: idleWidth,
         opacity: idleOpacity,
         x: 0,

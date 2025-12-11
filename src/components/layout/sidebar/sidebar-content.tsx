@@ -20,7 +20,7 @@ interface SidebarContentProps {
 export function SidebarContent({
   pathname,
   pendingRoute,
-  onClose,
+  onClose: _onClose, // Unused but kept for interface compatibility
   onNavClick,
   onTestClick,
   showTestButton = false,
@@ -83,13 +83,13 @@ export function SidebarContent({
             // 1. Current pathname matches AND there's no pending route (normal state)
             // 2. OR this is the pending route (clicked but not yet loaded)
             // This ensures the old selection is cleared when a new one is clicked
-            const isActive = pendingRoute 
-              ? pendingRoute === item.href 
+            const isActive = pendingRoute
+              ? pendingRoute === item.href
               : pathname === item.href;
             return (
-              <Link 
-                key={item.href} 
-                href={item.href} 
+              <Link
+                key={item.href}
+                href={item.href}
                 onClick={(e) => {
                   if (isAnimating) {
                     e.preventDefault();

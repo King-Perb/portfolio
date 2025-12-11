@@ -51,8 +51,8 @@ export function MobileNav() {
                 const width = getWidth();
                 sheetContent.style.width = width;
                 sheetContent.style.maxWidth = 'none';
-                sheetContent.style.transition = isInitialMount 
-                    ? 'none' 
+                sheetContent.style.transition = isInitialMount
+                    ? 'none'
                     : `width ${ANIMATION_CONFIG.DURATION / 1000}s cubic-bezier(0.4, 0, 0.2, 1)`;
             }
         };
@@ -72,14 +72,14 @@ export function MobileNav() {
                     <span className="sr-only">Toggle menu</span>
                 </Button>
             </SheetTrigger>
-            <SheetContent 
-                side="left" 
+            <SheetContent
+                side="left"
                 className="p-0 overflow-visible"
             >
                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                 {/* Reuse the Sidebar component inside the sheet */}
-                <Sidebar 
-                    className="w-full border-none" 
+                <Sidebar
+                    className="w-full border-none"
                     onClose={() => setOpen(false)}
                     onAnimationPhaseChange={setAnimationPhase}
                 />

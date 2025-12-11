@@ -23,4 +23,3 @@ export function useIsDesktop(breakpoint = 768): boolean {
 
   return isDesktop;
 }
-

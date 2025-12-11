@@ -5,23 +5,21 @@ import userEvent from "@testing-library/user-event";
 import { EasterEggButton } from "../easter-egg-button";
 
 // Mock Dialog components - simplified to work with the component structure
-let dialogOpen = false;
 let dialogOnOpenChange: ((open: boolean) => void) | null = null;
 
 vi.mock("@/components/ui/dialog", () => ({
   Dialog: ({ children, open, onOpenChange }: { children: React.ReactNode; open: boolean; onOpenChange: (open: boolean) => void }) => {
-    dialogOpen = open;
     dialogOnOpenChange = onOpenChange;
-    
+
     const childrenArray = React.Children.toArray(children);
-    const trigger = childrenArray.find((child: any) => 
-      child?.type?.name === "DialogTrigger" || 
-      (child?.props && 'asChild' in child.props)
+    const trigger = childrenArray.find((child: React.ReactElement) =>
+      child?.type && (typeof child.type === 'function' && child.type.name === "DialogTrigger" ||
+      (child?.props && 'asChild' in child.props))
     );
-    const content = childrenArray.find((child: any) => 
-      child?.type?.name === "DialogContent"
+    const content = childrenArray.find((child: React.ReactElement) =>
+      child?.type && typeof child.type === 'function' && child.type.name === "DialogContent"
     );
-    
+
     return (
       <div data-testid="dialog" data-open={open.toString()}>
         {trigger}
@@ -38,9 +36,9 @@ vi.mock("@/components/ui/dialog", () => ({
         dialogOnOpenChange(true);
       }
     };
-    
+
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, { onClick: handleClick });
+      return React.cloneElement(children, { onClick: handleClick } as Partial<unknown>);
     }
     return (
       <div data-testid="dialog-trigger" onClick={handleClick}>
@@ -82,7 +80,6 @@ vi.mock("lucide-react", () => ({
 describe("EasterEggButton", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    dialogOpen = false;
     dialogOnOpenChange = null;
   });
 
@@ -225,4 +222,3 @@ describe("EasterEggButton", () => {
     }
   });
 });
-

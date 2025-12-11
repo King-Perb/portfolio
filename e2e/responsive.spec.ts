@@ -11,9 +11,6 @@ test.describe('Responsive Design', () => {
     await expect(mobileNavButton).toBeVisible();
 
     // Desktop sidebar should be hidden
-    const desktopSidebar = page.locator('aside:not([class*="hidden"])');
-    const sidebarVisible = await desktopSidebar.isVisible().catch(() => false);
-
     // On mobile, sidebar should not be visible (or should be in a sheet)
     expect(mobileNavButton).toBeVisible();
   });
