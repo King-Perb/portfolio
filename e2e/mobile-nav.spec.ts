@@ -10,7 +10,7 @@ test.describe('Mobile Navigation', () => {
   test('should open and close mobile navigation', async ({ page }) => {
     // Find menu button (button with Menu icon, visible on mobile)
     const menuButton = page.locator('button[class*="md:hidden"]').first();
-    
+
     // Open navigation
     await menuButton.click();
 
@@ -43,9 +43,8 @@ test.describe('Mobile Navigation', () => {
 
     // Should navigate to projects page
     await expect(page).toHaveURL(/\/projects/);
-    
+
     // Navigation should close after clicking
     await expect(navSheet).not.toBeVisible({ timeout: 2000 });
   });
 });
-

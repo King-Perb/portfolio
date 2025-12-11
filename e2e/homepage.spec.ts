@@ -36,4 +36,3 @@ test.describe('Homepage', () => {
     await expect(mobileNav).toBeVisible();
   });
 });
-

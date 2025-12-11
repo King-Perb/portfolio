@@ -19,4 +19,3 @@ export const ANIMATION_PHASE = {
 } as const;
 
 export type AnimationPhase = typeof ANIMATION_PHASE[keyof typeof ANIMATION_PHASE];
-

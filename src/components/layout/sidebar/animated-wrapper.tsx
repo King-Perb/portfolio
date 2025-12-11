@@ -52,4 +52,3 @@ export function AnimatedWrapper({
     document.body
   );
 }
-

@@ -23,7 +23,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
     const checkDesktop = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
-    
+
     checkDesktop();
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);

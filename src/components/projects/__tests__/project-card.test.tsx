@@ -72,7 +72,7 @@ describe("ProjectCard", () => {
     const image = screen.getByAltText("Test Project");
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute("src", "/test-screenshot.jpg");
-    
+
     // Verify green overlay is present
     const overlay = container.querySelector(".mix-blend-overlay");
     expect(overlay).toBeInTheDocument();

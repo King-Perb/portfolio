@@ -67,14 +67,14 @@ test.describe('Project Card Interactions', () => {
 
     // Wait for projects to load
     const firstCard = page.locator('[class*="card"][role="button"]').first();
-    
+
     // Check if any card is clickable
     const clickableCard = await firstCard.isVisible().catch(() => false);
-    
+
     if (clickableCard) {
       // Focus the card
       await firstCard.focus();
-      
+
       // Press Enter to activate
       const [newPage] = await Promise.all([
         page.context().waitForEvent('page').catch(() => null),
@@ -100,7 +100,7 @@ test.describe('Project Card Interactions', () => {
       firstCard.locator('[class*="flex"][class*="gap-2"]')
     );
     await expect(tagsContainer.first()).toBeVisible();
-    
+
     // Tags should be visible as spans with text
     const tags = firstCard.locator('span[class*="font-mono"]');
     const tagCount = await tags.count();
@@ -128,4 +128,3 @@ test.describe('Project Card Interactions', () => {
     expect(firstCard).toBeVisible();
   });
 });
-

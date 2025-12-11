@@ -36,7 +36,7 @@ Instead of a scrolling brochure, the site acts as a functional dashboard.
         - Animated wrapper expands from sidebar width (280px) to full viewport width (100vw) as line reaches right edge
         - After content loads, line and wrapper animate back to sidebar width
         - Total animation: ~1000ms (500ms out + 500ms back) with content loading detection
-        - Implementation: 
+        - Implementation:
           - `AnimatedLine` component: Renders vertical line using `framer-motion` and `createPortal`
           - `AnimatedWrapper` component: Renders expanding wrapper using `framer-motion` and `createPortal`
           - `useSidebarAnimation` hook: Manages animation state and timing

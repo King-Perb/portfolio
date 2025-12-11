@@ -38,4 +38,3 @@ export function AnimatedLine({ animationPhase, mounted }: AnimatedLineProps) {
     document.body
   );
 }
-

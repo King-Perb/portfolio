@@ -60,10 +60,9 @@ test.describe('Overview Metrics', () => {
     // Check for icons in metric cards (SVG elements)
     const metricCards = page.locator('[class*="card"]');
     const firstCard = metricCards.first();
-    
+
     const hasIcon = await firstCard.locator('svg').count() > 0;
     // At least one metric card should have an icon
     expect(hasIcon || await metricCards.count() > 0).toBeTruthy();
   });
 });
-

@@ -13,7 +13,7 @@ test.describe('Responsive Design', () => {
     // Desktop sidebar should be hidden
     const desktopSidebar = page.locator('aside:not([class*="hidden"])');
     const sidebarVisible = await desktopSidebar.isVisible().catch(() => false);
-    
+
     // On mobile, sidebar should not be visible (or should be in a sheet)
     expect(mobileNavButton).toBeVisible();
   });
@@ -62,7 +62,7 @@ test.describe('Responsive Design', () => {
     // Project images should be hidden on mobile (hidden md:block class)
     const projectImages = page.locator('img[alt*="project"], img[alt*="Project"]');
     const imageCount = await projectImages.count();
-    
+
     // Images with hidden md:block should not be visible on mobile
     for (let i = 0; i < imageCount; i++) {
       const img = projectImages.nth(i);
@@ -71,7 +71,7 @@ test.describe('Responsive Design', () => {
       if (isVisible) {
         // If visible, it might be a different image (like avatar)
         const parent = img.locator('..');
-        const hasHiddenMdBlock = await parent.evaluate((el) => 
+        const hasHiddenMdBlock = await parent.evaluate((el) =>
           el.classList.toString().includes('hidden') && el.classList.toString().includes('md:block')
         );
         if (hasHiddenMdBlock) {
@@ -111,11 +111,11 @@ test.describe('Responsive Design', () => {
 
     for (const viewport of viewports) {
       await page.setViewportSize(viewport);
-      
+
       // Check that main heading is visible and readable
       const heading = page.getByRole('heading', { name: /activity overview/i });
       await expect(heading).toBeVisible();
-      
+
       // Check text contrast (basic check - text should be visible)
       const textColor = await heading.evaluate((el) => {
         const styles = window.getComputedStyle(el);
@@ -125,4 +125,3 @@ test.describe('Responsive Design', () => {
     }
   });
 });
-

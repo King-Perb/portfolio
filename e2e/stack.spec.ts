@@ -34,7 +34,7 @@ test.describe('Stack Page', () => {
 
     if (cardCount > 0) {
       const firstCard = techCards.first();
-      
+
       // Check for language name (in card title)
       const cardTitle = firstCard.locator('[data-slot="card-title"], h3, h4');
       await expect(cardTitle).toBeVisible();
@@ -42,7 +42,7 @@ test.describe('Stack Page', () => {
       // Check for percentage and progress bar (in CardContent)
       const percentageText = firstCard.getByText(/%/);
       await expect(percentageText).toBeVisible();
-      
+
       // Check for progress bar (div with width style)
       const progressBar = firstCard.locator('div[style*="width"]');
       await expect(progressBar.first()).toBeVisible();
@@ -60,7 +60,7 @@ test.describe('Stack Page', () => {
 
     if (cardCount > 0) {
       const firstCard = techCards.first();
-      
+
       // Hover over the card
       await firstCard.hover();
 
@@ -82,4 +82,3 @@ test.describe('Stack Page', () => {
     expect(hasContent).toBeTruthy();
   });
 });
-

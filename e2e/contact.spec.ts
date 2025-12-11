@@ -30,7 +30,7 @@ test.describe('Contact Page', () => {
     // Find and click copy button
     const copyButton = page.getByRole('button', { name: /copy email/i });
     await expect(copyButton).toBeVisible();
-    
+
     await copyButton.click();
 
     // Check that button text changes to "Copied!"
@@ -88,11 +88,11 @@ test.describe('Contact Page', () => {
 
     // Check for common social platforms
     const socialLinks = ['GitHub', 'LinkedIn', 'Twitter'];
-    
+
     for (const platform of socialLinks) {
       const link = page.getByRole('link', { name: new RegExp(platform, 'i') });
       const linkExists = await link.isVisible().catch(() => false);
-      
+
       // At least one social link should be visible
       if (linkExists) {
         await expect(link).toBeVisible();
@@ -112,7 +112,7 @@ test.describe('Contact Page', () => {
     ).first();
 
     const linkExists = await socialLink.isVisible().catch(() => false);
-    
+
     if (linkExists) {
       // Set up promise to wait for new page
       const [newPage] = await Promise.all([
@@ -125,4 +125,3 @@ test.describe('Contact Page', () => {
     }
   });
 });
-

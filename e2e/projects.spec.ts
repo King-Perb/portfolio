@@ -28,9 +28,8 @@ test.describe('Projects Page', () => {
     // This test would require mocking the API to return empty array
     // For now, we'll just check the page structure
     await page.goto('/projects');
-    
+
     // Page should still render
     await expect(page.getByRole('heading', { name: /all projects/i })).toBeVisible();
   });
 });
-

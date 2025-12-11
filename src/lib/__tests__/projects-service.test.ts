@@ -151,7 +151,7 @@ describe("projects-service", () => {
       // Both repos should exist
       expect(newRepoIndex).toBeGreaterThanOrEqual(0);
       expect(oldRepoIndex).toBeGreaterThanOrEqual(0);
-      
+
       // New repo should come before old repo (most recent first)
       if (newRepoIndex >= 0 && oldRepoIndex >= 0) {
         expect(newRepoIndex).toBeLessThan(oldRepoIndex);

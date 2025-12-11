@@ -25,9 +25,9 @@ test.describe('Navigation', () => {
     } else {
       projectsLink = page.getByRole('link', { name: /projects/i }).first();
     }
-    
+
     await projectsLink.click();
-    
+
     // Wait for navigation to complete
     await expect(page).toHaveURL(/\/projects/, { timeout: 5000 });
     await expect(page.getByRole('heading', { name: /all projects/i })).toBeVisible();
@@ -86,10 +86,9 @@ test.describe('Navigation', () => {
     // Projects link should be active (button inside the link has active classes)
     const projectsLink = page.getByRole('link', { name: /projects/i }).first();
     await expect(projectsLink).toBeVisible();
-    
+
     // Check that the button inside has active styling
     const projectsButton = projectsLink.getByRole('button');
     await expect(projectsButton).toHaveClass(/bg-primary\/10|text-primary/);
   });
 });
-

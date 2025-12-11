@@ -123,11 +123,11 @@ interface SidebarContentProps {
   showTestButton?: boolean;
 }
 
-export function SidebarContent({ 
-  pathname, 
-  onClose, 
+export function SidebarContent({
+  pathname,
+  onClose,
   onTestClick,
-  showTestButton = false 
+  showTestButton = false
 }: SidebarContentProps) {
   // Extract all the sidebar content JSX here
   // Used by both portal and SSR versions
@@ -208,11 +208,11 @@ interface AnimatedWrapperProps {
   children: React.ReactNode;
 }
 
-export function AnimatedWrapper({ 
-  animationPhase, 
-  mounted, 
+export function AnimatedWrapper({
+  animationPhase,
+  mounted,
   isInitialMount,
-  children 
+  children
 }: AnimatedWrapperProps) {
   // Portal-based wrapper with animation
 }
@@ -235,7 +235,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  
+
   const {
     animationPhase,
     startAnimation,
@@ -266,7 +266,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
           showTestButton={process.env.NODE_ENV === 'development'}
         />
       </AnimatedWrapper>
-      
+
       {/* SSR fallback */}
       {!mounted && (
         <SidebarContent
@@ -451,4 +451,3 @@ src/components/layout/sidebar/
 4. **Error Boundaries**: Add error handling for portal rendering
 5. **Analytics**: Add tracking for navigation events
 6. **Theme Support**: Make animation colors theme-aware
-
