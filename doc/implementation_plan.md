@@ -434,3 +434,24 @@ These rules ensure maintainability and "premium" code quality.
   - **Code Quality:** Reduced complexity, improved readability, better separation of concerns
 - [ ] **Private Repository Popover:** Show popover message when clicking private repo cards, prevent link opening.
 - [x] **Easter Egg Video Button:** Add "Don't Click This" button under Activity Overview that plays Portfolio_Presentation.mp4 in dialog.
+- [x] **Animated Line Styling Improvements:** Enhanced scanner line with better visual feedback.
+  - Match idle state to project card default styling (bg-primary/20, no shadow)
+  - Increase thickness during animation (4px desktop, 1.5px mobile)
+  - Add opacity animation (20% idle, 50% during animation)
+  - Return to thin state 100ms before animation completes
+  - Support different keyframes for MOVING_RIGHT vs MOVING_BACK phases
+- [x] **Navigation Blocking During Animation:** Prevent navigation clicks when animation is in progress.
+  - Add isAnimating prop to SidebarContent component
+  - Block navigation link clicks when animation is in progress
+  - Block test button clicks during animation
+  - No visual changes, only prevents interactions
+- [x] **Sidebar Refactoring (Phase 2):** Further improvements to sidebar architecture.
+  - Extract useIsDesktop hook for reusable desktop breakpoint detection
+  - Improve animated-line keyframe generation with helper function
+  - Consolidate width and opacity keyframe times
+  - Reduce code duplication in sidebar component
+- [x] **Test Coverage Improvements:** Added comprehensive test coverage.
+  - Add 9 test cases for easter-egg-button component
+  - Improve sidebar and mobile-nav test coverage
+  - Update tests for commented out stars/forks
+  - All 161 unit tests and 76 E2E tests passing

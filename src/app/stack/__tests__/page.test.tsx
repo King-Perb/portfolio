@@ -16,8 +16,11 @@ vi.mock("@/components/stack/stack-card", () => ({
 }));
 
 // Mock manual technologies
+const mockManualTechnologies: Array<{ name: string; bytes?: number }> = [];
 vi.mock("@/data/manual-technologies", () => ({
-  MANUAL_TECHNOLOGIES: [],
+  get MANUAL_TECHNOLOGIES() {
+    return mockManualTechnologies;
+  },
 }));
 
 describe("StackPage", () => {
@@ -53,6 +56,50 @@ describe("StackPage", () => {
     expect(screen.getByText("Python")).toBeInTheDocument();
   });
 
+  it("displays manual technologies in 'Other technologies' subsection", async () => {
+    mockManualTechnologies.length = 0;
+    mockManualTechnologies.push(
+      { name: "Docker", bytes: 1000 },
+      { name: "Kubernetes", bytes: 500 }
+    );
+
+    mockFetchGitHubStats.mockResolvedValueOnce({ languages: {} });
+
+    const component = await StackPage();
+    render(component);
+
+    expect(screen.getByText("Other technologies")).toBeInTheDocument();
+    expect(screen.getByText("Docker")).toBeInTheDocument();
+    expect(screen.getByText("Kubernetes")).toBeInTheDocument();
+  });
+
+  it("displays both GitHub languages and manual technologies", async () => {
+    mockManualTechnologies.length = 0;
+    mockManualTechnologies.push(
+      { name: "Docker", bytes: 1000 },
+      { name: "AWS", bytes: 2000 }
+    );
+
+    const mockLanguages = {
+      TypeScript: 5000,
+      JavaScript: 3000,
+    };
+
+    mockFetchGitHubStats.mockResolvedValueOnce({ languages: mockLanguages });
+
+    const component = await StackPage();
+    render(component);
+
+    // GitHub languages should be in main section
+    expect(screen.getByText("TypeScript")).toBeInTheDocument();
+    expect(screen.getByText("JavaScript")).toBeInTheDocument();
+
+    // Manual technologies should be in "Other technologies" subsection
+    expect(screen.getByText("Other technologies")).toBeInTheDocument();
+    expect(screen.getByText("Docker")).toBeInTheDocument();
+    expect(screen.getByText("AWS")).toBeInTheDocument();
+  });
+
   it("sorts languages by bytes (descending)", async () => {
     const mockLanguages = {
       Python: 2000,
@@ -71,7 +118,8 @@ describe("StackPage", () => {
     expect(stackCards[2]).toHaveTextContent("Python");
   });
 
-  it("displays empty state when no languages", async () => {
+  it("displays empty state when no languages and no manual technologies", async () => {
+    mockManualTechnologies.length = 0;
     mockFetchGitHubStats.mockResolvedValueOnce({ languages: {} });
 
     const component = await StackPage();
@@ -82,6 +130,7 @@ describe("StackPage", () => {
   });
 
   it("handles API error gracefully", async () => {
+    mockManualTechnologies.length = 0;
     mockFetchGitHubStats.mockRejectedValueOnce(new Error("API Error"));
 
     const component = await StackPage();
@@ -92,6 +141,7 @@ describe("StackPage", () => {
   });
 
   it("handles non-ok response", async () => {
+    mockManualTechnologies.length = 0;
     mockFetchGitHubStats.mockRejectedValueOnce(new Error("API Error"));
 
     const component = await StackPage();

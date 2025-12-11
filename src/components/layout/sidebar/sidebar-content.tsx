@@ -8,19 +8,23 @@ import { SIDEBAR_CONFIG } from "./constants";
 
 interface SidebarContentProps {
   pathname: string;
+  pendingRoute?: string | null;
   onClose?: () => void;
   onNavClick: (href: string, e: React.MouseEvent<HTMLAnchorElement>) => void;
   onTestClick?: () => void;
   showTestButton?: boolean;
+  isAnimating?: boolean;
   className?: string;
 }
 
 export function SidebarContent({
   pathname,
-  onClose,
+  pendingRoute,
+  onClose: _onClose, // Unused but kept for interface compatibility
   onNavClick,
   onTestClick,
   showTestButton = false,
+  isAnimating = false,
   className,
 }: SidebarContentProps) {
   return (
@@ -29,9 +33,6 @@ export function SidebarContent({
         "relative flex h-full flex-col gap-6 p-6 border-r border-primary/20 shadow-[2px_0_12px] shadow-primary/10 bg-background pointer-events-auto",
         className
       )}
-      style={{
-        width: className?.includes("w-full") ? "100vw" : className ? undefined : `${SIDEBAR_CONFIG.WIDTH}px`,
-      }}
     >
       {/* Content wrapper constrained to content width */}
       <div
@@ -69,7 +70,7 @@ export function SidebarContent({
           {showTestButton && onTestClick && (
             <Button
               variant="ghost"
-              onClick={onTestClick}
+              onClick={isAnimating ? undefined : onTestClick}
               className="w-full justify-start gap-3 h-10 font-normal text-muted-foreground hover:text-foreground hover:bg-muted/50"
             >
               <span className="h-4 w-4">🧪</span>
@@ -78,9 +79,26 @@ export function SidebarContent({
           )}
 
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
+            // Highlight if:
+            // 1. Current pathname matches AND there's no pending route (normal state)
+            // 2. OR this is the pending route (clicked but not yet loaded)
+            // This ensures the old selection is cleared when a new one is clicked
+            const isActive = pendingRoute
+              ? pendingRoute === item.href
+              : pathname === item.href;
             return (
-              <Link key={item.href} href={item.href} onClick={(e) => onNavClick(item.href, e)}>
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={(e) => {
+                  if (isAnimating) {
+                    e.preventDefault();
+                    return;
+                  }
+                  onNavClick(item.href, e);
+                }}
+                className={isAnimating ? "pointer-events-none" : undefined}
+              >
                 <Button
                   variant="ghost"
                   className={cn(

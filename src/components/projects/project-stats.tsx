@@ -1,4 +1,4 @@
-import { Star, GitFork, GitCommitHorizontal, Rocket } from "lucide-react";
+import { GitCommitHorizontal, Rocket } from "lucide-react";
 import type { Project } from "@/types";
 import type { LucideIcon } from "lucide-react";
 
@@ -26,8 +26,8 @@ export function ProjectStats({ project }: ProjectStatsProps) {
     <div className="flex items-center gap-4 text-xs font-mono">
       {project.source === "github" && (
         <>
-          <StatItem icon={Star} value={project.stars} title="Stars" />
-          <StatItem icon={GitFork} value={project.forks} title="Forks" />
+          {/* <StatItem icon={Star} value={project.stars} title="Stars" /> */}
+          {/* <StatItem icon={GitFork} value={project.forks} title="Forks" /> */}
         </>
       )}
       {project.commitCount !== undefined && project.commitCount > 0 && (
