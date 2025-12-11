@@ -65,23 +65,41 @@ export function Sidebar({ className, onClose }: SidebarProps) {
         previousPathnameRef.current = pathname;
     }, [pathname, pendingRoute]);
 
-    const handleTestClick = () => {
+    const handleNavigation = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+        // Only animate if navigating to a different route
+        if (pathname === href) {
+            onClose?.();
+            return;
+        }
+
+        // Prevent default navigation
+        e.preventDefault();
+
         // Start moving right
         setAnimationPhase('moving-right');
         animationStartTimeRef.current = Date.now(); // Track when animation started
         
+        // Set pending route to track when content loads
+        setPendingRoute(href);
+        
+        // Navigate after animation completes (500ms for moving-right)
+        setTimeout(() => {
+            router.push(href);
+        }, 500);
+    };
+
+    const handleTestClick = () => {
         // Navigate to a different route (cycle through routes for testing)
         const routes = ['/', '/projects', '/stack', '/contact'];
         const currentIndex = routes.indexOf(pathname);
         const nextRoute = routes[(currentIndex + 1) % routes.length] || '/projects';
         
-        // Set pending route to track when content loads
-        setPendingRoute(nextRoute);
+        // Create a synthetic event for handleNavigation
+        const syntheticEvent = {
+            preventDefault: () => {},
+        } as React.MouseEvent<HTMLAnchorElement>;
         
-        // Navigate after 200ms delay to let animation start
-        setTimeout(() => {
-            router.push(nextRoute);
-        }, 200);
+        handleNavigation(nextRoute, syntheticEvent);
     };
 
     // Render the animated line in a portal to document.body to escape stacking contexts
@@ -163,7 +181,11 @@ export function Sidebar({ className, onClose }: SidebarProps) {
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         return (
-                            <Link key={item.href} href={item.href} onClick={() => onClose?.()}>
+                            <Link 
+                                key={item.href} 
+                                href={item.href} 
+                                onClick={(e) => handleNavigation(item.href, e)}
+                            >
                                 <Button
                                     variant="ghost"
                                     className={cn(
@@ -262,7 +284,11 @@ export function Sidebar({ className, onClose }: SidebarProps) {
                         {NAV_ITEMS.map((item) => {
                             const isActive = pathname === item.href;
                             return (
-                                <Link key={item.href} href={item.href} onClick={() => onClose?.()}>
+                                <Link 
+                                    key={item.href} 
+                                    href={item.href} 
+                                    onClick={(e) => handleNavigation(item.href, e)}
+                                >
                                     <Button
                                         variant="ghost"
                                         className={cn(
