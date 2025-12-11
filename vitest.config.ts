@@ -12,6 +12,14 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./src/test/setup.tsx"],
     css: true,
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.next/**",
+      "**/e2e/**", // Exclude Playwright E2E tests
+      "**/*.e2e.{ts,tsx}",
+      "**/*.spec.ts", // Exclude Playwright spec files
+    ],
     coverage: {
       provider: "v8",
       exclude: [
