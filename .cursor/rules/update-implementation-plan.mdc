@@ -1,6 +1,5 @@
 ---
-description: Commiting changes
-alwaysApply: false
+alwaysApply: true
 ---
 # Update Implementation Plan Workflow
 
