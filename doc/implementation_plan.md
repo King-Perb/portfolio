@@ -216,6 +216,16 @@ These rules ensure maintainability and "premium" code quality.
 - **Atomic:** Keep components small (`src/components/dashboard/stat-card.tsx`).
 - **Server Components:** Default to Server Components. Use `"use client"` *only* for interaction (hover states, sheets).
 - **Colocation:** Keep related utils with features if specific.
+- **Refactoring Pattern:** Large components (>200 lines) should be broken down into:
+  - **Constants:** Extract magic numbers and config to `constants.ts` files
+  - **Hooks:** Extract state management and side effects to custom hooks
+  - **Sub-components:** Extract JSX sections to dedicated components
+  - **Example:** `Sidebar` component refactored from 321 lines to 118 lines by extracting:
+    - `sidebar/constants.ts`: Animation config, dimensions, types
+    - `hooks/use-sidebar-animation.ts`: Animation state management
+    - `sidebar/sidebar-content.tsx`: Shared sidebar JSX content
+    - `sidebar/animated-line.tsx`: Portal-based animated line component
+    - `sidebar/animated-wrapper.tsx`: Portal-based animated wrapper component
 
 ### 5.2 Styling Rules
 - **No Magic Numbers:** Use Tailwind spacing tokens (`p-4`, `gap-6`).
@@ -417,5 +427,10 @@ These rules ensure maintainability and "premium" code quality.
     - Proper pointer events handling (wrapper doesn't block interactions)
     - SSR-safe with client-side hydration detection
     - Reduced main sidebar component from 321 lines to 118 lines (63% reduction)
+- [x] **Sidebar Refactoring:** Refactored sidebar component for maintainability and testability.
+  - **Architecture:** Extracted sidebar into 5 focused modules (constants, hook, 3 components)
+  - **Performance:** Fixed mobile interaction blocking by conditionally rendering AnimatedWrapper
+  - **Testing:** All 11 sidebar unit tests passing, improved testability with smaller components
+  - **Code Quality:** Reduced complexity, improved readability, better separation of concerns
 - [ ] **Private Repository Popover:** Show popover message when clicking private repo cards, prevent link opening.
 - [x] **Easter Egg Video Button:** Add "Don't Click This" button under Activity Overview that plays Portfolio_Presentation.mp4 in dialog.
