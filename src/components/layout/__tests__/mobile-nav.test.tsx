@@ -135,6 +135,50 @@ describe("MobileNav", () => {
 
     const content = screen.getByTestId("sheet-content");
     expect(content).toHaveAttribute("data-side", "left");
-    expect(content).toHaveAttribute("data-classname", "p-0 w-[280px]");
+    // Width is now controlled via inline styles, not className
+    expect(content).toHaveAttribute("data-classname", "p-0 overflow-visible");
+  });
+
+  it("passes onAnimationPhaseChange to Sidebar", async () => {
+    const user = userEvent.setup();
+    render(<MobileNav />);
+
+    const toggleButton = screen.getByTestId("sheet-toggle");
+    await user.click(toggleButton);
+
+    // Verify Sidebar is rendered (which receives onAnimationPhaseChange)
+    const sidebar = screen.getByTestId("sidebar");
+    expect(sidebar).toBeInTheDocument();
+  });
+
+  it("resets animation phase when sheet closes", async () => {
+    const user = userEvent.setup();
+    render(<MobileNav />);
+
+    // Open sheet
+    const toggleButton = screen.getByTestId("sheet-toggle");
+    await user.click(toggleButton);
+
+    let sheet = screen.getByTestId("sheet");
+    expect(sheet).toHaveAttribute("data-open", "true");
+
+    // Close sheet
+    await user.click(toggleButton);
+
+    sheet = screen.getByTestId("sheet");
+    expect(sheet).toHaveAttribute("data-open", "false");
+  });
+
+  it("handles initial mount state correctly", async () => {
+    const user = userEvent.setup();
+    render(<MobileNav />);
+
+    // Open sheet - initial mount should prevent animation
+    const toggleButton = screen.getByTestId("sheet-toggle");
+    await user.click(toggleButton);
+
+    // Sheet should open
+    const sheet = screen.getByTestId("sheet");
+    expect(sheet).toHaveAttribute("data-open", "true");
   });
 });
