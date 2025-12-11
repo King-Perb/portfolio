@@ -4,6 +4,7 @@
  */
 
 import { Octokit } from "@octokit/rest";
+import { unstable_cache } from "next/cache";
 import { getExcludedRepos } from "@/data/github-project-overrides";
 import { calculateProjectStatus } from "./project-status";
 
@@ -140,9 +141,9 @@ async function fetchRepoDeployments(
 }
 
 /**
- * Aggregate all GitHub statistics
+ * Internal function to fetch GitHub statistics (not cached)
  */
-export async function fetchGitHubStats(): Promise<GitHubStats> {
+async function _fetchGitHubStatsInternal(): Promise<GitHubStats> {
   // Create authenticated Octokit instance
   const octokit = createOctokit();
 
@@ -211,6 +212,19 @@ export async function fetchGitHubStats(): Promise<GitHubStats> {
     repoDeployments,
   };
 }
+
+/**
+ * Aggregate all GitHub statistics
+ * Cached for 5 minutes to avoid excessive API calls during development
+ */
+export const fetchGitHubStats = unstable_cache(
+  _fetchGitHubStatsInternal,
+  ['github-stats'],
+  {
+    revalidate: 300, // Cache for 5 minutes (300 seconds)
+    tags: ['github-stats'],
+  }
+);
 
 /**
  * Options for transforming a GitHub repository to a Project
