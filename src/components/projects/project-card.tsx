@@ -30,7 +30,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
       onKeyDown={isClickable ? handleKeyDown : undefined}
     >
       {showScreenshot && imageUrl && (
-        <div className="relative w-full h-48 overflow-hidden rounded-t-xl -mt-6 mb-6 hidden md:block">
+        <div className="relative w-full h-48 overflow-hidden rounded-t-xl -mt-6 mb-6">
           <Image
             src={imageUrl}
             alt={project.title}
