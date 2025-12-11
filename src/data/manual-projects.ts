@@ -27,7 +27,7 @@ export const MANUAL_PROJECTS: Project[] = [
 
   // Wordpress website
   {
-    title: "Langexpress",
+    title: "langexpress",
     description: "WordPress website built for personal language and career coaching",
     tags: ["WordPress", "PHP", "CSS", "Cloudflare", "Elementor", "SEO", "Google Analytics"],
     stars: 0,

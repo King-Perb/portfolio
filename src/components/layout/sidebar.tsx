@@ -1,79 +1,117 @@
-"use client"
+"use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSidebarAnimation } from "@/hooks/use-sidebar-animation";
+import { SidebarContent } from "./sidebar/sidebar-content";
+import { AnimatedLine } from "./sidebar/animated-line";
+import { AnimatedWrapper } from "./sidebar/animated-wrapper";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { USER_PROFILE, NAV_ITEMS } from "@/lib/constants";
 
 interface SidebarProps {
-    className?: string;
-    onClose?: () => void;
+  className?: string;
+  onClose?: () => void;
 }
 
 export function Sidebar({ className, onClose }: SidebarProps) {
-    const pathname = usePathname();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isDesktop, setIsDesktop] = useState(false);
 
-    return (
-        <aside className={cn("flex h-full w-[280px] flex-col gap-6 p-6 border-r border-primary/20 shadow-[2px_0_12px] shadow-primary/10", className)}>
-            {/* Player Card Header */}
-            <div className="flex flex-col gap-4">
-                <Avatar className="h-16 w-16 border-2 border-primary/20">
-                    <AvatarImage src={USER_PROFILE.avatarUrl} alt={USER_PROFILE.name} />
-                    <AvatarFallback className="text-lg font-bold">SB</AvatarFallback>
-                </Avatar>
+  // Check if we're on desktop (md: breakpoint and above)
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
 
-                <div className="space-y-1">
-                    <h2 className="text-xl font-bold tracking-tight">{USER_PROFILE.name}</h2>
-                    <p className="text-sm text-muted-foreground font-mono">{USER_PROFILE.handle}</p>
-                </div>
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
 
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                    {USER_PROFILE.bio}
-                </p>
+  const { animationPhase, startAnimation, mounted, isInitialMount } = useSidebarAnimation({
+    pathname,
+    onRouteChange: (route) => router.push(route),
+  });
 
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary w-fit border border-primary/20">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                    </span>
-                    {USER_PROFILE.status}
-                </div>
-            </div>
+  const handleNavClick = (href: string, e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Only animate if navigating to a different route
+    if (pathname === href) {
+      onClose?.();
+      return;
+    }
 
-            <Separator className="bg-border/50" />
+    // Prevent default navigation
+    e.preventDefault();
 
-            {/* Navigation */}
-            <nav className="flex flex-col gap-2 flex-1">
-                {NAV_ITEMS.map((item) => {
-                    const isActive = pathname === item.href;
-                    return (
-                        <Link key={item.href} href={item.href} onClick={() => onClose?.()}>
-                            <Button
-                                variant="ghost"
-                                className={cn(
-                                    "w-full justify-start gap-3 h-10 font-normal",
-                                    isActive
-                                        ? "bg-primary/10 text-primary font-medium border-l-2 border-primary rounded-none rounded-r-md"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                                )}
-                            >
-                                <item.icon className="h-4 w-4" />
-                                {item.label}
-                            </Button>
-                        </Link>
-                    );
-                })}
-            </nav>
+    // Call onClose callback
+    onClose?.();
 
-            {/* Footer / Socials (Optional) */}
-            <div className="mt-auto">
-                <p className="text-xs text-muted-foreground text-center">
-                    © 2025 {USER_PROFILE.name.split(" ")[0]}
-                </p>
-            </div>
-        </aside>
-    );
+    // Start animation and navigation
+    startAnimation(href);
+  };
+
+  const handleTestClick = () => {
+    // Navigate to a different route (cycle through routes for testing)
+    const routes = ["/", "/projects", "/stack", "/contact"];
+    const currentIndex = routes.indexOf(pathname);
+    const nextRoute = routes[(currentIndex + 1) % routes.length] || "/projects";
+
+    // Create a synthetic event for handleNavClick
+    const syntheticEvent = {
+      preventDefault: () => {},
+    } as React.MouseEvent<HTMLAnchorElement>;
+
+    handleNavClick(nextRoute, syntheticEvent);
+  };
+
+  // Only use animated wrapper on desktop (where sidebar is visible)
+  // On mobile, sidebar is inside a sheet and doesn't need animation wrapper
+  const useAnimatedWrapper = isDesktop;
+
+  return (
+    <>
+      {useAnimatedWrapper && (
+        <>
+          <AnimatedLine animationPhase={animationPhase} mounted={mounted} />
+          <AnimatedWrapper
+            animationPhase={animationPhase}
+            mounted={mounted}
+            isInitialMount={isInitialMount}
+          >
+            <SidebarContent
+              pathname={pathname}
+              onClose={onClose}
+              onNavClick={handleNavClick}
+              onTestClick={handleTestClick}
+              showTestButton={process.env.NODE_ENV === "development"}
+              className={cn("w-full", className)}
+            />
+          </AnimatedWrapper>
+        </>
+      )}
+
+      {/* On mobile or when not using animated wrapper, render sidebar content directly */}
+      {!useAnimatedWrapper && mounted && (
+        <SidebarContent
+          pathname={pathname}
+          onClose={onClose}
+          onNavClick={handleNavClick}
+          onTestClick={handleTestClick}
+          showTestButton={process.env.NODE_ENV === "development"}
+          className={className}
+        />
+      )}
+
+      {/* SSR fallback - will be hidden by portal on client */}
+      {!mounted && (
+        <SidebarContent
+          pathname={pathname}
+          onClose={onClose}
+          onNavClick={handleNavClick}
+          className={className}
+        />
+      )}
+    </>
+  );
 }

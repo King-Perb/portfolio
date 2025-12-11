@@ -1,5 +1,6 @@
 import { OverviewMetrics } from "@/components/dashboard/overview-metrics";
 import { ProjectsGrid } from "@/components/dashboard/projects-grid";
+import { EasterEggButton } from "@/components/dashboard/easter-egg-button";
 import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
@@ -18,6 +19,10 @@ export default function Home() {
       </div>
 
       <OverviewMetrics />
+
+      <div className="flex justify-center md:justify-start">
+        <EasterEggButton />
+      </div>
 
       <Separator className="my-2 opacity-50" />
 

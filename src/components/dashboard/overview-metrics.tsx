@@ -3,30 +3,30 @@ import { cn } from "@/lib/utils";
 import { MOCK_METRICS } from "@/data/mock-data";
 import { GitCommitHorizontal, FolderGit2, Rocket } from "lucide-react";
 import type { Metric } from "@/types";
+import { fetchGitHubStats } from "@/lib/github";
 
 async function getGitHubMetrics() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"}/api/github/stats`, {
-      next: { revalidate: 3600 },
-    });
+    // Call the function directly instead of going through API route
+    // This works during build time and in production
+    const stats = await fetchGitHubStats();
 
-    if (response.ok) {
-      const stats = await response.json();
+    // Calculate total deployments across all repos
+    const totalDeployments = stats.repoDeployments
+      ? Object.values(stats.repoDeployments as Record<string, number>).reduce((sum: number, count: number) => sum + (count || 0), 0)
+      : 0;
 
-      // Calculate total deployments across all repos
-      const totalDeployments = stats.repoDeployments
-        ? Object.values(stats.repoDeployments as Record<string, number>).reduce((sum: number, count: number) => sum + (count || 0), 0)
-        : 0;
-
-      return {
-        commits: stats.commitsLastMonth || 0,
-        repos: stats.totalRepos || 0,
-        totalCommits: (stats.totalCommits as number) || 0,
-        totalDeployments: totalDeployments,
-      };
-    }
+    return {
+      commits: stats.commitsLastMonth || 0,
+      repos: stats.totalRepos || 0,
+      totalCommits: stats.totalCommits || 0,
+      totalDeployments: totalDeployments,
+    };
   } catch (error) {
-    console.error("Failed to fetch GitHub metrics:", error);
+    // Only log errors in development, not during build
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Failed to fetch GitHub metrics:", error);
+    }
   }
 
   return null;

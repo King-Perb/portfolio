@@ -106,6 +106,8 @@
   --accent-foreground: oklch(0.85 0.05 145);
   --destructive: oklch(0.4 0.15 25);
   /* Muted Red */
+  --neon-red: oklch(0.55 0.22 25);
+  /* Neon Red for easter egg button */
   --border: oklch(0.20 0.05 145);
   /* Visible Green Borders */
   --input: oklch(0.20 0.05 145);

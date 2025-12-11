@@ -11,6 +11,10 @@ vi.mock("@/components/dashboard/projects-grid", () => ({
   ProjectsGrid: () => <div data-testid="projects-grid">Projects Grid</div>,
 }));
 
+vi.mock("@/components/dashboard/easter-egg-button", () => ({
+  EasterEggButton: () => <button data-testid="easter-egg-button">Don&apos;t Click This</button>,
+}));
+
 vi.mock("@/components/ui/separator", () => ({
   Separator: ({ className }: { className?: string }) => (
     <hr data-testid="separator" data-classname={className} />
@@ -37,6 +41,13 @@ describe("Home Page", () => {
     expect(screen.getByTestId("projects-grid")).toBeInTheDocument();
   });
 
+  it("renders EasterEggButton component", () => {
+    render(<Home />);
+
+    expect(screen.getByTestId("easter-egg-button")).toBeInTheDocument();
+    expect(screen.getByText("Don't Click This")).toBeInTheDocument();
+  });
+
   it("renders separator between metrics and projects", () => {
     render(<Home />);
 
@@ -56,6 +67,7 @@ describe("Home Page", () => {
 
     const heading = screen.getByText("Activity Overview");
     const metrics = screen.getByTestId("overview-metrics");
+    const easterEggButton = screen.getByTestId("easter-egg-button");
     const separator = screen.getByTestId("separator");
     const featuredHeading = screen.getByText("Featured Projects");
     const projects = screen.getByTestId("projects-grid");
@@ -63,6 +75,7 @@ describe("Home Page", () => {
     // Check that elements are in the DOM
     expect(heading).toBeInTheDocument();
     expect(metrics).toBeInTheDocument();
+    expect(easterEggButton).toBeInTheDocument();
     expect(separator).toBeInTheDocument();
     expect(featuredHeading).toBeInTheDocument();
     expect(projects).toBeInTheDocument();

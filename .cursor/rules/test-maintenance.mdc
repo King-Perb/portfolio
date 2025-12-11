@@ -44,6 +44,10 @@ After code is error-free, update tests:
 
 4. **Ensure tests pass**: Run `npm test` to verify all tests pass
 
+5. **Run E2E tests (when applicable)**: For changes affecting navigation, routing, or critical user flows:
+   - Run `npm run test:e2e` to verify end-to-end functionality
+   - E2E tests are slower, so only run when necessary (see "When to Run E2E Tests" below)
+
 ## When to Update Tests
 
 ### Always Update Tests When:
@@ -63,13 +67,44 @@ After code is error-free, update tests:
 
 **When in doubt, add or update tests.**
 
+## When to Run E2E Tests
+
+E2E tests are slower and should be run selectively, not for every code change.
+
+### Always Run E2E Tests When:
+- ✅ **Navigation/routing changes** - Changes to routes, navigation components, or routing logic
+- ✅ **Major component refactoring** - Significant refactoring of layout components (e.g., sidebar, navigation)
+- ✅ **Critical user flows** - Changes to authentication, checkout, or other critical paths
+- ✅ **Mobile/responsive changes** - Changes affecting mobile navigation or responsive behavior
+- ✅ **Before major releases** - Before merging to main or deploying to production
+
+### Optional (Run if Time Permits):
+- ⚠️ **UI component changes** - Changes to components that affect user interaction
+- ⚠️ **Form changes** - Changes to forms or form validation
+- ⚠️ **API integration changes** - Changes to how data is fetched or displayed
+
+### Skip E2E Tests When:
+- ❌ **Pure utility/helper functions** - No UI or navigation impact
+- ❌ **Type definitions only** - No runtime behavior changes
+- ❌ **Test file changes** - Only updating test code
+- ❌ **Documentation changes** - README, comments, etc.
+- ❌ **Configuration changes** - Build config, environment variables (unless they affect runtime)
+
+**Note**: E2E tests run automatically in CI/CD, so they will catch issues even if not run locally.
+
 ## Test File Naming Convention
 
+### Unit/Component Tests:
 - Component tests: `src/components/**/__tests__/[component-name].test.tsx`
 - Service/utility tests: `src/lib/__tests__/[service-name].test.ts`
 - API route tests: `src/app/api/**/__tests__/route.test.ts`
 - Page tests: `src/app/**/__tests__/page.test.tsx`
 - Hook tests: `src/hooks/__tests__/[hook-name].test.ts`
+
+### E2E Tests:
+- E2E test files: `e2e/[feature-name].spec.ts`
+- Use Playwright for E2E testing
+- Test critical user flows and integration scenarios
 
 ## Examples
 
@@ -135,12 +170,21 @@ When updating tests, ensure:
    ↓
 4. Verify build (npm run build)
    ↓
-5. Update/add tests
+5. Update/add unit/component tests
    ↓
-6. Run tests (npm test)
+6. Run unit/component tests (npm test)
    ↓
-7. Ensure all tests pass
+7. Ensure all unit/component tests pass
+   ↓
+8. Run E2E tests (npm run test:e2e) - IF applicable
+   ↓
+9. Ensure all tests pass
 ```
+
+**E2E Test Commands:**
+- `npm run test:e2e` - Run all E2E tests
+- `npm run test:e2e:ui` - Run E2E tests with Playwright UI
+- `npm run test:e2e:headed` - Run E2E tests in headed mode (see browser)
 
 ## Integration with Other Rules
 

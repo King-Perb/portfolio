@@ -38,6 +38,8 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
             className="object-cover group-hover:scale-105 transition-transform duration-300 rounded-t-xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
+          {/* Green overlay for "Hacker Mode" aesthetic */}
+          <div className="absolute inset-0 bg-primary/30 group-hover:bg-primary/40 mix-blend-overlay transition-colors duration-300 rounded-t-xl pointer-events-none" />
         </div>
       )}
 

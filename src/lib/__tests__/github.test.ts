@@ -1,6 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Octokit } from "@octokit/rest";
 
+// Mock unstable_cache to bypass Next.js cache in test environment
+vi.mock("next/cache", () => ({
+  unstable_cache: vi.fn(<T,>(fn: () => Promise<T>) => fn), // Just return the function directly without caching
+}));
+
 // Mock Octokit before importing github module
 const mockPaginate = vi.fn();
 const mockListLanguages = vi.fn();

@@ -149,6 +149,7 @@ Migration:
 3. **Review unstaged changes**: Use `git diff` to see unstaged changes
 4. **Include all changes**: The commit message must accurately represent ALL changes being committed
 5. **Group related changes**: For multi-file changes, group related changes in the body with bullet points
+6. **Update implementation plan** (if applicable): For commits involving architectural changes, new features, major refactoring, or data strategy changes, update `doc/implementation_plan.md` before committing. See `update-implementation-plan.mdc` for details.
 
 **Never create a commit message without first reviewing all changed files.** The commit message should comprehensively cover all significant changes.
 
