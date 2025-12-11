@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, startTransition } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -22,18 +22,21 @@ export function Sidebar({ className, onClose }: SidebarProps) {
     const [animationPhase, setAnimationPhase] = useState<'idle' | 'moving-right' | 'moving-back'>('idle');
     const [mounted, setMounted] = useState(false);
     const [pendingRoute, setPendingRoute] = useState<string | null>(null);
+    const [isInitialMount, setIsInitialMount] = useState(true);
     const previousPathnameRef = useRef(pathname);
     const animationStartTimeRef = useRef<number | null>(null);
-    const isInitialMountRef = useRef(true);
 
     // Only render portal after client-side hydration to avoid hydration mismatch
     // This is a valid pattern for client-only rendering in Next.js
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        setMounted(true);
+        startTransition(() => {
+            setMounted(true);
+        });
         // Mark initial mount as complete after a short delay to prevent animation on first load
         const timer = setTimeout(() => {
-            isInitialMountRef.current = false;
+            startTransition(() => {
+                setIsInitialMount(false);
+            });
         }, 100);
         return () => clearTimeout(timer);
     }, []);
@@ -211,7 +214,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
                     : '280px', // Show only sidebar width when idle
             }}
             transition={{
-                duration: isInitialMountRef.current ? 0 : 0.5, // No transition on initial mount
+                duration: isInitialMount ? 0 : 0.5, // No transition on initial mount
                 ease: [0.4, 0, 0.2, 1],
             }}
         >
