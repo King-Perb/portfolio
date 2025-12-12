@@ -24,10 +24,10 @@ vi.mock("@/contexts/navigation-context", () => ({
 
 // Mock Button component
 vi.mock("@/components/ui/button", () => ({
-  Button: ({ children, onClick, disabled, className, ...props }: { 
-    children: React.ReactNode; 
-    onClick?: () => void; 
-    disabled?: boolean; 
+  Button: ({ children, onClick, disabled, className, ...props }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
     className?: string;
     [key: string]: unknown;
   }) => (
@@ -158,4 +158,3 @@ describe("MobileNextSectionButton", () => {
     expect(button).toBeInTheDocument();
   });
 });
-

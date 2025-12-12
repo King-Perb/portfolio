@@ -14,7 +14,7 @@ interface PageTransitionLineProps {
  * Full-screen page transition overlay and line that animates from left edge (0) to right and back.
  * Used for navigation triggered from content area (e.g., mobile next section buttons).
  * Different from sidebar AnimatedLine which starts from sidebar edge.
- * 
+ *
  * Includes an expanding background overlay that covers content as the line sweeps across,
  * similar to the sidebar's AnimatedWrapper behavior.
  */
@@ -152,4 +152,3 @@ export function PageTransitionLine({ animationPhase }: PageTransitionLineProps) 
 
   return createPortal(transitionElement, document.body);
 }
-

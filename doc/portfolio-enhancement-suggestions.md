@@ -46,7 +46,7 @@
 **Purpose**: Visualize coding activity and contributions over time
 
 **Features:**
-- **GitHub Contributions Graph**: 
+- **GitHub Contributions Graph**:
   - Heatmap showing commit activity (similar to GitHub's contribution graph)
   - Filter by year/month
   - Hover to see commit details
@@ -144,7 +144,7 @@
 **Purpose**: Social proof from colleagues/clients
 
 **Features:**
-- **Testimonial Cards**: 
+- **Testimonial Cards**:
   - Name, role, company
   - Photo/avatar
   - Quote
@@ -162,7 +162,7 @@
 **Purpose**: Showcase site performance and technical excellence
 
 **Features:**
-- **Core Web Vitals**: 
+- **Core Web Vitals**:
   - LCP (Largest Contentful Paint)
   - FID (First Input Delay)
   - CLS (Cumulative Layout Shift)
@@ -244,4 +244,3 @@
 - Follow component patterns from existing codebase
 - Ensure responsive design for all new features
 - Use consistent animation patterns (framer-motion)
-

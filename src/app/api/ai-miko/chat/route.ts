@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
         const encoder = new TextEncoder();
 
         // Simulate AI response (replace with actual AI API call)
-        const response = `I'm AI Miko, your portfolio assistant! You asked: "${message}". 
+        const response = `I'm AI Miko, your portfolio assistant! You asked: "${message}".
 
-I can help you explore the portfolio, discuss projects, explain the tech stack, or answer questions about the codebase. 
+I can help you explore the portfolio, discuss projects, explain the tech stack, or answer questions about the codebase.
 
 Currently, I'm a placeholder implementation. To make me fully functional, you'll need to:
 1. Integrate with an AI service (OpenAI, Anthropic, etc.)
@@ -28,7 +28,7 @@ Would you like to know more about any specific project or technology?`;
           const chunk = response[i];
           const data = JSON.stringify({ content: chunk });
           controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-          
+
           // Small delay for typing effect
           await new Promise((resolve) => setTimeout(resolve, 20));
         }
@@ -59,4 +59,3 @@ Would you like to know more about any specific project or technology?`;
     );
   }
 }
-

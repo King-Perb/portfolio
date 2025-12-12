@@ -35,7 +35,7 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
     const handleScroll = () => {
       // Clear any pending scroll checks
       clearTimeout(scrollTimeout);
-      
+
       // If we're auto-scrolling, update lastScrollTop but don't update the flag
       if (isAutoScrollingRef.current) {
         lastScrollTop = container.scrollTop;
@@ -71,10 +71,10 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
   // Auto-scroll only for new messages, not content updates
   useEffect(() => {
     const currentMessageIds = messages.map((m) => m.id);
-    
+
     // Check if we have new message IDs (not just content updates)
     const hasNewMessage = currentMessageIds.some((id) => !lastMessageIdsRef.current.has(id));
-    
+
     // Update tracked message IDs
     lastMessageIdsRef.current = new Set(currentMessageIds);
 
@@ -89,7 +89,7 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
           if (!userScrolledUpRef.current) {
             isAutoScrollingRef.current = true;
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            
+
             // Reset flag after scroll completes
             setTimeout(() => {
               isAutoScrollingRef.current = false;
@@ -140,19 +140,19 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
           // Show typing indicator on the last assistant message if typing
           // Also show if it's the last message and it's an assistant message being streamed
           const isLastMessage = index === messages.length - 1;
-          const showTyping = isTyping && 
-            message.role === "assistant" && 
+          const showTyping = isTyping &&
+            message.role === "assistant" &&
             isLastMessage;
-          
+
           return (
-            <MessageBubble 
-              key={message.id} 
-              message={message} 
+            <MessageBubble
+              key={message.id}
+              message={message}
               isTyping={showTyping}
             />
           );
         })}
-        
+
         {/* Show typing indicator if typing but no assistant message exists yet */}
         {isTyping && messages.length > 0 && messages[messages.length - 1]?.role !== "assistant" && (
           <div className="flex gap-4 px-4 py-6">
@@ -172,4 +172,3 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
     </div>
   );
 }
-

@@ -65,7 +65,7 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
       }]);
 
       await processStream(reader, abortController, assistantMessageId, setMessages);
-      
+
       abortControllerRef.current = null;
       setIsTyping(false);
     } catch (error) {
@@ -120,7 +120,7 @@ async function processStream(
 
       for (const line of lines) {
         if (!line.startsWith("data: ")) continue;
-        
+
         const data = line.slice(6);
         if (data === "[DONE]") return;
 
@@ -159,4 +159,3 @@ function updateMessage(
     return updated;
   });
 }
-

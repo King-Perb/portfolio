@@ -15,8 +15,8 @@ export function ChatContainer({ initialMessages = [] }: ChatContainerProps) {
   return (
     <div className="flex flex-col h-[calc(100vh-200px)] max-h-[800px] bg-background border border-primary/20 rounded-xl overflow-hidden">
       <MessageList messages={messages} isTyping={isTyping} />
-      <ChatInput 
-        onSendMessage={sendMessage} 
+      <ChatInput
+        onSendMessage={sendMessage}
         onStop={stopGeneration}
         isTyping={isTyping}
         disabled={false}
@@ -24,4 +24,3 @@ export function ChatContainer({ initialMessages = [] }: ChatContainerProps) {
     </div>
   );
 }
-

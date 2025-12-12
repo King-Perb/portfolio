@@ -12,4 +12,3 @@ export interface ChatDocument {
   content: string;
   uploadedAt: Date;
 }
-

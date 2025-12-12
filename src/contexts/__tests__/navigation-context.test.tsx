@@ -15,7 +15,7 @@ vi.mock("next/navigation", () => ({
 // Test component that uses the navigation context
 function TestComponent() {
   const { triggerNavigation, animationPhase, isAnimating } = useNavigation();
-  
+
   return (
     <div>
       <button onClick={() => triggerNavigation("/projects")} data-testid="trigger-btn">
@@ -56,7 +56,7 @@ describe("NavigationContext", () => {
     );
 
     const button = screen.getByTestId("trigger-btn");
-    
+
     act(() => {
       button.click();
     });
@@ -78,7 +78,7 @@ describe("NavigationContext", () => {
     );
 
     const button = screen.getByTestId("trigger-btn");
-    
+
     act(() => {
       button.click();
     });
@@ -109,7 +109,7 @@ describe("NavigationContext", () => {
     // Should remain idle
     expect(screen.getByTestId("animation-phase")).toHaveTextContent(ANIMATION_PHASE.IDLE);
     expect(mockPush).not.toHaveBeenCalled();
-    
+
     // Reset for other tests
     mockPathname.mockReturnValue("/");
   });
@@ -122,12 +122,12 @@ describe("NavigationContext", () => {
     );
 
     const button = screen.getByTestId("trigger-btn");
-    
+
     // First click
     act(() => {
       button.click();
     });
-    
+
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -145,7 +145,7 @@ describe("NavigationContext", () => {
     act(() => {
       button.click();
     });
-    
+
     // Should still be in MOVING_RIGHT, not restart
     expect(screen.getByTestId("animation-phase")).toHaveTextContent(ANIMATION_PHASE.MOVING_RIGHT);
     // Should still be only 1 call
@@ -160,7 +160,7 @@ describe("NavigationContext", () => {
     );
 
     const button = screen.getByTestId("trigger-btn");
-    
+
     act(() => {
       button.click();
     });
@@ -183,4 +183,3 @@ describe("NavigationContext", () => {
     consoleSpy.mockRestore();
   });
 });
-

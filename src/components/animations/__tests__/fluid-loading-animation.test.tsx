@@ -4,16 +4,16 @@ import { FluidLoadingAnimation } from "../fluid-loading-animation";
 
 // Mock DotLottieReact
 vi.mock("@lottiefiles/dotlottie-react", () => ({
-  DotLottieReact: ({ src, loop, autoplay, style }: { 
-    src: string; 
-    loop: boolean; 
-    autoplay: boolean; 
+  DotLottieReact: ({ src, loop, autoplay, style }: {
+    src: string;
+    loop: boolean;
+    autoplay: boolean;
     style: React.CSSProperties;
   }) => (
-    <div 
-      data-testid="dotlottie-react" 
-      data-src={src} 
-      data-loop={loop.toString()} 
+    <div
+      data-testid="dotlottie-react"
+      data-src={src}
+      data-loop={loop.toString()}
       data-autoplay={autoplay.toString()}
       style={style}
     />
@@ -96,10 +96,9 @@ describe("FluidLoadingAnimation", () => {
     render(<FluidLoadingAnimation style={customStyle} />);
 
     const container = screen.getByTestId("dotlottie-react").parentElement;
-    expect(container).toHaveStyle({ 
+    expect(container).toHaveStyle({
       pointerEvents: "none",
       zIndex: "10"
     });
   });
 });
-

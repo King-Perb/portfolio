@@ -90,4 +90,3 @@ export function MessageBubble({ message, isTyping = false }: MessageBubbleProps)
     </div>
   );
 }
-

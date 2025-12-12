@@ -97,4 +97,3 @@ export function useTriggerNavigation() {
   const { triggerNavigation } = useNavigation();
   return triggerNavigation;
 }
-
