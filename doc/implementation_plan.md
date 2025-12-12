@@ -475,3 +475,23 @@ These rules ensure maintainability and "premium" code quality.
     - Desktop sidebar transitions (AnimatedWrapper): Animation centered at 50vw
     - Mobile page transitions (PageTransitionLine): Animation centered at 50vw
     - Revealed as overlay expands, hidden when idle
+- [x] **AI Miko Chat Interface:** ChatGPT-like chat interface with document-based knowledge.
+  - **Components:**
+    - `src/components/ai-miko/chat-container.tsx`: Main chat interface orchestrator
+    - `src/components/ai-miko/message-list.tsx`: Auto-scrolling message display
+    - `src/components/ai-miko/message-bubble.tsx`: Individual message rendering (user/AI)
+    - `src/components/ai-miko/chat-input.tsx`: Message input with send/stop toggle
+    - `src/components/ai-miko/typing-indicator.tsx`: Animated dots below avatar
+  - **Infrastructure:**
+    - `src/hooks/use-chat-stream.ts`: Streaming logic hook (refactored from chat-container)
+    - `src/app/api/ai-miko/chat/route.ts`: API route (placeholder for NotebookLM integration)
+    - `src/types/chat.ts`: TypeScript types for chat messages
+    - `src/components/ui/textarea.tsx`: Textarea component for message input
+  - **Features:**
+    - Streaming response support with abort capability
+    - Auto-scroll with manual scroll detection (prevents glitches during streaming)
+    - Stop generation button (toggles from send to stop during streaming)
+    - Typing indicator positioned below avatar icon (not in message text)
+    - Refactored streaming logic into reusable hook
+  - **Navigation:** Added "AI Miko" to navigation menu with Bot icon
+  - **Status:** UI complete, awaiting NotebookLM API integration for document-based responses
