@@ -343,6 +343,22 @@ These rules ensure maintainability and "premium" code quality.
     - Position: Absolute positioned div over image with `absolute inset-0`
     - Hover: Overlay intensity increases to `bg-primary/30` on hover for interactive feedback
     - Implementation: Overlay div added in `ProjectCard` component image container (line 41)
+- **Project Card Hover Improvements:** ✅ Implemented
+  - **JavaScript Event Handlers:** Replaced CSS `:hover` pseudo-classes with JavaScript `onMouseEnter`/`onMouseLeave` event handlers
+    - **Problem Solved:** Fixed ~0.5s hover detection lag when cursor lands on cards during scrolling
+    - **Implementation:** Use `useState` to track hover state for immediate detection regardless of scroll state
+    - **Benefits:** JavaScript event handlers fire immediately, eliminating CSS hover delay during scroll
+  - **Simple Glowing Outline:** Fade in/out glowing border on hover
+    - Border: `border-primary/20` (default) → `border-primary/50` (hover)
+    - Shadow: No shadow (default) → `shadow-[0_0_20px] shadow-primary/50` (hover)
+    - Smooth transition with `duration-300` easing
+  - **Image Zoom Control:** Added `ENABLE_PROJECT_IMAGE_ZOOM` constant in `src/lib/constants.ts`
+    - Default: `true` (enables `group-hover:scale-105` on project images)
+    - Can be set to `false` to disable image zoom animation
+    - Applied conditionally based on constant value
+  - **Private Repository Support:** Added `isPrivate` field to Project type
+    - GitHub repos: `isPrivate` set from API response (`repo.private`)
+    - Manual projects: Can be set in config if needed
 - **Private Repository Handling:**
   - **Private Repo Detection:** Check `private: true` field from GitHub API response
   - **Click Behavior:** When user clicks a private repo project card:
