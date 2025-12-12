@@ -7,11 +7,18 @@ When finalizing plans in plan mode, ALWAYS update `doc/implementation_plan.md` w
 
 ## When to Update
 
-Update `doc/implementation_plan.md` after:
-- Finalizing a plan in plan mode with user confirmation
-- Making architectural decisions that affect the project structure
-- Adding new features, pages, or major components
-- Changing data strategies or API integrations
+**MANDATORY**: Update `doc/implementation_plan.md` for ALL commits, including:
+- New features, pages, components, or routes
+- Bug fixes that affect functionality or user experience
+- Refactoring that changes component structure or architecture
+- Test additions for new features or components
+- Configuration changes (constants, environment variables, settings)
+- API changes, new endpoints, or data strategy modifications
+- UI/UX improvements or styling changes
+- Performance optimizations
+- Documentation updates (if they reflect actual implementation changes)
+
+**Exception**: Pure formatting changes (whitespace, line endings) that don't affect functionality may skip implementation plan updates, but it's still recommended to document them if they're part of a larger change.
 
 ## What to Update
 
@@ -70,6 +77,14 @@ When adding a new page:
 
 ## Workflow Summary
 
+**For All Commits:**
+1. Make code changes
+2. **Update `doc/implementation_plan.md`** ← MANDATORY before committing
+3. Stage changes (including implementation plan)
+4. Create commit with proper message
+5. Push to feature branch
+
+**For Plan Mode:**
 1. Create plan in plan mode → Get user confirmation
 2. **Update `doc/implementation_plan.md`** ← You are here
 3. Execute plan using MCP todos

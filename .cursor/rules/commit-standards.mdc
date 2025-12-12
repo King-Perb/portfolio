@@ -154,9 +154,16 @@ Migration:
 3. **Review unstaged changes**: Use `git diff` to see unstaged changes
 4. **Include all changes**: The commit message must accurately represent ALL changes being committed
 5. **Group related changes**: For multi-file changes, group related changes in the body with bullet points
-6. **Update implementation plan** (if applicable): For commits involving architectural changes, new features, major refactoring, or data strategy changes, update `doc/implementation_plan.md` before committing. See `update-implementation-plan.mdc` for details.
+6. **MANDATORY: Update implementation plan**: ALWAYS update `doc/implementation_plan.md` before committing. Document all changes including:
+   - New features, components, pages, or routes
+   - Bug fixes that affect functionality
+   - Refactoring that changes component structure
+   - Test additions for new features
+   - Configuration changes (constants, environment variables)
+   - API changes or new endpoints
+   - See `update-implementation-plan.mdc` for details on what and how to document
 
-**Never create a commit message without first reviewing all changed files and ensuring you're on a feature branch (not main).** The commit message should comprehensively cover all significant changes.
+**Never create a commit message without first reviewing all changed files, ensuring you're on a feature branch (not main), and updating the implementation plan.** The commit message should comprehensively cover all significant changes, and the implementation plan must be updated to reflect those changes.
 
 - Always use the format above
 - For multi-file changes, group related changes in the body with bullet points
