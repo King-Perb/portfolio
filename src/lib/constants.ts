@@ -31,6 +31,11 @@ export const NAV_ITEMS = [
         href: "/contact",
         icon: User,
     },
+    {
+        label: "AI Miko",
+        href: "/ai-miko",
+        icon: Bot,
+    },
 ];
 
 export interface SocialLink {
@@ -59,3 +64,6 @@ export const CONTACT_INFO = {
         },
     ] as SocialLink[],
 };
+
+// Animation preferences
+export const ENABLE_PROJECT_IMAGE_ZOOM = true; // Set to false to disable image zoom on hover

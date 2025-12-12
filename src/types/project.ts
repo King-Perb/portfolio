@@ -19,4 +19,5 @@ export interface Project {
   screenshot?: string;
   source: ProjectSource;
   featured?: boolean;
+  isPrivate?: boolean; // Whether the repository is private (GitHub repos only)
 }
