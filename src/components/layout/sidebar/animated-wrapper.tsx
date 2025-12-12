@@ -3,6 +3,7 @@
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 import { ANIMATION_CONFIG, ANIMATION_PHASE, SIDEBAR_CONFIG, type AnimationPhase } from "./constants";
+import { FluidLoadingAnimation } from "@/components/animations/fluid-loading-animation";
 
 interface AnimatedWrapperProps {
   animationPhase: AnimationPhase;
@@ -48,6 +49,22 @@ export function AnimatedWrapper({
       }}
     >
       {children}
+      {/* Lottie animation revealed as overlay expands (desktop only) */}
+      {/* Centered at viewport center (50vw), revealed as overlay expands past it */}
+      {/* Rendered after children with z-index to appear above sidebar */}
+      {animationPhase !== ANIMATION_PHASE.IDLE && (
+        <div
+          className="absolute top-1/2"
+          style={{
+            left: "50vw", // Center of viewport
+            transform: "translate(-50%, -50%)",
+            pointerEvents: "none",
+            zIndex: 10, // Above sidebar content
+          }}
+        >
+          <FluidLoadingAnimation />
+        </div>
+      )}
     </motion.div>,
     document.body
   );

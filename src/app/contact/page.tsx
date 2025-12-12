@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Mail, Copy, Check } from "lucide-react";
 import { CONTACT_INFO } from "@/lib/constants";
 import { SocialLinkComponent } from "@/components/contact/social-link";
+import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
 import { useState } from "react";
 
 export default function ContactPage() {
@@ -78,6 +79,8 @@ export default function ContactPage() {
           </CardContent>
         </Card>
       </div>
+
+      <MobileNextSectionButton />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { ProjectCard } from "@/components/projects/project-card";
 import { getProjectsPageProjects } from "@/lib/projects-service";
+import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
 
 export default async function ProjectsPage() {
   const projects = await getProjectsPageProjects();
@@ -26,6 +27,8 @@ export default async function ProjectsPage() {
           <p>No projects found.</p>
         </div>
       )}
+
+      <MobileNextSectionButton />
     </div>
   );
 }

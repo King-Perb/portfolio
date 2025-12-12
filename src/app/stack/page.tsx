@@ -1,6 +1,7 @@
 import { StackCard } from "@/components/stack/stack-card";
 import { MANUAL_TECHNOLOGIES } from "@/data/manual-technologies";
 import { fetchGitHubStats } from "@/lib/github";
+import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
 
 async function getStackData() {
   try {
@@ -110,6 +111,8 @@ export default async function StackPage() {
           <p className="text-sm mt-2">Connect your GitHub account to see your tech stack.</p>
         </div>
       )}
+
+      <MobileNextSectionButton />
     </div>
   );
 }

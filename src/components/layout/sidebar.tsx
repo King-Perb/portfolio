@@ -11,13 +11,13 @@ import { ANIMATION_PHASE } from "./sidebar/constants";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
-  className?: string;
-  onClose?: () => void;
+    className?: string;
+    onClose?: () => void;
   onAnimationPhaseChange?: (phase: typeof ANIMATION_PHASE[keyof typeof ANIMATION_PHASE]) => void;
 }
 
 export function Sidebar({ className, onClose, onAnimationPhaseChange }: SidebarProps) {
-  const pathname = usePathname();
+    const pathname = usePathname();
   const router = useRouter();
   const isDesktop = useIsDesktop();
   const [pendingRoute, setPendingRoute] = useState<string | null>(null);
@@ -30,21 +30,21 @@ export function Sidebar({ className, onClose, onAnimationPhaseChange }: SidebarP
   });
 
   // Expose animation phase to parent (for mobile Sheet animation)
-  useEffect(() => {
+    useEffect(() => {
     onAnimationPhaseChange?.(animationPhase);
   }, [animationPhase, onAnimationPhaseChange]);
 
   // Clear pending route when navigation completes (pathname matches pending route)
-  useEffect(() => {
+    useEffect(() => {
     if (pendingRoute && pathname === pendingRoute) {
-      startTransition(() => {
+            startTransition(() => {
         setPendingRoute(null);
-      });
-    }
+            });
+        }
   }, [pathname, pendingRoute]);
 
   // Track when animation completes to close Sheet on mobile
-  useEffect(() => {
+    useEffect(() => {
     // Detect transition from MOVING_BACK to IDLE (animation complete)
     const wasMovingBack = previousAnimationPhaseRef.current === ANIMATION_PHASE.MOVING_BACK;
     const isNowIdle = animationPhase === ANIMATION_PHASE.IDLE;
@@ -52,12 +52,12 @@ export function Sidebar({ className, onClose, onAnimationPhaseChange }: SidebarP
     // On mobile, close Sheet when animation completes (line returns and goes to IDLE)
     if (!isDesktop && onClose && wasMovingBack && isNowIdle && shouldCloseOnIdleRef.current && mounted) {
       // Small delay to ensure animation is fully complete
-      const timer = setTimeout(() => {
+            const timer = setTimeout(() => {
         onClose();
         shouldCloseOnIdleRef.current = false; // Reset flag
       }, 50);
-      return () => clearTimeout(timer);
-    }
+            return () => clearTimeout(timer);
+        }
 
     // Update previous phase
     previousAnimationPhaseRef.current = animationPhase;
@@ -85,7 +85,7 @@ export function Sidebar({ className, onClose, onAnimationPhaseChange }: SidebarP
     startAnimation(href);
     // Note: Sheet closing is handled by useEffect watching animationPhase transition
     // On desktop, sidebar stays visible (no onClose call)
-  };
+    };
 
   const handleTestClick = () => {
     // Navigate to a different route (cycle through routes for testing)
@@ -157,5 +157,5 @@ export function Sidebar({ className, onClose, onAnimationPhaseChange }: SidebarP
         />
       )}
     </>
-  );
+    );
 }

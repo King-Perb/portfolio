@@ -2,6 +2,7 @@ import { OverviewMetrics } from "@/components/dashboard/overview-metrics";
 import { ProjectsGrid } from "@/components/dashboard/projects-grid";
 import { EasterEggButton } from "@/components/dashboard/easter-egg-button";
 import { Separator } from "@/components/ui/separator";
+import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
 
 export default function Home() {
   return (
@@ -31,6 +32,7 @@ export default function Home() {
         <ProjectsGrid />
       </div>
 
+      <MobileNextSectionButton />
     </div>
   );
 }
