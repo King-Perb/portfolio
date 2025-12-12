@@ -455,3 +455,23 @@ These rules ensure maintainability and "premium" code quality.
   - Improve sidebar and mobile-nav test coverage
   - Update tests for commented out stars/forks
   - All 161 unit tests and 76 E2E tests passing
+- [x] **Mobile Next Section Navigation:** Add navigation buttons at bottom of each page (mobile only).
+  - **Components:**
+    - `src/components/navigation/mobile-next-section-button.tsx`: Mobile-only button to navigate to next section
+    - `src/contexts/navigation-context.tsx`: Context for animated navigation from content area
+    - `src/components/layout/page-transition-line.tsx`: Full-screen scanner animation for page transitions
+  - **Features:**
+    - Circular navigation: Overview → Projects → Stack → Contact → Overview
+    - Scanner animation from left edge with expanding background overlay
+    - Disabled during animation to prevent rapid clicks
+    - Styled with primary (green) color scheme
+  - **Integration:** NavigationProvider in Shell, buttons in all page components
+- [x] **Fluid Loading Animation:** Add Lottie animation during page transitions.
+  - **Library:** @lottiefiles/dotlottie-react
+  - **Components:**
+    - `src/components/animations/fluid-loading-animation.tsx`: Reusable Lottie animation component
+    - `public/Fluid_Loading_Animation.lottie`: Animation asset
+  - **Integration:**
+    - Desktop sidebar transitions (AnimatedWrapper): Animation centered at 50vw
+    - Mobile page transitions (PageTransitionLine): Animation centered at 50vw
+    - Revealed as overlay expands, hidden when idle
