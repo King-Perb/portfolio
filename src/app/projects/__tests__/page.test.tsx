@@ -15,6 +15,11 @@ vi.mock("@/components/projects/project-card", () => ({
   ),
 }));
 
+// Mock MobileNextSectionButton to avoid NavigationProvider dependency
+vi.mock("@/components/navigation/mobile-next-section-button", () => ({
+  MobileNextSectionButton: () => <div data-testid="mobile-next-section-button" />,
+}));
+
 describe("ProjectsPage", () => {
   it("renders page title", async () => {
     vi.mocked(projectsService.getProjectsPageProjects).mockResolvedValueOnce([]);

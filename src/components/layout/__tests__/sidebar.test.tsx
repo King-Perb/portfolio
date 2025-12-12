@@ -29,6 +29,11 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+// Mock FluidLoadingAnimation to avoid IntersectionObserver dependency
+vi.mock("@/components/animations/fluid-loading-animation", () => ({
+  FluidLoadingAnimation: () => <div data-testid="fluid-loading-animation" />,
+}));
+
 describe("Sidebar", () => {
   beforeEach(() => {
     vi.clearAllMocks();

@@ -21,6 +21,11 @@ vi.mock("@/components/ui/separator", () => ({
   ),
 }));
 
+// Mock MobileNextSectionButton to avoid NavigationProvider dependency
+vi.mock("@/components/navigation/mobile-next-section-button", () => ({
+  MobileNextSectionButton: () => <div data-testid="mobile-next-section-button" />,
+}));
+
 describe("Home Page", () => {
   it("renders the page title and description", () => {
     render(<Home />);

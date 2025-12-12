@@ -23,6 +23,11 @@ vi.mock("@/data/manual-technologies", () => ({
   },
 }));
 
+// Mock MobileNextSectionButton to avoid NavigationProvider dependency
+vi.mock("@/components/navigation/mobile-next-section-button", () => ({
+  MobileNextSectionButton: () => <div data-testid="mobile-next-section-button" />,
+}));
+
 describe("StackPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
