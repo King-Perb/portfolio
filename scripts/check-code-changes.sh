@@ -46,13 +46,13 @@ while IFS= read -r line; do
     added=$(echo "$line" | awk '{print $1}')
     deleted=$(echo "$line" | awk '{print $2}')
     file=$(echo "$line" | awk '{print $3}')
-    
+
     # If we have additions, it's definitely code changes
     if [ "$added" != "0" ]; then
       has_code_changes=true
       break
     fi
-    
+
     # If we only have deletions, check if it's actual content or just trailing newlines
     # by checking the whitespace-ignored diff for that specific file
     if [ "$deleted" != "0" ] && [ "$added" = "0" ] && [ -n "$file" ]; then

@@ -11,7 +11,7 @@ $isCommitRange = $RemoteBranch -match "\.\."
 if (-not $isCommitRange) {
     # Get current branch name
     $currentBranch = git branch --show-current
-    
+
     # If no remote branch specified, use origin/current-branch
     if ([string]::IsNullOrEmpty($RemoteBranch)) {
         $RemoteBranch = "origin/$currentBranch"
@@ -43,13 +43,13 @@ foreach ($line in $diffStats -split "`n") {
             $added = [int]$parts[0]
             $deleted = [int]$parts[1]
             $file = $parts[2]
-            
+
             # If we have additions, it's definitely code changes
             if ($added -ne 0) {
                 $hasCodeChanges = $true
                 break
             }
-            
+
             # If we only have deletions, check if it's actual content or just trailing newlines
             # by checking the whitespace-ignored diff for that specific file
             if ($deleted -ne 0 -and $added -eq 0 -and -not [string]::IsNullOrWhiteSpace($file)) {
