@@ -3,16 +3,16 @@ import { test, expect } from '@playwright/test';
 test.describe('Page Transition Animation', () => {
   test('should show animation line when navigating via content buttons', async ({ page }) => {
     await page.goto('/');
-    
+
     // Wait for page to load
     await page.waitForLoadState('networkidle');
 
     // Find the "Next Section" button (mobile) or any button that triggers navigation
     // This button uses triggerNavigation from navigation context
     const nextButton = page.getByRole('button', { name: /projects|stack|contact|ai miko/i });
-    
+
     const buttonExists = await nextButton.isVisible().catch(() => false);
-    
+
     if (buttonExists) {
       // Click the button to trigger navigation with animation
       await nextButton.click();
@@ -30,10 +30,10 @@ test.describe('Page Transition Animation', () => {
       await animationLine.isVisible().catch(() => {
         // Line might be too fast to catch, that's okay
       });
-      
+
       // At minimum, navigation should proceed
       await page.waitForTimeout(1000);
-      
+
       // Page should have navigated
       const currentUrl = page.url();
       expect(currentUrl).not.toBe('http://localhost:3000/');
@@ -131,9 +131,9 @@ test.describe('Page Transition Animation', () => {
 
     // Find mobile next section button
     const nextButton = page.getByRole('button', { name: /projects|stack|contact|ai miko/i });
-    
+
     const buttonExists = await nextButton.isVisible().catch(() => false);
-    
+
     if (buttonExists) {
       // Button should be visible on mobile
       await expect(nextButton).toBeVisible();
@@ -149,7 +149,7 @@ test.describe('Page Transition Animation', () => {
 
   test('should handle navigation from different pages', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Test navigation from projects page (more reliable)
     await page.goto('/projects');
     await page.waitForLoadState('networkidle');
@@ -164,13 +164,13 @@ test.describe('Page Transition Animation', () => {
       const initialUrl = page.url();
       // Ensure button is enabled
       await expect(nextButton).toBeEnabled();
-      
+
       // Click and wait for URL to change
       await Promise.all([
         page.waitForURL(/\/(stack|contact|ai-miko|overview)/, { timeout: 5000 }),
         nextButton.click(),
       ]);
-      
+
       // Should have navigated away from projects
       const currentUrl = page.url();
       expect(currentUrl).not.toBe(initialUrl);
@@ -187,12 +187,12 @@ test.describe('Page Transition Animation', () => {
       if (buttonExists2) {
         const initialUrl2 = page.url();
         await expect(nextButton2).toBeEnabled();
-        
+
         await Promise.all([
           page.waitForURL(/\/(projects|stack|contact|ai-miko)/, { timeout: 5000 }),
           nextButton2.click(),
         ]);
-        
+
         const currentUrl2 = page.url();
         expect(currentUrl2).not.toBe(initialUrl2);
         expect(currentUrl2).toMatch(/\/(projects|stack|contact|ai-miko)/);
@@ -200,4 +200,3 @@ test.describe('Page Transition Animation', () => {
     }
   });
 });
-

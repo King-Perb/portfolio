@@ -111,4 +111,3 @@ describe("MessageList", () => {
     expect(messages[1]).toHaveTextContent("Hi there!");
   });
 });
-

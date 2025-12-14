@@ -28,7 +28,7 @@ describe("useChatStream - Error Handling", () => {
     });
 
     await waitFor(() => {
-      const errorMessages = result.current.messages.filter(m => 
+      const errorMessages = result.current.messages.filter(m =>
         m.content.includes("error") || m.content.includes("Sorry")
       );
       expect(errorMessages.length).toBeGreaterThan(0);
@@ -57,7 +57,7 @@ describe("useChatStream - Error Handling", () => {
     });
 
     await waitFor(() => {
-      const errorMessages = result.current.messages.filter(m => 
+      const errorMessages = result.current.messages.filter(m =>
         m.content.includes("error") || m.content.includes("Sorry")
       );
       expect(errorMessages.length).toBeGreaterThan(0);
@@ -132,7 +132,7 @@ describe("useChatStream - Error Handling", () => {
     });
 
     await waitFor(() => {
-      const errorMessages = result.current.messages.filter(m => 
+      const errorMessages = result.current.messages.filter(m =>
         m.content.includes("Error") || m.content.includes("API Error")
       );
       expect(errorMessages.length).toBeGreaterThan(0);
@@ -142,4 +142,3 @@ describe("useChatStream - Error Handling", () => {
     consoleSpy.mockRestore();
   });
 });
-

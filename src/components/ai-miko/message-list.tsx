@@ -123,8 +123,8 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
   }, [isTyping]);
 
   return (
-    <div 
-      ref={scrollContainerRef} 
+    <div
+      ref={scrollContainerRef}
       className="flex-1 overflow-y-auto flex flex-col scrollbar scrollbar-thin scrollbar-thumb-primary/30 scrollbar-thumb-rounded scrollbar-track-transparent hover:scrollbar-thumb-primary/50"
     >
       {messages.length === 0 ? (

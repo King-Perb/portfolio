@@ -103,7 +103,7 @@ describe("MessageBubble", () => {
   it("displays typing indicator when isTyping is true", () => {
     render(<MessageBubble message={mockAssistantMessage} isTyping={true} />);
 
-    const dots = screen.getAllByRole("generic").filter(el => 
+    const dots = screen.getAllByRole("generic").filter(el =>
       el.className.includes("animate-bounce") && el.className.includes("bg-primary/50")
     );
     expect(dots.length).toBeGreaterThan(0);
@@ -173,4 +173,3 @@ describe("MessageBubble", () => {
     expect(avatarImage).toBeInTheDocument();
   });
 });
-

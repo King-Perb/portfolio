@@ -58,5 +58,3 @@ export function ClearConversationPopover({ onClear }: ClearConversationPopoverPr
     </Popover>
   );
 }
-
-

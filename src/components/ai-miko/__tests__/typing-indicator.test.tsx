@@ -70,7 +70,7 @@ describe("TypingIndicator", () => {
     const { container } = render(<TypingIndicator />);
 
     const dots = container.querySelectorAll(".animate-bounce");
-    
+
     // Check for animation delay classes
     const firstDot = dots[0] as HTMLElement;
     const secondDot = dots[1] as HTMLElement;
@@ -109,4 +109,3 @@ describe("TypingIndicator", () => {
     expect(avatar).toHaveClass("h-8", "w-8", "border", "border-primary/20", "shrink-0");
   });
 });
-

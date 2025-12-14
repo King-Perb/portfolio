@@ -9,9 +9,9 @@ let mockOpenState = false;
 let mockOnOpenChange: ((open: boolean) => void) | null = null;
 
 vi.mock("@/components/ui/popover", () => ({
-  Popover: ({ children, open, onOpenChange }: { 
-    children: React.ReactNode; 
-    open: boolean; 
+  Popover: ({ children, open, onOpenChange }: {
+    children: React.ReactNode;
+    open: boolean;
     onOpenChange: (open: boolean) => void;
   }) => {
     mockOpenState = open;
@@ -30,8 +30,8 @@ vi.mock("@/components/ui/popover", () => ({
       </div>
     );
   },
-  PopoverTrigger: ({ children, asChild, __popoverOpen, __popoverOnOpenChange }: { 
-    children: React.ReactNode; 
+  PopoverTrigger: ({ children, asChild, __popoverOpen, __popoverOnOpenChange }: {
+    children: React.ReactNode;
     asChild?: boolean;
     __popoverOpen?: boolean;
     __popoverOnOpenChange?: (open: boolean) => void;
@@ -43,22 +43,22 @@ vi.mock("@/components/ui/popover", () => ({
         onOpenChange(!currentOpen);
       }
     };
-    
+
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children as React.ReactElement<{ onClick?: () => void; "data-testid"?: string }>, { 
+      return React.cloneElement(children as React.ReactElement<{ onClick?: () => void; "data-testid"?: string }>, {
         onClick: handleClick,
         "data-testid": "popover-trigger"
       });
     }
-    
+
     return (
       <div data-testid="popover-trigger" onClick={handleClick}>
         {children}
       </div>
     );
   },
-  PopoverContent: ({ children, align, __popoverOpen }: { 
-    children: React.ReactNode; 
+  PopoverContent: ({ children, align, __popoverOpen }: {
+    children: React.ReactNode;
     align?: string;
     __popoverOpen?: boolean;
   }) => {
@@ -178,4 +178,3 @@ describe("ClearConversationPopover", () => {
     expect(onClear).not.toHaveBeenCalled();
   });
 });
-

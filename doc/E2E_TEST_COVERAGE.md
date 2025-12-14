@@ -327,7 +327,7 @@ When adding a new route (e.g., `/blog`):
        await page.goto('/blog');
        await expect(page).toHaveURL('/blog');
      });
-     
+
      test('should display blog posts', async ({ page }) => {
        await page.goto('/blog');
        // ... assertions
@@ -364,4 +364,3 @@ Unit test coverage is about ensuring:
 - **E2E tests** → Route/flow coverage (Playwright) ✅
 
 You already have the right setup! Use Vitest for code coverage and the route/flow analysis script for E2E coverage.
-

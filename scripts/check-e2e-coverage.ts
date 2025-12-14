@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * E2E Test Coverage Analysis Script
- * 
+ *
  * Analyzes e2e test files to determine:
  * - Which routes/pages are covered
  * - Which user flows are tested
@@ -88,7 +88,7 @@ async function analyzeE2ETests(): Promise<CoverageReport> {
         `(goto|navigate|visit|url).*['"]${routeCoverageItem.route.replace(/\//g, '\\/')}['"]`,
         'i'
       );
-      
+
       if (routePattern.test(content) || content.includes(`'${routeCoverageItem.route}'`) || content.includes(`"${routeCoverageItem.route}"`)) {
         routeCoverageItem.tested = true;
         routeCoverageItem.testFiles.push(testFile);
@@ -99,12 +99,12 @@ async function analyzeE2ETests(): Promise<CoverageReport> {
     // Check which user flows are tested (by filename and content)
     for (const flowItem of flowCoverage) {
       const flowKeywords = flowItem.flow.toLowerCase().split('-');
-      
+
       // Check if test file name matches flow
       const fileNameMatches = flowKeywords.some(keyword => fileName.includes(keyword));
-      
+
       // Check if content mentions the flow
-      const contentMatches = flowKeywords.some(keyword => 
+      const contentMatches = flowKeywords.some(keyword =>
         content.toLowerCase().includes(keyword)
       );
 
@@ -137,11 +137,11 @@ async function analyzeE2ETests(): Promise<CoverageReport> {
 function printReport(report: CoverageReport): void {
   console.log('\n📊 E2E Test Coverage Report\n');
   console.log('═'.repeat(60));
-  
+
   console.log('\n📈 Overall Coverage:');
   console.log(`   Routes Covered: ${report.coveredRoutes}/${report.totalRoutes} (${report.coveragePercentage.toFixed(1)}%)`);
   console.log(`   User Flows Covered: ${report.coveredFlows}/${report.totalFlows} (${((report.coveredFlows / report.totalFlows) * 100).toFixed(1)}%)`);
-  
+
   console.log('\n✅ Covered Routes:');
   report.routes
     .filter(r => r.tested)
@@ -149,7 +149,7 @@ function printReport(report: CoverageReport): void {
       console.log(`   ✓ ${route.route.padEnd(20)} (${route.testCount} test(s) in ${route.testFiles.length} file(s))`);
       route.testFiles.forEach(file => console.log(`     └─ ${file}`));
     });
-  
+
   if (report.missingRoutes.length > 0) {
     console.log('\n❌ Missing Route Coverage:');
     report.missingRoutes.forEach(route => {
@@ -172,22 +172,22 @@ function printReport(report: CoverageReport): void {
       console.log(`   ✗ ${flow}`);
     });
   }
-  
+
   console.log('\n📁 Test Files:');
   report.testFiles.forEach(file => {
     console.log(`   • ${file}`);
   });
-  
+
   console.log('\n💡 Recommendations:');
-  
+
   if (report.missingRoutes.length > 0) {
     console.log(`   • Add e2e tests for routes: ${report.missingRoutes.join(', ')}`);
   }
-  
+
   if (missingFlows.length > 0) {
     console.log(`   • Add e2e tests for user flows: ${missingFlows.join(', ')}`);
   }
-  
+
   console.log('\n' + '═'.repeat(60) + '\n');
 }
 
@@ -198,4 +198,3 @@ analyzeE2ETests()
     console.error('Error analyzing e2e tests:', error);
     process.exit(1);
   });
-

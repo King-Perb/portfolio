@@ -192,4 +192,3 @@ describe("ChatInput", () => {
     expect(button.className).toContain("text-red-500");
   });
 });
-

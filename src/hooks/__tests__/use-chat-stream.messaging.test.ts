@@ -306,4 +306,3 @@ describe("useChatStream - Messaging", () => {
     expect(mockLocalStorage.removeItem).toHaveBeenCalledWith("ai-miko-thread-id");
   });
 });
-

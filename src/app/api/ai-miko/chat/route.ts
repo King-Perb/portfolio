@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
           if (!currentThreadId) {
             const thread = await openai.beta.threads.create();
             currentThreadId = thread.id;
-            
+
             // Send thread ID to client so they can reuse it
             const threadData = JSON.stringify({ threadId: currentThreadId });
             controller.enqueue(encoder.encode(`data: ${threadData}\n\n`));
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
                 if (delta.type === "text" && delta.text) {
                   // Extract text value - in Assistants API, text is an object with a 'value' property
                   let textValue: string | undefined;
-                  
+
                   if (typeof delta.text === "string") {
                     textValue = delta.text;
                   } else if (delta.text && typeof delta.text === "object") {
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
                     const textObj = delta.text as { value?: string; [key: string]: unknown };
                     textValue = textObj.value;
                   }
-                  
+
                   if (textValue && typeof textValue === "string") {
                     // Transform to our SSE format
                     const data = JSON.stringify({ content: textValue });
@@ -108,9 +108,9 @@ export async function POST(request: NextRequest) {
         } catch (error) {
           console.error("OpenAI API error:", error);
           const errorMessage = error instanceof Error ? error.message : "Unknown error";
-          const errorData = JSON.stringify({ 
+          const errorData = JSON.stringify({
             error: "Failed to get response from OpenAI",
-            details: errorMessage 
+            details: errorMessage
           });
           controller.enqueue(encoder.encode(`data: ${errorData}\n\n`));
           controller.close();

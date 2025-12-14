@@ -8,7 +8,7 @@ vi.mock("openai", () => {
   const threadCreate = vi.fn();
   const messageCreate = vi.fn();
   const runCreate = vi.fn();
-  
+
   // Expose mocks on a global object so tests can access them
   interface OpenAIMocks {
     threadCreate: ReturnType<typeof vi.fn>;
@@ -20,7 +20,7 @@ vi.mock("openai", () => {
     messageCreate,
     runCreate,
   };
-  
+
   const MockOpenAI = vi.fn().mockImplementation(() => ({
     beta: {
       threads: {
@@ -34,7 +34,7 @@ vi.mock("openai", () => {
       },
     },
   }));
-  
+
   return {
     default: MockOpenAI,
   };
@@ -59,7 +59,7 @@ const getMocks = (): OpenAIMocks => {
 
 describe("POST /api/ai-miko/chat", () => {
   let mocks: ReturnType<typeof getMocks>;
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
     process.env.OPENAI_API_KEY = "test-api-key";
@@ -101,7 +101,7 @@ describe("POST /api/ai-miko/chat", () => {
     const mocks = getMocks();
     const mockThread = { id: "thread-123" };
     mocks.threadCreate.mockResolvedValueOnce(mockThread);
-    
+
     const mockRun = {
       [Symbol.asyncIterator]: async function* () {
         yield {
@@ -117,7 +117,7 @@ describe("POST /api/ai-miko/chat", () => {
 
     expect(mocks.threadCreate).toHaveBeenCalledOnce();
     expect(response.headers.get("Content-Type")).toBe("text/event-stream");
-    
+
     // Read the stream to verify thread ID is sent
     const reader = response.body?.getReader();
     if (reader) {
@@ -140,9 +140,9 @@ describe("POST /api/ai-miko/chat", () => {
     };
     mocks.runCreate.mockResolvedValueOnce(mockRun as unknown as AsyncIterable<unknown>);
 
-    const request = createRequest({ 
-      message: "Hello", 
-      threadId: "existing-thread-123" 
+    const request = createRequest({
+      message: "Hello",
+      threadId: "existing-thread-123"
     });
     const response = await POST(request);
 
@@ -157,7 +157,7 @@ describe("POST /api/ai-miko/chat", () => {
   it("adds conversation history to new thread", async () => {
     const mockThread = { id: "thread-123" };
     mocks.threadCreate.mockResolvedValueOnce(mockThread);
-    
+
     const mockRun = {
       [Symbol.asyncIterator]: async function* () {
         yield {
@@ -173,7 +173,7 @@ describe("POST /api/ai-miko/chat", () => {
       { id: "2", role: "assistant" as const, content: "Hello!", timestamp: new Date() },
     ];
 
-    const request = createRequest({ 
+    const request = createRequest({
       message: "How are you?",
       conversationHistory,
     });
@@ -204,7 +204,7 @@ describe("POST /api/ai-miko/chat", () => {
   it("streams message deltas from OpenAI", async () => {
     const mockThread = { id: "thread-123" };
     mocks.threadCreate.mockResolvedValueOnce(mockThread);
-    
+
     const mockRun = {
       [Symbol.asyncIterator]: async function* () {
         yield {
@@ -248,7 +248,7 @@ describe("POST /api/ai-miko/chat", () => {
     if (reader) {
       const decoder = new TextDecoder();
       const chunks: string[] = [];
-      
+
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
@@ -265,7 +265,7 @@ describe("POST /api/ai-miko/chat", () => {
   it("handles string text deltas", async () => {
     const mockThread = { id: "thread-123" };
     mocks.threadCreate.mockResolvedValueOnce(mockThread);
-    
+
     const mockRun = {
       [Symbol.asyncIterator]: async function* () {
         yield {
@@ -310,7 +310,7 @@ describe("POST /api/ai-miko/chat", () => {
   it("handles run failure", async () => {
     const mockThread = { id: "thread-123" };
     mocks.threadCreate.mockResolvedValueOnce(mockThread);
-    
+
     const mockRun = {
       [Symbol.asyncIterator]: async function* () {
         yield {
@@ -393,7 +393,7 @@ describe("POST /api/ai-miko/chat", () => {
   it("sends thread ID in stream when creating new thread", async () => {
     const mockThread = { id: "new-thread-456" };
     mocks.threadCreate.mockResolvedValueOnce(mockThread);
-    
+
     const mockRun = {
       [Symbol.asyncIterator]: async function* () {
         yield {
@@ -418,4 +418,3 @@ describe("POST /api/ai-miko/chat", () => {
     }
   });
 });
-

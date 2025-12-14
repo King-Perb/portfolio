@@ -213,7 +213,7 @@ describe("NavigationContext", () => {
 
     // Simulate pathname change to pending route
     mockPathname.mockReturnValue("/projects");
-    
+
     // Trigger pathname change effect
     act(() => {
       vi.advanceTimersByTime(ANIMATION_CONFIG.DURATION);
@@ -263,7 +263,7 @@ describe("NavigationContext", () => {
 
     // Change pathname without triggering navigation
     mockPathname.mockReturnValue("/about");
-    
+
     act(() => {
       vi.advanceTimersByTime(0);
     });
@@ -291,17 +291,17 @@ describe("NavigationContext", () => {
     // The function should be available and callable
     const button = screen.getByTestId("test-trigger");
     expect(button).toBeInTheDocument();
-    
+
     // Verify it's a function by checking it can be called
     act(() => {
       button.click();
     });
-    
+
     // Advance timers to trigger navigation delay
     act(() => {
       vi.advanceTimersByTime(ANIMATION_CONFIG.NAVIGATION_DELAY);
     });
-    
+
     // Should have triggered navigation
     expect(mockPush).toHaveBeenCalledWith("/test");
   });

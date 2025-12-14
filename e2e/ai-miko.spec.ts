@@ -40,7 +40,7 @@ test.describe('AI Miko Chat', () => {
   test('should show typing indicator when AI is responding', async ({ page }) => {
     const chatInput = page.getByPlaceholder(/message miko ai/i);
     await chatInput.fill('Test message');
-    
+
     const sendButton = page.getByRole('button', { name: /send/i }).or(
       page.locator('button[type="submit"]')
     ).first();
@@ -51,15 +51,15 @@ test.describe('AI Miko Chat', () => {
     const typingIndicator = page.getByText(/typing/i).or(
       page.locator('[data-testid="typing"]')
     );
-    
+
     // Typing indicator might appear and disappear quickly
     // Just check that it exists at some point or that the UI responds
     await page.waitForTimeout(500);
-    
+
     // The button should change to "Stop" when typing
     const stopButton = page.getByRole('button', { name: /stop/i });
     const stopButtonExists = await stopButton.isVisible().catch(() => false);
-    
+
     // Either typing indicator or stop button should be visible
     if (!stopButtonExists) {
       // If no stop button, check for typing text
@@ -71,7 +71,7 @@ test.describe('AI Miko Chat', () => {
   test('should allow stopping message generation', async ({ page }) => {
     const chatInput = page.getByPlaceholder(/message miko ai/i);
     await chatInput.fill('Tell me a long story');
-    
+
     const sendButton = page.getByRole('button', { name: /send/i }).or(
       page.locator('button[type="submit"]')
     ).first();
@@ -115,7 +115,7 @@ test.describe('AI Miko Chat', () => {
     // First, send a message
     const chatInput = page.getByPlaceholder(/message miko ai/i);
     await chatInput.fill('Test message');
-    
+
     const sendButton = page.getByRole('button', { name: /send/i }).or(
       page.locator('button[type="submit"]')
     ).first();
@@ -129,12 +129,12 @@ test.describe('AI Miko Chat', () => {
     const clearButton = page.getByRole('button', { name: /clear/i }).or(
       page.getByText(/clear conversation/i)
     ).first();
-    
+
     const clearButtonExists = await clearButton.isVisible().catch(() => false);
-    
+
     if (clearButtonExists) {
       await clearButton.click();
-      
+
       // Confirm if there's a confirmation dialog
       const confirmButton = page.getByRole('button', { name: /confirm|yes|clear/i }).first();
       const hasConfirm = await confirmButton.isVisible().catch(() => false);
@@ -192,7 +192,7 @@ test.describe('AI Miko Chat', () => {
 
     // Message should be sent without leading/trailing whitespace
     await expect(page.getByText(trimmedMessage)).toBeVisible({ timeout: 5000 });
-    
+
     // Input should be cleared after sending
     const inputValue = await chatInput.inputValue();
     expect(inputValue).toBe('');
@@ -209,7 +209,7 @@ test.describe('AI Miko Chat', () => {
 
     const chatInput = page.getByPlaceholder(/message miko ai/i);
     await chatInput.fill('Test error handling');
-    
+
     const sendButton = page.getByRole('button', { name: /send/i }).or(
       page.locator('button[type="submit"]')
     ).first();
@@ -224,4 +224,3 @@ test.describe('AI Miko Chat', () => {
     });
   });
 });
-

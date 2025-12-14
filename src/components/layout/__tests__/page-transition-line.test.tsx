@@ -65,19 +65,19 @@ describe("PageTransitionLine", () => {
   it("renders portal when mounted and animating", async () => {
     // Component uses startTransition which might delay mounting
     render(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_RIGHT} />);
-    
+
     // Wait for startTransition to complete
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     // Component should render after mount effect
     expect(mockCreatePortal).toHaveBeenCalled();
   });
 
   it("creates portal to document.body", async () => {
     render(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_RIGHT} />);
-    
+
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     expect(mockCreatePortal).toHaveBeenCalledWith(
       expect.anything(),
       document.body
@@ -86,50 +86,49 @@ describe("PageTransitionLine", () => {
 
   it("renders overlay and line when animating", async () => {
     render(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_RIGHT} />);
-    
+
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     // Portal should be called with the transition element
     expect(mockCreatePortal).toHaveBeenCalled();
   });
 
   it("handles MOVING_RIGHT phase", async () => {
     render(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_RIGHT} />);
-    
+
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     expect(mockCreatePortal).toHaveBeenCalled();
   });
 
   it("handles MOVING_BACK phase", async () => {
     render(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_BACK} />);
-    
+
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     expect(mockCreatePortal).toHaveBeenCalled();
   });
 
   it("handles phase transitions", async () => {
     const { rerender } = render(<PageTransitionLine animationPhase={ANIMATION_PHASE.IDLE} />);
-    
+
     // Should not render when idle
     await new Promise(resolve => setTimeout(resolve, 10));
     expect(mockCreatePortal).not.toHaveBeenCalled();
-    
+
     // Change to MOVING_RIGHT
     rerender(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_RIGHT} />);
     await new Promise(resolve => setTimeout(resolve, 10));
     expect(mockCreatePortal).toHaveBeenCalled();
-    
+
     // Change to MOVING_BACK
     rerender(<PageTransitionLine animationPhase={ANIMATION_PHASE.MOVING_BACK} />);
     await new Promise(resolve => setTimeout(resolve, 10));
     expect(mockCreatePortal).toHaveBeenCalledTimes(2);
-    
+
     // Back to IDLE
     rerender(<PageTransitionLine animationPhase={ANIMATION_PHASE.IDLE} />);
     await new Promise(resolve => setTimeout(resolve, 10));
     // Should not render new portal when idle
   });
 });
-

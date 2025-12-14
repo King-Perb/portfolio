@@ -20,19 +20,19 @@ vi.mock("../message-list", () => ({
 }));
 
 vi.mock("../chat-input", () => ({
-  ChatInput: ({ 
-    onSendMessage, 
-    onStop, 
-    isTyping, 
-    disabled 
-  }: { 
+  ChatInput: ({
+    onSendMessage,
+    onStop,
+    isTyping,
+    disabled
+  }: {
     onSendMessage: (msg: string) => void;
     onStop: () => void;
     isTyping: boolean;
     disabled: boolean;
   }) => (
     <div data-testid="chat-input">
-      <button 
+      <button
         data-testid="send-button"
         onClick={() => onSendMessage("test message")}
         disabled={disabled}
@@ -66,7 +66,7 @@ describe("ChatContainer", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockMessages.length = 0;
-    
+
     vi.mocked(useChatStream).mockReturnValue({
       messages: mockMessages,
       isTyping: mockIsTyping,
@@ -232,4 +232,3 @@ describe("ChatContainer", () => {
     expect(wrapper).toHaveClass("flex", "flex-col", "flex-1", "min-h-0");
   });
 });
-

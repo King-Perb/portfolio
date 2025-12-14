@@ -184,7 +184,7 @@ describe("MobileNav", () => {
 
   it("updates SheetContent width based on animation phase", async () => {
     const user = userEvent.setup();
-    
+
     // Mock querySelector to return a mock element
     const mockSheetContent = {
       style: {
@@ -193,7 +193,7 @@ describe("MobileNav", () => {
         transition: "",
       },
     };
-    
+
     vi.spyOn(document, "querySelector").mockReturnValue(mockSheetContent as unknown as Element);
 
     render(<MobileNav />);
@@ -211,7 +211,7 @@ describe("MobileNav", () => {
 
   it("handles animation phase changes from Sidebar", async () => {
     const user = userEvent.setup();
-    
+
     const mockSheetContent = {
       style: {
         width: "",
@@ -219,7 +219,7 @@ describe("MobileNav", () => {
         transition: "",
       },
     };
-    
+
     vi.spyOn(document, "querySelector").mockReturnValue(mockSheetContent as unknown as Element);
 
     render(<MobileNav />);

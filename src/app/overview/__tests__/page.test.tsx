@@ -73,4 +73,3 @@ describe("OverviewPage", () => {
     expect(mainDiv).toHaveClass("flex", "flex-col", "gap-8", "fade-in-bottom", "md:pb-8");
   });
 });
-

@@ -22,4 +22,3 @@ export function resetMocks() {
   vi.clearAllMocks();
   mockLocalStorage.getItem.mockReturnValue(null);
 }
-

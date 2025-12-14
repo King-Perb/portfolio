@@ -9,11 +9,11 @@ const THREAD_ID_KEY = "ai-miko-thread-id";
 // Load messages from localStorage
 function loadMessagesFromStorage(): ChatMessage[] {
   if (typeof window === "undefined") return [];
-  
+
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) return [];
-    
+
     const parsed = JSON.parse(stored);
     // Convert timestamp strings back to Date objects
     return parsed.map((msg: ChatMessage & { timestamp: string | Date }) => ({
@@ -29,7 +29,7 @@ function loadMessagesFromStorage(): ChatMessage[] {
 // Load thread ID from localStorage
 function loadThreadIdFromStorage(): string | null {
   if (typeof window === "undefined") return null;
-  
+
   try {
     return localStorage.getItem(THREAD_ID_KEY);
   } catch (error) {
@@ -41,7 +41,7 @@ function loadThreadIdFromStorage(): string | null {
 // Save messages to localStorage
 function saveMessagesToStorage(messages: ChatMessage[]): void {
   if (typeof window === "undefined") return;
-  
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
   } catch (error) {
@@ -52,7 +52,7 @@ function saveMessagesToStorage(messages: ChatMessage[]): void {
 // Save thread ID to localStorage
 function saveThreadIdToStorage(threadId: string | null): void {
   if (typeof window === "undefined") return;
-  
+
   try {
     if (threadId) {
       localStorage.setItem(THREAD_ID_KEY, threadId);
@@ -143,10 +143,10 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
       const response = await fetch("/api/ai-miko/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          message: content, 
+        body: JSON.stringify({
+          message: content,
           conversationHistory: messages,
-          threadId: threadId 
+          threadId: threadId
         }),
         signal: abortController.signal,
       });
@@ -236,24 +236,24 @@ async function processStream(
 
         try {
           const parsed = JSON.parse(data);
-          
+
           // Handle thread ID from server
           if (parsed.threadId) {
             setThreadId(parsed.threadId);
             saveThreadIdToStorage(parsed.threadId);
             continue;
           }
-          
+
           // Handle error responses from OpenAI
           if (parsed.error) {
             console.error("OpenAI error:", parsed);
-            updateMessage(setMessages, assistantMessageId, 
-              `Error: ${parsed.error}${parsed.details ? ` (${parsed.details})` : ""}`, 
+            updateMessage(setMessages, assistantMessageId,
+              `Error: ${parsed.error}${parsed.details ? ` (${parsed.details})` : ""}`,
               currentSources
             );
             return;
           }
-          
+
           if (parsed.content) {
             currentContent += parsed.content;
             updateMessage(setMessages, assistantMessageId, currentContent, currentSources);
