@@ -21,8 +21,34 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   exit $?
 fi
 
-# Check if there are code changes
-if scripts/check-code-changes.sh "$upstream_branch"; then
+# Get the commits being pushed (commits in local but not in remote)
+commits_being_pushed=$(git rev-list "$upstream_branch"..HEAD 2>/dev/null)
+
+if [ -z "$commits_being_pushed" ]; then
+  # No commits being pushed (shouldn't happen, but handle it)
+  echo "No commits to push, skipping build"
+  exit 0
+fi
+
+# Check if any of the commits being pushed contain code changes
+# We'll check the diff of all commits being pushed together
+has_code_changes=false
+for commit in $commits_being_pushed; do
+  # Check diff of this commit against its parent
+  if scripts/check-code-changes.sh "$commit^..$commit" 2>/dev/null; then
+    has_code_changes=true
+    break
+  fi
+done
+
+# If no individual commit check worked, fall back to comparing against remote
+if [ "$has_code_changes" = false ]; then
+  if scripts/check-code-changes.sh "$upstream_branch"; then
+    has_code_changes=true
+  fi
+fi
+
+if [ "$has_code_changes" = true ]; then
   # Code changes detected, run build
   GITHUB_TOKEN="test-token-dummy-value" npm run build
   exit $?

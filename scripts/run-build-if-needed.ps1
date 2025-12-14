@@ -23,10 +23,39 @@ if (-not $branchExists) {
     exit $LASTEXITCODE
 }
 
-# Check if there are code changes
+# Get the commits being pushed (commits in local but not in remote)
+$commitsBeingPushed = git rev-list "$upstreamBranch..HEAD" 2>$null
+
+if ([string]::IsNullOrWhiteSpace($commitsBeingPushed)) {
+    # No commits being pushed (shouldn't happen, but handle it)
+    Write-Host "No commits to push, skipping build"
+    exit 0
+}
+
+# Check if any of the commits being pushed contain code changes
+# We'll check each commit individually
+$hasCodeChanges = $false
 $checkScript = Join-Path $PSScriptRoot "check-code-changes.ps1"
-& $checkScript -RemoteBranch $upstreamBranch
-$hasCodeChanges = $LASTEXITCODE -eq 0
+
+foreach ($commit in ($commitsBeingPushed -split "`n")) {
+    if (-not [string]::IsNullOrWhiteSpace($commit)) {
+        $commit = $commit.Trim()
+        # Check diff of this commit against its parent
+        $parentCommit = "$commit^"
+        $commitRange = "$parentCommit..$commit"
+        & $checkScript -RemoteBranch $commitRange 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            $hasCodeChanges = $true
+            break
+        }
+    }
+}
+
+# If no individual commit check worked, fall back to comparing against remote
+if (-not $hasCodeChanges) {
+    & $checkScript -RemoteBranch $upstreamBranch
+    $hasCodeChanges = $LASTEXITCODE -eq 0
+}
 
 if ($hasCodeChanges) {
     # Code changes detected, run build
