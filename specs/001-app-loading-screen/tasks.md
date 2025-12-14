@@ -115,7 +115,7 @@
 - [x] T028 [P] Test error handling for missing Lottie file - temporarily remove animation file and verify graceful degradation (placeholder shows on SSR before Lottie loads)
 - [x] T029 [P] Verify no layout shift (CLS) when loading screen dismisses - check Core Web Vitals in DevTools (fixed positioning prevents CLS)
 - [x] T030 [P] Run all quickstart.md test scenarios from `specs/001-app-loading-screen/quickstart.md` (E2E tests cover main scenarios)
-- [ ] T031 Update `doc/implementation_plan.md` with loading screen feature details
+- [x] T031 Update `doc/implementation_plan.md` with loading screen feature details (added brief summary with link to Spec Kit docs)
 - [x] T032 Run full test suite: `npm test` and `npm run test:e2e` (loading screen tests pass, pre-existing failures in other tests)
 - [x] T033 Verify build succeeds: `npm run build` (build succeeded)
 - [x] T034 [P] Code review - ensure component follows project conventions and constitution principles (verified - uses "use client", proper TypeScript types, accessibility)
