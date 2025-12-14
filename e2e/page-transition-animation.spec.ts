@@ -1,6 +1,32 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Page Transition Animation', () => {
+  test.beforeEach(async ({ page }) => {
+    // Mock GitHub API calls to avoid needing real credentials
+    // Intercept both our API route and direct GitHub API calls
+    await page.route('**/api/github/stats', async (route) => {
+      await route.fulfill({
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          repos: [],
+          languages: {},
+          repoCommits: {},
+          repoDeployments: {},
+        }),
+      });
+    });
+
+    // Mock direct GitHub API calls (server-side rendering makes these)
+    await page.route('**/api.github.com/**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([]),
+      });
+    });
+  });
+
   test('should show animation line when navigating via content buttons', async ({ page }) => {
     await page.goto('/');
 
