@@ -1,0 +1,30 @@
+﻿# portfolio Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2025-12-14
+
+## Active Technologies
+
+- TypeScript 5 (strict mode), React 19.2.0 + Next.js 16.0.7, `@lottiefiles/dotlottie-react` 0.17.10, React DOM 19.2.0 (001-app-loading-screen)
+
+## Project Structure
+
+```text
+backend/
+frontend/
+tests/
+```
+
+## Commands
+
+npm test; npm run lint
+
+## Code Style
+
+TypeScript 5 (strict mode), React 19.2.0: Follow standard conventions
+
+## Recent Changes
+
+- 001-app-loading-screen: Added TypeScript 5 (strict mode), React 19.2.0 + Next.js 16.0.7, `@lottiefiles/dotlottie-react` 0.17.10, React DOM 19.2.0
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->
