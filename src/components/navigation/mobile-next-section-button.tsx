@@ -10,6 +10,11 @@ export function MobileNextSectionButton() {
   const pathname = usePathname()
   const { triggerNavigation, isAnimating } = useNavigation()
 
+  // Don't show button on AI Miko page
+  if (pathname === "/ai-miko") {
+    return null
+  }
+
   // Find current index in NAV_ITEMS
   const currentIndex = NAV_ITEMS.findIndex(item => item.href === pathname)
 
@@ -18,10 +23,10 @@ export function MobileNextSectionButton() {
     return null
   }
 
-  // If on last page (Contact), show button to Overview (first page)
+  // If on last page (Contact), show button to AI Miko (first page)
   // Otherwise, show button to next section
   const targetSection = currentIndex === NAV_ITEMS.length - 1
-    ? NAV_ITEMS[0] // Overview
+    ? NAV_ITEMS[0] // AI Miko (first item)
     : NAV_ITEMS[currentIndex + 1]
 
   const handleClick = () => {

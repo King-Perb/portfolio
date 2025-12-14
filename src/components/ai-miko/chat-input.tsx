@@ -19,7 +19,7 @@ export function ChatInput({
   onStop,
   isTyping = false,
   disabled = false,
-  placeholder = "Message AI Miko...",
+  placeholder = "Message Miko AI...",
 }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);

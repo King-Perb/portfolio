@@ -13,12 +13,12 @@ function ShellContent({ children }: ShellProps) {
     const { animationPhase } = useNavigation();
 
     return (
-        <div className="flex min-h-screen flex-col md:flex-row bg-background">
+        <div className="flex h-screen flex-col md:flex-row bg-background overflow-hidden">
             {/* Page Transition Line (for mobile content navigation) */}
             <PageTransitionLine animationPhase={animationPhase} />
 
             {/* Mobile Top Bar */}
-            <div className="md:hidden flex items-center justify-between p-4 border-b sticky top-0 bg-background/80 backdrop-blur-md z-50">
+            <div className="md:hidden flex items-center justify-between p-4 border-b bg-background/80 backdrop-blur-md z-50 shrink-0">
                 <div className="font-bold font-mono tracking-tighter text-lg">
                     MIKO&apos;S PORTFOLIO
                 </div>
@@ -32,8 +32,8 @@ function ShellContent({ children }: ShellProps) {
 
             {/* Main Content Area */}
             {/* Add left margin to account for fixed sidebar (280px) */}
-            <main className="flex-1 overflow-y-auto md:ml-[280px]">
-                <div className="container max-w-5xl mx-auto p-4 md:p-8 space-y-8">
+            <main className="flex-1 min-h-0 overflow-y-auto md:ml-[280px] flex flex-col">
+                <div className="container max-w-5xl mx-auto px-4 md:px-8 py-4 md:py-8 flex-1 flex flex-col min-h-0">
                     {children}
                 </div>
             </main>

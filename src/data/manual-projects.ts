@@ -41,4 +41,21 @@ export const MANUAL_PROJECTS: Project[] = [
     commitCount: 0,
     deploymentCount: 0,
   },
+
+  // AI Miko
+  {
+    title: "AI Miko",
+    description: "An AI chatbot that can answer questions about the portfolio, projects, and tech stack.",
+    tags: ["OpenAI", "Vector Store", "Custom AI Assistant"],
+    stars: 0,
+    forks: 0,
+    status: "Active",
+    statusColor: "text-primary border-primary/20 bg-primary/10",
+    liveUrl: "http://localhost:3000/ai-miko",
+    screenshot: undefined,
+    source: "manual",
+    featured: true,
+    commitCount: 0,
+    deploymentCount: 0,
+  },
 ];

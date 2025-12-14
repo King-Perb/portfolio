@@ -12,8 +12,13 @@ export const USER_PROFILE = {
 
 export const NAV_ITEMS = [
     {
+        label: "AI Miko",
+        href: "/ai-miko",
+        icon: Bot,
+    },
+    {
         label: "Overview",
-        href: "/",
+        href: "/overview",
         icon: LayoutDashboard,
     },
     {
@@ -30,11 +35,6 @@ export const NAV_ITEMS = [
         label: "Contact",
         href: "/contact",
         icon: User,
-    },
-    {
-        label: "AI Miko",
-        href: "/ai-miko",
-        icon: Bot,
     },
 ];
 

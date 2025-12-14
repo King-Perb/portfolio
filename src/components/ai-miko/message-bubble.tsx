@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { ChatMessage } from "@/types/chat";
 import { USER_PROFILE } from "@/lib/constants";
 import { Bot } from "lucide-react";
+import Image from "next/image";
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -23,12 +24,17 @@ export function MessageBubble({ message, isTyping = false }: MessageBubbleProps)
     >
       {!isUser && (
         <div className="flex flex-col items-center gap-2 shrink-0">
-          <Avatar className="h-8 w-8 border border-primary/20">
-            <AvatarImage src={USER_PROFILE.avatarUrl} alt="AI Miko" />
-            <AvatarFallback className="bg-primary/10 text-primary">
-              <Bot className="h-4 w-4" />
-            </AvatarFallback>
-          </Avatar>
+          {/* Use Next/Image for immediate display with priority loading */}
+          <div className="h-8 w-8 border border-primary/20 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center relative">
+            <Image
+              src={USER_PROFILE.avatarUrl}
+              alt="AI Miko"
+              fill
+              sizes="32px"
+              className="object-cover"
+              priority
+            />
+          </div>
           {isTyping && (
             <div className="flex items-center gap-1">
               <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
@@ -45,18 +51,24 @@ export function MessageBubble({ message, isTyping = false }: MessageBubbleProps)
           isUser && "items-end"
         )}
       >
-        <div
-          className={cn(
-            "rounded-2xl px-4 py-3 font-mono text-sm leading-relaxed",
-            isUser
-              ? "bg-primary/10 text-primary border border-primary/20"
-              : "bg-card/80 text-foreground border border-primary/20"
-          )}
-        >
-          {message.content && (
-            <div className="whitespace-pre-wrap break-words">{message.content}</div>
-          )}
-        </div>
+        {(message.content || isTyping) && (
+          <div
+            className={cn(
+              "rounded-2xl px-4 py-3 font-mono text-sm leading-relaxed",
+              isUser
+                ? "bg-primary/10 text-primary border border-primary/20"
+                : "bg-card/80 text-foreground border border-primary/20",
+              // Ensure minimum height even when content is empty
+              !message.content && "min-h-[44px] flex items-center"
+            )}
+          >
+            {message.content ? (
+              <div className="whitespace-pre-wrap break-words">{message.content}</div>
+            ) : isTyping ? (
+              <div className="text-muted-foreground/50">Thinking...</div>
+            ) : null}
+          </div>
+        )}
 
         {message.sources && message.sources.length > 0 && (
           <div className="flex flex-wrap gap-1 text-xs text-muted-foreground">
@@ -81,7 +93,7 @@ export function MessageBubble({ message, isTyping = false }: MessageBubbleProps)
 
       {isUser && (
         <Avatar className="h-8 w-8 border border-primary/20 shrink-0">
-          <AvatarImage src={USER_PROFILE.avatarUrl} alt={USER_PROFILE.name} />
+          <AvatarImage src="/chat-user-pic.png" alt={USER_PROFILE.name} />
           <AvatarFallback className="bg-primary/10 text-primary">
             {USER_PROFILE.name.charAt(0)}
           </AvatarFallback>

@@ -57,10 +57,10 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
       )}
 
       {/* Text content section with overlay */}
-      <div className="relative flex flex-col flex-1">
+      <div className="relative flex flex-col flex-1 min-h-0">
         {/* Text content with blur effect on hover */}
         <div className={cn(
-          "transition-all duration-300",
+          "flex flex-col flex-1 min-h-0 transition-all duration-300",
           isHovered && "blur-sm"
         )}>
           <CardHeader>
@@ -80,7 +80,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="mt-auto pt-4">
+          <CardContent className="pt-4">
             <div className="flex gap-2 mb-4 flex-wrap">
               {project.tags.map(tag => (
                 <span key={tag} className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-sm font-mono">
@@ -90,7 +90,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
             </div>
           </CardContent>
 
-          <CardFooter className="pt-0 border-t border-border/30 mt-4 pt-4 flex items-center justify-between text-muted-foreground">
+          <CardFooter className="pt-0 border-t border-border/30 mt-auto pt-4 flex items-center justify-between text-muted-foreground">
             <ProjectStats project={project} />
           </CardFooter>
         </div>

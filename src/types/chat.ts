@@ -3,7 +3,7 @@ export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
-  sources?: string[]; // Document sources referenced (for NotebookLM-like feature)
+  sources?: string[]; // Document sources referenced (for RAG/document-based responses)
 }
 
 export interface ChatDocument {
