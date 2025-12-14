@@ -96,4 +96,3 @@ switch ($Command) {
         Write-Host $hash
     }
 }
-
