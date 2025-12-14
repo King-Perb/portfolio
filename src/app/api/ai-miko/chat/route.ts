@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import type { ChatMessage } from "@/types/chat";
 
 // Lazy-initialize OpenAI client only when needed (not during build)
 function getOpenAIClient() {

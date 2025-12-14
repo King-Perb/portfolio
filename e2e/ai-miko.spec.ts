@@ -119,11 +119,9 @@ test.describe('AI Miko Chat', () => {
     await page.waitForTimeout(300);
 
     // The send button transforms into a stop button when isTyping is true
-    // Check if the button is enabled and has the stop appearance
+    // Check if the button is enabled
     const submitButton = page.locator('button[type="submit"]').first();
     const isEnabled = await submitButton.isEnabled().catch(() => false);
-    const buttonText = await submitButton.textContent().catch(() => '');
-    const hasStopIcon = await submitButton.locator('svg').count() > 0;
 
     // With mocked responses that complete immediately, isTyping may never become true
     // Skip this test if the button is disabled (response completed too fast)
