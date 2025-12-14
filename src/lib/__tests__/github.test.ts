@@ -258,13 +258,34 @@ describe("fetchGitHubStats", () => {
   it("should handle API errors gracefully", async () => {
     mockPaginate.mockRejectedValue(new Error("API Error"));
 
-    // Should throw if listForAuthenticatedUser fails
-    await expect(fetchGitHubStats()).rejects.toThrow("API Error");
+    // Should return empty stats if listForAuthenticatedUser fails (graceful degradation)
+    const stats = await fetchGitHubStats();
+    expect(stats).toEqual({
+      totalCommits: 0,
+      commitsLastMonth: 0,
+      totalRepos: 0,
+      languages: {},
+      repos: [],
+      repoLanguages: {},
+      repoCommits: {},
+      repoDeployments: {},
+    });
   });
 
   it("should handle missing GITHUB_TOKEN", async () => {
     delete process.env.GITHUB_TOKEN;
 
-    await expect(fetchGitHubStats()).rejects.toThrow("GITHUB_TOKEN environment variable is not set");
+    // Should return empty stats if token is missing (graceful degradation for tests/CI)
+    const stats = await fetchGitHubStats();
+    expect(stats).toEqual({
+      totalCommits: 0,
+      commitsLastMonth: 0,
+      totalRepos: 0,
+      languages: {},
+      repos: [],
+      repoLanguages: {},
+      repoCommits: {},
+      repoDeployments: {},
+    });
   });
 });
