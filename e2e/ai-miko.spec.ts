@@ -6,15 +6,15 @@ test.describe('AI Miko Chat', () => {
     await page.route('**/api/ai-miko/chat', async (route) => {
       const request = route.request();
       const postData = request.postDataJSON();
-      
+
       // Simulate Server-Sent Events (SSE) streaming response
       // Playwright route.fulfill doesn't support true streaming, so we simulate it
       // by sending all chunks at once in SSE format
       let responseBody = '';
-      
+
       // Send thread ID
       responseBody += `data: ${JSON.stringify({ threadId: 'test-thread-123' })}\n\n`;
-      
+
       // Send content chunks based on the message
       if (postData?.message) {
         const words = postData.message.split(' ');
@@ -25,7 +25,7 @@ test.describe('AI Miko Chat', () => {
         // Default response
         responseBody += `data: ${JSON.stringify({ content: 'Hello! How can I help you?' })}\n\n`;
       }
-      
+
       // Send completion signal
       responseBody += 'data: [DONE]\n\n';
 
