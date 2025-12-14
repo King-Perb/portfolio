@@ -31,6 +31,8 @@ export default defineConfig({
     trace: 'on-first-retry',
     /* Screenshot on failure */
     screenshot: 'only-on-failure',
+    /* Collect code coverage (requires Next.js coverage setup) */
+    // coverage: process.env.CI ? 'on' : 'off',
   },
 
   /* Configure projects for major browsers */
