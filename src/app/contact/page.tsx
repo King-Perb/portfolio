@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Mail, Copy, Check } from "lucide-react";
 import { CONTACT_INFO } from "@/lib/constants";
 import { SocialLinkComponent } from "@/components/contact/social-link";
+import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
 import { useState } from "react";
 
 export default function ContactPage() {
@@ -21,7 +22,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8 fade-in-bottom">
+    <div className="flex flex-col gap-8 fade-in-bottom md:pb-8">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Get In Touch</h1>
@@ -78,6 +79,8 @@ export default function ContactPage() {
           </CardContent>
         </Card>
       </div>
+
+      <MobileNextSectionButton />
     </div>
   );
 }

@@ -29,6 +29,11 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+// Mock FluidLoadingAnimation to avoid IntersectionObserver dependency
+vi.mock("@/components/animations/fluid-loading-animation", () => ({
+  FluidLoadingAnimation: () => <div data-testid="fluid-loading-animation" />,
+}));
+
 describe("Sidebar", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -233,7 +238,7 @@ describe("Sidebar", () => {
   });
 
   it("does not call onClose when clicking same route", async () => {
-    mockUsePathname.mockReturnValue("/");
+    mockUsePathname.mockReturnValue("/overview");
     const onClose = vi.fn();
     const user = userEvent.setup();
     render(<Sidebar onClose={onClose} />);

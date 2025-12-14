@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, FolderKanban, Layers, User, Github, Linkedin, Twitter } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Layers, User, Github, Linkedin, Twitter, Bot } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export const USER_PROFILE = {
@@ -12,8 +12,13 @@ export const USER_PROFILE = {
 
 export const NAV_ITEMS = [
     {
+        label: "AI Miko",
+        href: "/ai-miko",
+        icon: Bot,
+    },
+    {
         label: "Overview",
-        href: "/",
+        href: "/overview",
         icon: LayoutDashboard,
     },
     {
@@ -59,3 +64,6 @@ export const CONTACT_INFO = {
         },
     ] as SocialLink[],
 };
+
+// Animation preferences
+export const ENABLE_PROJECT_IMAGE_ZOOM = true; // Set to false to disable image zoom on hover

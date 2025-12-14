@@ -12,6 +12,11 @@ vi.stubGlobal("navigator", {
   },
 });
 
+// Mock MobileNextSectionButton to avoid NavigationProvider dependency
+vi.mock("@/components/navigation/mobile-next-section-button", () => ({
+  MobileNextSectionButton: () => <div data-testid="mobile-next-section-button" />,
+}));
+
 describe("ContactPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();

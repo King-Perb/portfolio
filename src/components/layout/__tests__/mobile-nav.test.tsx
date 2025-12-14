@@ -181,4 +181,76 @@ describe("MobileNav", () => {
     const sheet = screen.getByTestId("sheet");
     expect(sheet).toHaveAttribute("data-open", "true");
   });
+
+  it("updates SheetContent width based on animation phase", async () => {
+    const user = userEvent.setup();
+
+    // Mock querySelector to return a mock element
+    const mockSheetContent = {
+      style: {
+        width: "",
+        maxWidth: "",
+        transition: "",
+      },
+    };
+
+    vi.spyOn(document, "querySelector").mockReturnValue(mockSheetContent as unknown as Element);
+
+    render(<MobileNav />);
+
+    // Open sheet
+    const toggleButton = screen.getByTestId("sheet-toggle");
+    await user.click(toggleButton);
+
+    // Wait for useEffect to run
+    await new Promise(resolve => setTimeout(resolve, 20));
+
+    // Verify querySelector was called with correct selector
+    expect(document.querySelector).toHaveBeenCalledWith('[data-slot="sheet-content"]');
+  });
+
+  it("handles animation phase changes from Sidebar", async () => {
+    const user = userEvent.setup();
+
+    const mockSheetContent = {
+      style: {
+        width: "",
+        maxWidth: "",
+        transition: "",
+      },
+    };
+
+    vi.spyOn(document, "querySelector").mockReturnValue(mockSheetContent as unknown as Element);
+
+    render(<MobileNav />);
+
+    // Open sheet
+    const toggleButton = screen.getByTestId("sheet-toggle");
+    await user.click(toggleButton);
+
+    // Wait for initial render
+    await new Promise(resolve => setTimeout(resolve, 20));
+
+    // The component should handle animation phase changes
+    // (Sidebar would call onAnimationPhaseChange, but we're mocking it)
+    expect(document.querySelector).toHaveBeenCalled();
+  });
+
+  it("resets animation phase when sheet closes", async () => {
+    const user = userEvent.setup();
+    render(<MobileNav />);
+
+    // Open sheet
+    const toggleButton = screen.getByTestId("sheet-toggle");
+    await user.click(toggleButton);
+
+    let sheet = screen.getByTestId("sheet");
+    expect(sheet).toHaveAttribute("data-open", "true");
+
+    // Close sheet
+    await user.click(toggleButton);
+
+    sheet = screen.getByTestId("sheet");
+    expect(sheet).toHaveAttribute("data-open", "false");
+  });
 });

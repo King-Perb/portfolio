@@ -277,5 +277,6 @@ export function transformRepoToProject(
     featuredImage: featuredImage,
     source: "github",
     featured: featuredRepos?.includes(repo.full_name) ?? false,
+    isPrivate: repo.private,
   };
 }

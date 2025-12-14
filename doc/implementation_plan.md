@@ -343,6 +343,22 @@ These rules ensure maintainability and "premium" code quality.
     - Position: Absolute positioned div over image with `absolute inset-0`
     - Hover: Overlay intensity increases to `bg-primary/30` on hover for interactive feedback
     - Implementation: Overlay div added in `ProjectCard` component image container (line 41)
+- **Project Card Hover Improvements:** ✅ Implemented
+  - **JavaScript Event Handlers:** Replaced CSS `:hover` pseudo-classes with JavaScript `onMouseEnter`/`onMouseLeave` event handlers
+    - **Problem Solved:** Fixed ~0.5s hover detection lag when cursor lands on cards during scrolling
+    - **Implementation:** Use `useState` to track hover state for immediate detection regardless of scroll state
+    - **Benefits:** JavaScript event handlers fire immediately, eliminating CSS hover delay during scroll
+  - **Simple Glowing Outline:** Fade in/out glowing border on hover
+    - Border: `border-primary/20` (default) → `border-primary/50` (hover)
+    - Shadow: No shadow (default) → `shadow-[0_0_20px] shadow-primary/50` (hover)
+    - Smooth transition with `duration-300` easing
+  - **Image Zoom Control:** Added `ENABLE_PROJECT_IMAGE_ZOOM` constant in `src/lib/constants.ts`
+    - Default: `true` (enables `group-hover:scale-105` on project images)
+    - Can be set to `false` to disable image zoom animation
+    - Applied conditionally based on constant value
+  - **Private Repository Support:** Added `isPrivate` field to Project type
+    - GitHub repos: `isPrivate` set from API response (`repo.private`)
+    - Manual projects: Can be set in config if needed
 - **Private Repository Handling:**
   - **Private Repo Detection:** Check `private: true` field from GitHub API response
   - **Click Behavior:** When user clicks a private repo project card:
@@ -455,3 +471,49 @@ These rules ensure maintainability and "premium" code quality.
   - Improve sidebar and mobile-nav test coverage
   - Update tests for commented out stars/forks
   - All 161 unit tests and 76 E2E tests passing
+- [x] **Mobile Next Section Navigation:** Add navigation buttons at bottom of each page (mobile only).
+  - **Components:**
+    - `src/components/navigation/mobile-next-section-button.tsx`: Mobile-only button to navigate to next section
+    - `src/contexts/navigation-context.tsx`: Context for animated navigation from content area
+    - `src/components/layout/page-transition-line.tsx`: Full-screen scanner animation for page transitions
+  - **Features:**
+    - Circular navigation: Overview → Projects → Stack → Contact → Overview
+    - Scanner animation from left edge with expanding background overlay
+    - Disabled during animation to prevent rapid clicks
+    - Styled with primary (green) color scheme
+  - **Integration:** NavigationProvider in Shell, buttons in all page components
+- [x] **Fluid Loading Animation:** Add Lottie animation during page transitions.
+  - **Library:** @lottiefiles/dotlottie-react
+  - **Components:**
+    - `src/components/animations/fluid-loading-animation.tsx`: Reusable Lottie animation component
+    - `public/Fluid_Loading_Animation.lottie`: Animation asset
+  - **Integration:**
+    - Desktop sidebar transitions (AnimatedWrapper): Animation centered at 50vw
+    - Mobile page transitions (PageTransitionLine): Animation centered at 50vw
+    - Revealed as overlay expands, hidden when idle
+- [x] **AI Miko Chat Interface:** ChatGPT-like chat interface with document-based knowledge.
+  - **Components:**
+    - `src/components/ai-miko/chat-container.tsx`: Main chat interface orchestrator
+    - `src/components/ai-miko/message-list.tsx`: Auto-scrolling message display
+    - `src/components/ai-miko/message-bubble.tsx`: Individual message rendering (user/AI)
+    - `src/components/ai-miko/chat-input.tsx`: Message input with send/stop toggle
+    - `src/components/ai-miko/typing-indicator.tsx`: Animated dots below avatar
+  - **Infrastructure:**
+    - `src/hooks/use-chat-stream.ts`: Streaming logic hook (refactored from chat-container)
+    - `src/app/api/ai-miko/chat/route.ts`: API route (OpenAI integration with streaming)
+    - `src/types/chat.ts`: TypeScript types for chat messages
+    - `src/components/ui/textarea.tsx`: Textarea component for message input
+  - **Features:**
+    - Streaming response support with abort capability
+    - Auto-scroll with manual scroll detection (prevents glitches during streaming)
+    - Stop generation button (toggles from send to stop during streaming)
+    - Typing indicator positioned below avatar icon (not in message text)
+    - Refactored streaming logic into reusable hook
+  - **Navigation:** Added "AI Miko" to navigation menu with Bot icon
+  - **Status:** UI complete, OpenAI API integrated with streaming support
+  - **OpenAI Integration:**
+    - Uses OpenAI GPT-4o-mini (configurable via OPENAI_API_KEY and OPENAI_MODEL env vars)
+    - Streaming responses for real-time chat experience
+    - Conversation history maintained across messages
+    - System prompt configured for portfolio assistant role
+    - Error handling for API failures

@@ -11,21 +11,29 @@ export async function ProjectsGrid() {
     }
 
     // Generate stable unique keys for React reconciliation
-    const getProjectKey = (project: typeof projects[0]): string => {
+    const getProjectKey = (project: typeof projects[0], index: number): string => {
         // For GitHub projects, use githubUrl as it's guaranteed unique
         if (project.source === "github" && project.githubUrl) {
             return project.githubUrl;
         }
-        // For manual projects or GitHub projects without URL, use source + title
-        // Title should be unique within each source type
-        return `${project.source}-${project.title}`;
+        // For manual projects or GitHub projects without URL, use source + title + index as fallback
+        // This ensures uniqueness even if titles are duplicated
+        const baseKey = `${project.source}-${project.title}`;
+        // Check if this key would be duplicate by looking at previous projects
+        const isDuplicate = projects.slice(0, index).some(p => {
+            if (p.source === "github" && p.githubUrl) {
+                return false; // GitHub projects use different key format
+            }
+            return `${p.source}-${p.title}` === baseKey;
+        });
+        return isDuplicate ? `${baseKey}-${index}` : baseKey;
     };
 
     return (
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
-            {projects.slice(0, 4).map((project) => (
+            {projects.slice(0, 4).map((project, index) => (
                 <ProjectCard
-                    key={getProjectKey(project)}
+                    key={getProjectKey(project, index)}
                     project={project}
                     showScreenshot={!!(project.featuredImage || project.screenshot)}
                 />
