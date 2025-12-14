@@ -1,5 +1,6 @@
 #!/bin/bash
 # Wrapper script that runs tests only if code changes are detected
+# Uses cache to skip tests if they already passed for the current code state
 
 # Get the current branch
 current_branch=$(git branch --show-current)
@@ -18,7 +19,18 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   # Run tests to be safe
   echo "New branch detected, running tests"
   GITHUB_TOKEN="test-token-dummy-value" npm test
-  exit $?
+  test_result=$?
+  if [ $test_result -eq 0 ]; then
+    scripts/test-cache.sh save "$upstream_branch"
+  fi
+  exit $test_result
+fi
+
+# Check if cache matches current code state (ignoring whitespace)
+# This handles the case where tests passed, hooks fixed formatting, and we're pushing again
+if scripts/test-cache.sh check "$upstream_branch" 2>/dev/null; then
+  echo "Skipping tests (cache hit - tests already passed for this code)"
+  exit 0
 fi
 
 # Get the commits being pushed (commits in local but not in remote)
@@ -51,7 +63,12 @@ fi
 if [ "$has_code_changes" = true ]; then
   # Code changes detected, run tests
   GITHUB_TOKEN="test-token-dummy-value" npm test
-  exit $?
+  test_result=$?
+  if [ $test_result -eq 0 ]; then
+    # Tests passed, save cache
+    scripts/test-cache.sh save "$upstream_branch"
+  fi
+  exit $test_result
 else
   # Only formatting changes, skip tests
   echo "Skipping tests (only formatting changes detected)"

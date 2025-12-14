@@ -2,7 +2,11 @@
 
 ## Overview
 
-The pre-push hooks are configured to intelligently skip tests and build when only formatting changes (whitespace, trailing spaces, etc.) are detected. This significantly speeds up the workflow when fixing formatting issues.
+The pre-push hooks are configured to intelligently skip tests and build when:
+1. Only formatting changes (whitespace, trailing spaces, etc.) are detected
+2. Tests/build already passed for the current code state (cache hit)
+
+This significantly speeds up the workflow when fixing formatting issues.
 
 ## How It Works
 
@@ -17,12 +21,33 @@ The pre-push hooks are configured to intelligently skip tests and build when onl
    - Type check
 
 3. **Tests** (conditional - slow):
-   - Only runs if code changes are detected
+   - Checks cache first - if tests already passed for this code, skips
+   - Otherwise, only runs if code changes are detected
    - Skips if only formatting changes detected
+   - Saves cache when tests pass
 
 4. **Build** (conditional - slow):
-   - Only runs if code changes are detected
+   - Checks cache first - if build already passed for this code, skips
+   - Otherwise, only runs if code changes are detected
    - Skips if only formatting changes detected
+   - Saves cache when build passes
+
+## Cache System
+
+The hooks use a cache to track when tests/build passed for a specific code state:
+
+- **Cache files:** `.pre-push-test-cache`, `.pre-push-build-cache` (gitignored)
+- **Cache key:** MD5 hash of the diff (ignoring whitespace)
+- **Cache hit:** If the code hash matches, tests/build are skipped
+
+### Scenario: Formatting Fixes After Passed Tests
+
+1. Push attempt → tests/build **run and pass**
+2. Hooks fix trailing whitespace → cache is saved
+3. Commit the whitespace fixes
+4. Push again → tests/build **skip** (cache hit!)
+
+The cache ensures that if tests passed for your actual code, you don't need to run them again just because formatting was fixed.
 
 ## Detection Logic
 

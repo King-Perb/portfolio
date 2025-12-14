@@ -1,4 +1,36 @@
 # PowerShell wrapper script that runs build only if code changes are detected
+# Uses cache to skip build if it already passed for the current code state
+
+$CACHE_FILE = ".pre-push-build-cache"
+
+function Get-CodeHash {
+    param([string]$Branch)
+    $diff = git diff --ignore-all-space --ignore-blank-lines --ignore-space-change $Branch 2>$null
+    if ([string]::IsNullOrEmpty($diff)) {
+        return "empty"
+    }
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($diff)
+    $hash = [System.Security.Cryptography.MD5]::Create().ComputeHash($bytes)
+    return [System.BitConverter]::ToString($hash).Replace("-", "").ToLower()
+}
+
+function Test-BuildCache {
+    param([string]$Branch)
+    if (-not (Test-Path $CACHE_FILE)) {
+        return $false
+    }
+    $cacheContent = Get-Content $CACHE_FILE -Raw
+    $cachedHash = ($cacheContent -split ' ')[0]
+    $currentHash = Get-CodeHash -Branch $Branch
+    return $cachedHash -eq $currentHash
+}
+
+function Save-BuildCache {
+    param([string]$Branch)
+    $codeHash = Get-CodeHash -Branch $Branch
+    $timestamp = Get-Date -UFormat %s
+    "$codeHash $timestamp" | Out-File -FilePath $CACHE_FILE -Encoding utf8 -NoNewline
+}
 
 # Get the current branch
 $currentBranch = git branch --show-current
@@ -12,6 +44,8 @@ if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($upstreamBranchOutput))
     $upstreamBranch = $upstreamBranchOutput.Trim()
 }
 
+$checkScript = Join-Path $PSScriptRoot "check-code-changes.ps1"
+
 # Check if remote branch exists
 $branchExists = git rev-parse --verify "$upstreamBranch" 2>$null
 if (-not $branchExists) {
@@ -20,7 +54,17 @@ if (-not $branchExists) {
     Write-Host "New branch detected, running build"
     $env:GITHUB_TOKEN = "test-token-dummy-value"
     npm run build
-    exit $LASTEXITCODE
+    $buildResult = $LASTEXITCODE
+    if ($buildResult -eq 0) {
+        Save-BuildCache -Branch $upstreamBranch
+    }
+    exit $buildResult
+}
+
+# Check if cache matches current code state (ignoring whitespace)
+if (Test-BuildCache -Branch $upstreamBranch) {
+    Write-Host "Skipping build (cache hit - build already passed for this code)"
+    exit 0
 }
 
 # Get the commits being pushed (commits in local but not in remote)
@@ -35,7 +79,6 @@ if ([string]::IsNullOrWhiteSpace($commitsBeingPushed)) {
 # Check if any of the commits being pushed contain code changes
 # We'll check each commit individually
 $hasCodeChanges = $false
-$checkScript = Join-Path $PSScriptRoot "check-code-changes.ps1"
 
 foreach ($commit in ($commitsBeingPushed -split "`n")) {
     if (-not [string]::IsNullOrWhiteSpace($commit)) {
@@ -61,7 +104,12 @@ if ($hasCodeChanges) {
     # Code changes detected, run build
     $env:GITHUB_TOKEN = "test-token-dummy-value"
     npm run build
-    exit $LASTEXITCODE
+    $buildResult = $LASTEXITCODE
+    if ($buildResult -eq 0) {
+        # Build passed, save cache
+        Save-BuildCache -Branch $upstreamBranch
+    }
+    exit $buildResult
 } else {
     # Only formatting changes, skip build
     Write-Host "Skipping build (only formatting changes detected)"

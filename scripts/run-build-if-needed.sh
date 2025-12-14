@@ -1,5 +1,36 @@
 #!/bin/bash
 # Wrapper script that runs build only if code changes are detected
+# Uses cache to skip build if it already passed for the current code state
+
+CACHE_FILE=".pre-push-build-cache"
+
+# Get a hash of the code state, ignoring whitespace changes
+get_code_hash() {
+  local remote_branch="$1"
+  git diff --ignore-all-space --ignore-blank-lines --ignore-space-change "$remote_branch" 2>/dev/null | md5sum | awk '{print $1}'
+}
+
+# Check if cache matches
+check_build_cache() {
+  local remote_branch="$1"
+  if [ ! -f "$CACHE_FILE" ]; then
+    return 1
+  fi
+  local cached_hash=$(awk '{print $1}' "$CACHE_FILE")
+  local current_hash=$(get_code_hash "$remote_branch")
+  if [ "$cached_hash" = "$current_hash" ]; then
+    echo "Build cache hit - build already passed for this code"
+    return 0
+  fi
+  return 1
+}
+
+# Save cache
+save_build_cache() {
+  local remote_branch="$1"
+  local code_hash=$(get_code_hash "$remote_branch")
+  echo "$code_hash $(date +%s)" > "$CACHE_FILE"
+}
 
 # Get the current branch
 current_branch=$(git branch --show-current)
@@ -18,7 +49,17 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   # Run build to be safe
   echo "New branch detected, running build"
   GITHUB_TOKEN="test-token-dummy-value" npm run build
-  exit $?
+  build_result=$?
+  if [ $build_result -eq 0 ]; then
+    save_build_cache "$upstream_branch"
+  fi
+  exit $build_result
+fi
+
+# Check if cache matches current code state (ignoring whitespace)
+if check_build_cache "$upstream_branch"; then
+  echo "Skipping build (cache hit - build already passed for this code)"
+  exit 0
 fi
 
 # Get the commits being pushed (commits in local but not in remote)
@@ -51,7 +92,12 @@ fi
 if [ "$has_code_changes" = true ]; then
   # Code changes detected, run build
   GITHUB_TOKEN="test-token-dummy-value" npm run build
-  exit $?
+  build_result=$?
+  if [ $build_result -eq 0 ]; then
+    # Build passed, save cache
+    save_build_cache "$upstream_branch"
+  fi
+  exit $build_result
 else
   # Only formatting changes, skip build
   echo "Skipping build (only formatting changes detected)"
