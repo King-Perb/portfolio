@@ -21,14 +21,14 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   GITHUB_TOKEN="test-token-dummy-value" npm test
   test_result=$?
   if [ $test_result -eq 0 ]; then
-    scripts/test-cache.sh save "$upstream_branch"
+    scripts/test-cache.sh save
   fi
   exit $test_result
 fi
 
 # Check if cache matches current code state (ignoring whitespace)
 # This handles the case where tests passed, hooks fixed formatting, and we're pushing again
-if scripts/test-cache.sh check "$upstream_branch" 2>/dev/null; then
+if scripts/test-cache.sh check 2>/dev/null; then
   echo "Skipping tests (cache hit - tests already passed for this code)"
   exit 0
 fi
@@ -66,7 +66,7 @@ if [ "$has_code_changes" = true ]; then
   test_result=$?
   if [ $test_result -eq 0 ]; then
     # Tests passed, save cache
-    scripts/test-cache.sh save "$upstream_branch"
+    scripts/test-cache.sh save
   fi
   exit $test_result
 else

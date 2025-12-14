@@ -4,20 +4,21 @@
 
 CACHE_FILE=".pre-push-build-cache"
 
-# Get a hash of the code state, ignoring whitespace changes
+# Get a hash of the current code state, ignoring whitespace
+# This hashes the actual file contents, not the diff
 get_code_hash() {
-  local remote_branch="$1"
-  git diff --ignore-all-space --ignore-blank-lines --ignore-space-change "$remote_branch" 2>/dev/null | md5sum | awk '{print $1}'
+  # Get all tracked files, cat their contents (ignoring whitespace), and hash
+  # This gives us a stable hash that doesn't change based on what's on remote
+  git ls-files -z | xargs -0 cat 2>/dev/null | tr -d '[:space:]' | md5sum | awk '{print $1}'
 }
 
 # Check if cache matches
 check_build_cache() {
-  local remote_branch="$1"
   if [ ! -f "$CACHE_FILE" ]; then
     return 1
   fi
   local cached_hash=$(awk '{print $1}' "$CACHE_FILE")
-  local current_hash=$(get_code_hash "$remote_branch")
+  local current_hash=$(get_code_hash)
   if [ "$cached_hash" = "$current_hash" ]; then
     echo "Build cache hit - build already passed for this code"
     return 0
@@ -27,8 +28,7 @@ check_build_cache() {
 
 # Save cache
 save_build_cache() {
-  local remote_branch="$1"
-  local code_hash=$(get_code_hash "$remote_branch")
+  local code_hash=$(get_code_hash)
   echo "$code_hash $(date +%s)" > "$CACHE_FILE"
 }
 
@@ -51,7 +51,7 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   GITHUB_TOKEN="test-token-dummy-value" npm run build
   build_result=$?
   if [ $build_result -eq 0 ]; then
-    save_build_cache "$upstream_branch"
+    save_build_cache
   fi
   exit $build_result
 fi
@@ -95,7 +95,7 @@ if [ "$has_code_changes" = true ]; then
   build_result=$?
   if [ $build_result -eq 0 ]; then
     # Build passed, save cache
-    save_build_cache "$upstream_branch"
+    save_build_cache
   fi
   exit $build_result
 else

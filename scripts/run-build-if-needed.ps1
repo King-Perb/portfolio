@@ -4,30 +4,41 @@
 $CACHE_FILE = ".pre-push-build-cache"
 
 function Get-CodeHash {
-    param([string]$Branch)
-    $diff = git diff --ignore-all-space --ignore-blank-lines --ignore-space-change $Branch 2>$null
-    if ([string]::IsNullOrEmpty($diff)) {
+    # Get all tracked files, cat their contents (ignoring whitespace), and hash
+    # This gives us a stable hash that doesn't change based on what's on remote
+    $files = git ls-files
+    $allContent = ""
+    foreach ($file in $files) {
+        if (Test-Path $file) {
+            $content = Get-Content $file -Raw -ErrorAction SilentlyContinue
+            if ($content) {
+                # Remove all whitespace for comparison
+                $allContent += ($content -replace '\s', '')
+            }
+        }
+    }
+
+    if ([string]::IsNullOrEmpty($allContent)) {
         return "empty"
     }
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes($diff)
+
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($allContent)
     $hash = [System.Security.Cryptography.MD5]::Create().ComputeHash($bytes)
     return [System.BitConverter]::ToString($hash).Replace("-", "").ToLower()
 }
 
 function Test-BuildCache {
-    param([string]$Branch)
     if (-not (Test-Path $CACHE_FILE)) {
         return $false
     }
     $cacheContent = Get-Content $CACHE_FILE -Raw
     $cachedHash = ($cacheContent -split ' ')[0]
-    $currentHash = Get-CodeHash -Branch $Branch
+    $currentHash = Get-CodeHash
     return $cachedHash -eq $currentHash
 }
 
 function Save-BuildCache {
-    param([string]$Branch)
-    $codeHash = Get-CodeHash -Branch $Branch
+    $codeHash = Get-CodeHash
     $timestamp = Get-Date -UFormat %s
     "$codeHash $timestamp" | Out-File -FilePath $CACHE_FILE -Encoding utf8 -NoNewline
 }
@@ -56,13 +67,13 @@ if (-not $branchExists) {
     npm run build
     $buildResult = $LASTEXITCODE
     if ($buildResult -eq 0) {
-        Save-BuildCache -Branch $upstreamBranch
+        Save-BuildCache
     }
     exit $buildResult
 }
 
 # Check if cache matches current code state (ignoring whitespace)
-if (Test-BuildCache -Branch $upstreamBranch) {
+if (Test-BuildCache) {
     Write-Host "Skipping build (cache hit - build already passed for this code)"
     exit 0
 }
@@ -107,7 +118,7 @@ if ($hasCodeChanges) {
     $buildResult = $LASTEXITCODE
     if ($buildResult -eq 0) {
         # Build passed, save cache
-        Save-BuildCache -Branch $upstreamBranch
+        Save-BuildCache
     }
     exit $buildResult
 } else {

@@ -26,14 +26,14 @@ if (-not $branchExists) {
     npm test
     $testResult = $LASTEXITCODE
     if ($testResult -eq 0) {
-        & $cacheScript -Command "save" -RemoteBranch $upstreamBranch
+        & $cacheScript -Command "save"
     }
     exit $testResult
 }
 
 # Check if cache matches current code state (ignoring whitespace)
 # This handles the case where tests passed, hooks fixed formatting, and we're pushing again
-& $cacheScript -Command "check" -RemoteBranch $upstreamBranch 2>$null
+& $cacheScript -Command "check" 2>$null
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Skipping tests (cache hit - tests already passed for this code)"
     exit 0
@@ -79,7 +79,7 @@ if ($hasCodeChanges) {
     $testResult = $LASTEXITCODE
     if ($testResult -eq 0) {
         # Tests passed, save cache
-        & $cacheScript -Command "save" -RemoteBranch $upstreamBranch
+        & $cacheScript -Command "save"
     }
     exit $testResult
 } else {
