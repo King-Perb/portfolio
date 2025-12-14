@@ -1,7 +1,7 @@
 # Data Model: App Loading Screen with Lottie Animation
 
-**Feature**: App Loading Screen with Lottie Animation  
-**Date**: 2025-12-14  
+**Feature**: App Loading Screen with Lottie Animation
+**Date**: 2025-12-14
 **Phase**: Phase 1 - Design & Contracts
 
 ## Overview
@@ -114,4 +114,3 @@ interface AriaAttributes {
 ## Summary
 
 The data model is minimal and focused on component-internal state management. All data is ephemeral and exists only during the component lifecycle. No persistence or external data integration is required.
-

@@ -1,8 +1,8 @@
 # Feature Specification: App Loading Screen with Lottie Animation
 
-**Feature Branch**: `001-app-loading-screen`  
-**Created**: 2025-12-14  
-**Status**: Draft  
+**Feature Branch**: `001-app-loading-screen`
+**Created**: 2025-12-14
+**Status**: Draft
 **Input**: User description: "app loading screen with a lottie animation"
 
 ## User Scenarios & Testing *(mandatory)*
@@ -92,4 +92,3 @@ As a user with accessibility needs or on a slower device, I want the loading scr
 - **SC-004**: Fade-out transition completes in 300ms without visual glitches
 - **SC-005**: Loading screen fully unmounts from DOM after dismissal (no memory leaks)
 - **SC-006**: Screen readers correctly announce "Loading application" status
-

@@ -28,8 +28,23 @@ vi.mock("@/components/layout/shell", () => ({
   ),
 }));
 
+// Mock AppLoadingScreen (uses Lottie which requires IntersectionObserver)
+vi.mock("@/components/layout/app-loading-screen", () => ({
+  AppLoadingScreen: () => <div data-testid="app-loading-screen" />,
+}));
+
 // Mock globals.css import (doesn't need to do anything in tests)
 vi.mock("../globals.css", () => ({}));
+
+// Mock IntersectionObserver (required by Lottie)
+global.IntersectionObserver = class IntersectionObserver {
+  observe = vi.fn();
+  disconnect = vi.fn();
+  unobserve = vi.fn();
+  root = null;
+  rootMargin = "";
+  thresholds = [];
+} as unknown as typeof IntersectionObserver;
 
 describe("RootLayout", () => {
   it("renders children correctly", () => {

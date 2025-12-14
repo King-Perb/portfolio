@@ -1,16 +1,16 @@
 # Quickstart: App Loading Screen with Lottie Animation
 
-**Feature**: App Loading Screen with Lottie Animation  
-**Date**: 2025-12-14  
+**Feature**: App Loading Screen with Lottie Animation
+**Date**: 2025-12-14
 **Phase**: Phase 1 - Design & Contracts
 
 ## Test Scenarios
 
 ### Scenario 1: Initial Page Load
 
-**Given**: User navigates to the portfolio URL  
-**When**: The page begins loading  
-**Then**: 
+**Given**: User navigates to the portfolio URL
+**When**: The page begins loading
+**Then**:
 - Loading screen appears immediately (within 100ms)
 - Lottie animation plays continuously
 - Loading screen covers entire viewport including navigation
@@ -29,9 +29,9 @@
 
 ### Scenario 2: Fast Load with Minimum Display Time
 
-**Given**: User has fast internet connection  
-**When**: Page loads in under 1 second  
-**Then**: 
+**Given**: User has fast internet connection
+**When**: Page loads in under 1 second
+**Then**:
 - Loading screen still displays for minimum duration (1.5s default)
 - Animation continues playing during minimum display time
 - Loading screen fades out smoothly after minimum time
@@ -49,9 +49,9 @@
 
 ### Scenario 3: Slow Load
 
-**Given**: User has slow internet connection  
-**When**: Page takes longer than minimum display time to load  
-**Then**: 
+**Given**: User has slow internet connection
+**When**: Page takes longer than minimum display time to load
+**Then**:
 - Loading screen displays during entire load
 - Animation continues playing
 - Loading screen dismisses immediately after page load completes
@@ -70,9 +70,9 @@
 
 ### Scenario 4: Fade-Out Animation
 
-**Given**: Loading screen is displayed  
-**When**: Dismissal is triggered  
-**Then**: 
+**Given**: Loading screen is displayed
+**When**: Dismissal is triggered
+**Then**:
 - Loading screen fades out smoothly (300ms transition)
 - Animation stops gracefully
 - Component unmounts from DOM after fade-out
@@ -91,9 +91,9 @@
 
 ### Scenario 5: Accessibility - Screen Reader
 
-**Given**: User has screen reader enabled  
-**When**: Loading screen appears  
-**Then**: 
+**Given**: User has screen reader enabled
+**When**: Loading screen appears
+**Then**:
 - Screen reader announces "Loading application"
 - Status is announced appropriately
 - No errors in accessibility tree
@@ -110,9 +110,9 @@
 
 ### Scenario 6: Performance - 60fps Animation
 
-**Given**: Loading screen is displayed  
-**When**: Animation is playing  
-**Then**: 
+**Given**: Loading screen is displayed
+**When**: Animation is playing
+**Then**:
 - Animation plays at 60fps
 - No frame drops or jank
 - No performance warnings in console
@@ -131,9 +131,9 @@
 
 ### Scenario 7: SPA Navigation (No Loading Screen)
 
-**Given**: User is already on the portfolio site  
-**When**: User navigates to a different page within the SPA  
-**Then**: 
+**Given**: User is already on the portfolio site
+**When**: User navigates to a different page within the SPA
+**Then**:
 - Loading screen does NOT appear
 - Only initial page load shows loading screen
 - Navigation is instant (no loading overlay)
@@ -150,9 +150,9 @@
 
 ### Scenario 8: Custom Minimum Display Time
 
-**Given**: Component is configured with custom `minimumDisplayTime`  
-**When**: Page loads  
-**Then**: 
+**Given**: Component is configured with custom `minimumDisplayTime`
+**When**: Page loads
+**Then**:
 - Loading screen respects custom minimum time
 - Default (1500ms) is used if not specified
 
@@ -168,9 +168,9 @@
 
 ### Scenario 9: Error Handling - Missing Animation File
 
-**Given**: Lottie animation file is missing or fails to load  
-**When**: Loading screen attempts to display animation  
-**Then**: 
+**Given**: Lottie animation file is missing or fails to load
+**When**: Loading screen attempts to display animation
+**Then**:
 - Component handles error gracefully
 - Loading screen still displays (even without animation)
 - No console errors break the application
@@ -188,9 +188,9 @@
 
 ### Scenario 10: Memory Leak Prevention
 
-**Given**: Loading screen has been dismissed  
-**When**: Component unmounts  
-**Then**: 
+**Given**: Loading screen has been dismissed
+**When**: Component unmounts
+**Then**:
 - Component is completely removed from DOM
 - Event listeners are cleaned up
 - No memory leaks detected
@@ -253,4 +253,3 @@ Test on:
 - [ ] Edge (latest)
 - [ ] Mobile Chrome
 - [ ] Mobile Safari
-

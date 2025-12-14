@@ -173,13 +173,13 @@ Before any code is merged:
 
 ## Technology Stack
 
-**Framework**: Next.js 15 (App Router)  
-**Language**: TypeScript (strict mode)  
-**Styling**: Tailwind CSS v4  
-**UI Components**: shadcn/ui  
-**Testing**: Vitest + React Testing Library (unit/component), Playwright (E2E)  
-**API**: Octokit for GitHub integration  
-**Animation**: framer-motion  
+**Framework**: Next.js 15 (App Router)
+**Language**: TypeScript (strict mode)
+**Styling**: Tailwind CSS v4
+**UI Components**: shadcn/ui
+**Testing**: Vitest + React Testing Library (unit/component), Playwright (E2E)
+**API**: Octokit for GitHub integration
+**Animation**: framer-motion
 **Icons**: lucide-react
 
 ## Governance

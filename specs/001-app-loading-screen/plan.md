@@ -9,14 +9,14 @@ Implement a full-screen loading overlay with a Lottie animation that displays du
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5 (strict mode), React 19.2.0  
-**Primary Dependencies**: Next.js 16.0.7, `@lottiefiles/dotlottie-react` 0.17.10, React DOM 19.2.0  
-**Storage**: N/A (client-side only component)  
-**Testing**: Vitest 2.1.8, React Testing Library 16.1.0, Playwright 1.57.0 (for E2E)  
-**Target Platform**: Web (Next.js App Router, client-side rendering)  
-**Project Type**: Web application (Next.js single-page application)  
-**Performance Goals**: Loading screen appears within 100ms, animation plays at 60fps, fade-out completes in 300ms  
-**Constraints**: Must not cause layout shift, must unmount cleanly to prevent memory leaks, must be accessible (WCAG 2.1 AA)  
+**Language/Version**: TypeScript 5 (strict mode), React 19.2.0
+**Primary Dependencies**: Next.js 16.0.7, `@lottiefiles/dotlottie-react` 0.17.10, React DOM 19.2.0
+**Storage**: N/A (client-side only component)
+**Testing**: Vitest 2.1.8, React Testing Library 16.1.0, Playwright 1.57.0 (for E2E)
+**Target Platform**: Web (Next.js App Router, client-side rendering)
+**Project Type**: Web application (Next.js single-page application)
+**Performance Goals**: Loading screen appears within 100ms, animation plays at 60fps, fade-out completes in 300ms
+**Constraints**: Must not cause layout shift, must unmount cleanly to prevent memory leaks, must be accessible (WCAG 2.1 AA)
 **Scale/Scope**: Single reusable component, used once per application session (initial load only)
 
 ## Constitution Check

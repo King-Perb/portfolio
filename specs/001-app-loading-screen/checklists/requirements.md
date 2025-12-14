@@ -1,7 +1,7 @@
 # Specification Quality Checklist: App Loading Screen with Lottie Animation
 
-**Purpose**: Validate specification completeness and quality before proceeding to planning  
-**Created**: 2025-12-14  
+**Purpose**: Validate specification completeness and quality before proceeding to planning
+**Created**: 2025-12-14
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -35,4 +35,3 @@
 - Existing implementation already exists in `src/components/layout/app-loading-screen.tsx`
 - Uses `@lottiefiles/dotlottie-react` with the Skull_and_Bone_Turnaround.lottie animation
 - This spec documents the existing feature for proper tracking and potential enhancements
-

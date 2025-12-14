@@ -10,10 +10,10 @@ interface AppLoadingScreenProps {
 /**
  * App loading screen component that displays during initial app load.
  * Shows the Skull and Bone Turnaround Lottie animation.
- * 
- * IMPORTANT: This component renders directly (no portal) to ensure 
+ *
+ * IMPORTANT: This component renders directly (no portal) to ensure
  * server and client render the same HTML, preventing hydration mismatch.
- * The loading screen appears immediately because it's rendered in the 
+ * The loading screen appears immediately because it's rendered in the
  * server HTML before hydration completes.
  */
 export function AppLoadingScreen({ minimumDisplayTime = 1500 }: AppLoadingScreenProps) {
@@ -32,11 +32,11 @@ export function AppLoadingScreen({ minimumDisplayTime = 1500 }: AppLoadingScreen
   useEffect(() => {
     // Wait for both minimum display time and window load
     const startTime = Date.now();
-    
+
     const handleLoad = () => {
       const elapsed = Date.now() - startTime;
       const remainingTime = Math.max(0, minimumDisplayTime - elapsed);
-      
+
       setTimeout(() => {
         setIsVisible(false);
         // Remove from DOM after fade-out animation

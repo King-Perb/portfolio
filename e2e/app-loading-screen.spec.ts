@@ -39,7 +39,7 @@ test.describe('App Loading Screen', () => {
     await page.goto('/');
 
     const loadingScreen = page.getByRole('status', { name: 'Loading application' });
-    
+
     // Wait for loading screen to appear
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
@@ -53,19 +53,19 @@ test.describe('App Loading Screen', () => {
     await page.goto('/');
     const loadingScreen = page.getByRole('status', { name: 'Loading application' });
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
-    
+
     // Wait for it to dismiss
     await expect(loadingScreen).not.toBeVisible({ timeout: 5000 });
 
     // Navigate to another page within the SPA using actual link click (not page.goto)
     const isMobile = (viewport?.width || 1920) < 768;
-    
+
     if (isMobile) {
       // On mobile, open navigation first
       const menuButton = page.locator('button[class*="md:hidden"]').first();
       await menuButton.click();
       await expect(page.locator('[role="dialog"][data-state="open"]')).toBeVisible();
-      
+
       // Get link from inside the nav sheet
       const navSheet = page.locator('[role="dialog"][data-state="open"]');
       await page.waitForTimeout(500); // Give sheet time to fully open
@@ -76,10 +76,10 @@ test.describe('App Loading Screen', () => {
       const projectsLink = page.getByRole('link', { name: /projects/i }).first();
       await projectsLink.click();
     }
-    
+
     // Wait for navigation to complete
     await expect(page).toHaveURL(/\/projects/, { timeout: 5000 });
-    
+
     // Loading screen should NOT appear again on SPA navigation
     // Give it a moment to ensure it doesn't appear
     await page.waitForTimeout(500);
@@ -97,4 +97,3 @@ test.describe('App Loading Screen', () => {
     await expect(loadingScreen).toHaveAttribute('aria-label', 'Loading application');
   });
 });
-
