@@ -31,4 +31,3 @@ else
   echo "Skipping build (only formatting changes detected)"
   exit 0
 fi
-

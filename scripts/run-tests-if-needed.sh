@@ -31,4 +31,3 @@ else
   echo "Skipping tests (only formatting changes detected)"
   exit 0
 fi
-

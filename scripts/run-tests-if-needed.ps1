@@ -38,4 +38,3 @@ if ($hasCodeChanges) {
     Write-Host "Skipping tests (only formatting changes detected)"
     exit 0
 }
-
