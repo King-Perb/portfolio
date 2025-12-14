@@ -132,7 +132,7 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
           <div className="max-w-4xl mx-auto w-full px-4">
             <div className="space-y-4 max-w-md mx-auto text-center">
               <h2 className="text-2xl font-bold text-foreground">
-                AI Miko
+                Miko AI
               </h2>
               <p className="text-muted-foreground font-mono text-sm">
                 Ask me anything about the portfolio, projects, or tech stack. I have access to all the documentation and can help you explore!
@@ -166,7 +166,7 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
               <div className="h-8 w-8 border border-primary/20 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center relative">
                 <Image
                   src={USER_PROFILE.avatarUrl}
-                  alt="AI Miko"
+                  alt="Miko AI"
                   fill
                   sizes="32px"
                   className="object-cover"

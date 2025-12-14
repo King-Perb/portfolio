@@ -14,8 +14,9 @@ vi.mock("../message-bubble", () => ({
 
 // Mock Next.js Image
 vi.mock("next/image", () => ({
-  default: ({ src, alt }: { src: string; alt: string }) => (
-    <img src={src} alt={alt} />
+  default: ({ src, alt, ...props }: { src: string; alt: string; [key: string]: unknown }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt} {...props} />
   ),
 }));
 
@@ -58,7 +59,7 @@ describe("MessageList", () => {
   it("renders empty state when no messages", () => {
     render(<MessageList messages={[]} />);
 
-    expect(screen.getByText("AI Miko")).toBeInTheDocument();
+    expect(screen.getByText("Miko AI")).toBeInTheDocument();
     expect(screen.getByText(/Ask me anything about the portfolio/i)).toBeInTheDocument();
   });
 
@@ -89,7 +90,7 @@ describe("MessageList", () => {
     render(<MessageList messages={userOnlyMessages} isTyping={true} />);
 
     // Should show typing indicator with avatar
-    const typingIndicator = screen.getByAltText("AI Miko");
+    const typingIndicator = screen.getByAltText("Miko AI");
     expect(typingIndicator).toBeInTheDocument();
   });
 

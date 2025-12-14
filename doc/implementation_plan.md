@@ -45,6 +45,11 @@ Instead of a scrolling brochure, the site acts as a functional dashboard.
         - Applied to: Desktop sidebar navigation only (mobile uses sheet which already has slide animation)
         - **Mobile Fix:** AnimatedWrapper only renders on desktop (viewport >= 768px) to prevent blocking mobile interactions
         - **Pointer Events:** AnimatedWrapper uses `pointer-events-none`, SidebarContent uses `pointer-events-auto` for proper interaction handling
+- **App Loading Screen:** ✅ Implemented
+    - Full-screen loading overlay with Lottie animation on initial app load
+    - Component: `src/components/layout/app-loading-screen.tsx`
+    - Features: Configurable minimum display time, smooth fade-out, SSR-safe rendering
+    - See `specs/001-app-loading-screen/` for detailed documentation
 
 ### 3.2 Design System (Brand Book)
 
@@ -491,6 +496,7 @@ These rules ensure maintainability and "premium" code quality.
     - Desktop sidebar transitions (AnimatedWrapper): Animation centered at 50vw
     - Mobile page transitions (PageTransitionLine): Animation centered at 50vw
     - Revealed as overlay expands, hidden when idle
+- [x] **App Loading Screen:** Full-screen loading overlay with Lottie animation for initial app load (see `specs/001-app-loading-screen/` for details)
 - [x] **AI Miko Chat Interface:** ChatGPT-like chat interface with document-based knowledge.
   - **Components:**
     - `src/components/ai-miko/chat-container.tsx`: Main chat interface orchestrator

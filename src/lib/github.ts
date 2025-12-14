@@ -25,12 +25,13 @@ export interface GitHubStats {
 
 /**
  * Create an authenticated Octokit instance
+ * Returns null if token is not set (for graceful degradation in tests/CI)
  */
-function createOctokit(): Octokit {
+function createOctokit(): Octokit | null {
   const token = process.env.GITHUB_TOKEN;
 
   if (!token) {
-    throw new Error("GITHUB_TOKEN environment variable is not set");
+    return null;
   }
 
   return new Octokit({
@@ -147,8 +148,38 @@ async function _fetchGitHubStatsInternal(): Promise<GitHubStats> {
   // Create authenticated Octokit instance
   const octokit = createOctokit();
 
+  // If no token, return empty stats (graceful degradation for tests/CI)
+  if (!octokit) {
+    return {
+      totalCommits: 0,
+      commitsLastMonth: 0,
+      totalRepos: 0,
+      languages: {},
+      repos: [],
+      repoLanguages: {},
+      repoCommits: {},
+      repoDeployments: {},
+    };
+  }
+
   // Fetch all repositories (with automatic pagination)
-  const allRepos = await fetchAllRepos(octokit);
+  let allRepos: GitHubRepo[] = [];
+  try {
+    allRepos = await fetchAllRepos(octokit);
+  } catch (error) {
+    // If API call fails (e.g., bad credentials), return empty stats
+    console.error("Failed to fetch GitHub repos:", error);
+    return {
+      totalCommits: 0,
+      commitsLastMonth: 0,
+      totalRepos: 0,
+      languages: {},
+      repos: [],
+      repoLanguages: {},
+      repoCommits: {},
+      repoDeployments: {},
+    };
+  }
 
   // Filter out excluded repositories
   const excludedRepos = getExcludedRepos();
