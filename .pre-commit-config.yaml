@@ -49,7 +49,7 @@ repos:
 
       - id: test
         name: Test
-        entry: bash -c 'GITHUB_TOKEN="test-token-dummy-value" npm test'
+        entry: bash scripts/run-tests-if-needed.sh
         language: system
         stages: [pre-push]
         pass_filenames: false
@@ -57,7 +57,7 @@ repos:
 
       - id: build
         name: Build
-        entry: bash -c 'GITHUB_TOKEN="test-token-dummy-value" npm run build'
+        entry: bash scripts/run-build-if-needed.sh
         language: system
         stages: [pre-push]
         pass_filenames: false
