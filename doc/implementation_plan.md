@@ -500,7 +500,7 @@ These rules ensure maintainability and "premium" code quality.
     - `src/components/ai-miko/typing-indicator.tsx`: Animated dots below avatar
   - **Infrastructure:**
     - `src/hooks/use-chat-stream.ts`: Streaming logic hook (refactored from chat-container)
-    - `src/app/api/ai-miko/chat/route.ts`: API route (placeholder for NotebookLM integration)
+    - `src/app/api/ai-miko/chat/route.ts`: API route (OpenAI integration with streaming)
     - `src/types/chat.ts`: TypeScript types for chat messages
     - `src/components/ui/textarea.tsx`: Textarea component for message input
   - **Features:**
@@ -510,4 +510,10 @@ These rules ensure maintainability and "premium" code quality.
     - Typing indicator positioned below avatar icon (not in message text)
     - Refactored streaming logic into reusable hook
   - **Navigation:** Added "AI Miko" to navigation menu with Bot icon
-  - **Status:** UI complete, awaiting NotebookLM API integration for document-based responses
+  - **Status:** UI complete, OpenAI API integrated with streaming support
+  - **OpenAI Integration:**
+    - Uses OpenAI GPT-4o-mini (configurable via OPENAI_API_KEY and OPENAI_MODEL env vars)
+    - Streaming responses for real-time chat experience
+    - Conversation history maintained across messages
+    - System prompt configured for portfolio assistant role
+    - Error handling for API failures
