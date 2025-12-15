@@ -454,6 +454,22 @@ These rules ensure maintainability and "premium" code quality.
   - **Testing:** All 11 sidebar unit tests passing, improved testability with smaller components
   - **Code Quality:** Reduced complexity, improved readability, better separation of concerns
 - [ ] **Private Repository Popover:** Show popover message when clicking private repo cards, prevent link opening.
+
+- [x] **Miko Starter Question Bubbles:** Add clickable starter prompts above the Miko AI chat input to help users begin conversations.
+  - **Components & Data:**
+    - `src/data/miko-starter-prompts.ts`: Central list of recruiter-style starter questions (experience, projects, frontend/full-stack, collaboration, growth, reflection)
+    - `src/components/ai-miko/chat-container.tsx`: Renders up to three starter bubbles on desktop and two on mobile, above the chat input
+    - `src/types/chat.ts`: Extended `ChatMessage` with optional `source` and `promptId` metadata for starter-prompt messages
+    - `src/hooks/use-chat-stream.ts`: Updated `sendMessage` to accept optional `{ source, promptId }` and persist metadata in localStorage
+  - **Behavior:**
+    - Bubbles appear when there are unused prompts in the configured list
+    - Clicking a bubble sends its text as a user message and marks the prompt as used for the current conversation
+    - Used prompts are derived from conversation history (via `source === "starter-prompt"` and `promptId`) and never reappear, even after reload
+    - On desktop, up to 3 bubbles are shown; on mobile, up to 2 bubbles are shown
+  - **Testing:**
+    - Unit tests in `src/components/ai-miko/__tests__/chat-container.test.tsx` verify bubble rendering and click-to-send behavior
+    - Data tests in `src/data/__tests__/miko-starter-prompts.test.ts` validate unique IDs and category coverage
+    - E2E tests in `e2e/ai-miko.spec.ts` ensure bubbles render on `/ai-miko`, send messages when clicked, and respect mobile vs desktop counts
 - [x] **Easter Egg Video Button:** Add "Don't Click This" button under Activity Overview that plays Portfolio_Presentation.mp4 in dialog.
 - [x] **Animated Line Styling Improvements:** Enhanced scanner line with better visual feedback.
   - Match idle state to project card default styling (bg-primary/20, no shadow)

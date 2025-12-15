@@ -4,6 +4,13 @@ export interface ChatMessage {
   content: string;
   timestamp: Date;
   sources?: string[]; // Document sources referenced (for RAG/document-based responses)
+  /**
+   * Optional metadata indicating that this message originated from a starter prompt
+   * bubble in the Miko AI chat. When present, promptId should match one of the
+   * IDs in `MIKO_STARTER_PROMPTS`.
+   */
+  source?: "starter-prompt" | "user" | "assistant" | string;
+  promptId?: string;
 }
 
 export interface ChatDocument {

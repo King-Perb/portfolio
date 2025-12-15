@@ -57,6 +57,43 @@ test.describe('AI Miko Chat', () => {
     await expect(sendButton).toBeVisible();
   });
 
+  test('should show starter question bubbles and send message when clicked', async ({ page }) => {
+    // Starter bubbles should appear above the input
+    const starterBubbles = page.getByTestId('miko-starter-bubble');
+    const totalCount = await starterBubbles.count();
+
+    expect(totalCount).toBeGreaterThan(0);
+
+    // Only count bubbles that are actually visible (CSS may hide some on mobile)
+    let visibleCount = 0;
+    for (let i = 0; i < totalCount; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      const isVisible = await starterBubbles.nth(i).isVisible().catch(() => false);
+      if (isVisible) visibleCount += 1;
+    }
+
+    const viewport = page.viewportSize();
+    const isMobile = viewport && viewport.width < 768;
+
+    if (isMobile) {
+      // On mobile we should show at most two starter bubbles
+      expect(visibleCount).toBeLessThanOrEqual(2);
+    } else {
+      // On desktop we can show up to three
+      expect(visibleCount).toBeLessThanOrEqual(3);
+    }
+
+    const firstBubble = starterBubbles.first();
+    const bubbleText = await firstBubble.textContent();
+
+    await firstBubble.click();
+
+    // The clicked question should appear as a user message in the conversation
+    if (bubbleText) {
+      await expect(page.getByText(bubbleText).first()).toBeVisible({ timeout: 5000 });
+    }
+  });
+
   test('should send a message and display it', async ({ page }) => {
     const chatInput = page.getByPlaceholder(/message miko ai/i);
     const message = 'Hello, Miko!';
