@@ -2,9 +2,10 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Navigation', () => {
   test('should navigate to all main pages', async ({ page, viewport }) => {
-    await page.goto('/');
+    // Start from overview page (homepage redirects to /ai-miko)
+    await page.goto('/overview');
 
-    // Home page should load
+    // Overview page should load
     await expect(page.getByRole('heading', { name: 'Activity Overview' })).toBeVisible();
 
     // On mobile, open navigation first
@@ -65,10 +66,10 @@ test.describe('Navigation', () => {
       await expect(page.locator('[role="dialog"][data-state="open"]')).toBeVisible();
     }
 
-    // Navigate back to Home (Overview link)
+    // Navigate back to Overview
     const overviewLink = page.getByRole('link', { name: /overview/i }).first();
     await overviewLink.click();
-    await expect(page).toHaveURL('/');
+    await expect(page).toHaveURL('/overview');
     await expect(page.getByRole('heading', { name: 'Activity Overview' })).toBeVisible();
   });
 

@@ -49,13 +49,19 @@ test.describe('App Loading Screen', () => {
   });
 
   test('should only appear on initial load, not on SPA navigation', async ({ page, viewport }) => {
-    // Initial load - should see loading screen
+    // Initial load - should see loading screen (homepage redirects to /ai-miko)
     await page.goto('/');
     const loadingScreen = page.getByRole('status', { name: 'Loading application' });
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Wait for it to dismiss
     await expect(loadingScreen).not.toBeVisible({ timeout: 5000 });
+
+    // Wait for redirect to complete (homepage redirects to /ai-miko)
+    await expect(page).toHaveURL(/\/ai-miko/, { timeout: 5000 });
+
+    // Wait for page to be fully interactive
+    await page.waitForLoadState('networkidle');
 
     // Navigate to another page within the SPA using actual link click (not page.goto)
     const isMobile = (viewport?.width || 1920) < 768;
@@ -72,8 +78,10 @@ test.describe('App Loading Screen', () => {
       const projectsLink = navSheet.getByRole('link', { name: /projects/i });
       await projectsLink.click();
     } else {
-      // On desktop, get link from sidebar
-      const projectsLink = page.getByRole('link', { name: /projects/i }).first();
+      // On desktop, get link from sidebar (inside aside element)
+      const sidebar = page.locator('aside');
+      const projectsLink = sidebar.getByRole('link', { name: /projects/i });
+      await expect(projectsLink).toBeVisible();
       await projectsLink.click();
     }
 

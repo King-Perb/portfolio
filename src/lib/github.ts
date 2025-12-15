@@ -23,14 +23,25 @@ export interface GitHubStats {
   repoDeployments: { [repoFullName: string]: number }; // Per-repo deployment counts
 }
 
+// Test/dummy token used in CI - when detected, return mock data
+const TEST_DUMMY_TOKEN = "test-token-dummy-value";
+
+/**
+ * Check if we're using a test/dummy token (for CI/testing)
+ */
+function isTestToken(): boolean {
+  const token = process.env.GITHUB_TOKEN;
+  return token === TEST_DUMMY_TOKEN;
+}
+
 /**
  * Create an authenticated Octokit instance
- * Returns null if token is not set (for graceful degradation in tests/CI)
+ * Returns null if token is not set or is a test dummy token (for graceful degradation in tests/CI)
  */
 function createOctokit(): Octokit | null {
   const token = process.env.GITHUB_TOKEN;
 
-  if (!token) {
+  if (!token || token === TEST_DUMMY_TOKEN) {
     return null;
   }
 
@@ -142,13 +153,251 @@ async function fetchRepoDeployments(
 }
 
 /**
+ * Generate mock data for testing/CI environments
+ * Returns realistic-looking data so E2E tests can verify UI rendering
+ */
+function getMockGitHubStats(): GitHubStats {
+  const mockRepos: GitHubRepo[] = [
+    {
+      id: 1,
+      name: "portfolio",
+      full_name: "testuser/portfolio",
+      description: "My personal portfolio website built with Next.js",
+      html_url: "https://github.com/testuser/portfolio",
+      homepage: "https://portfolio.example.com",
+      stargazers_count: 42,
+      forks_count: 5,
+      updated_at: new Date().toISOString(),
+      private: false,
+      mirror_url: null,
+      language: "TypeScript",
+      // Required fields from GitHub API
+      node_id: "mock-node-1",
+      owner: {
+        login: "testuser",
+        id: 1,
+        node_id: "mock-owner-node",
+        avatar_url: "",
+        gravatar_id: "",
+        url: "",
+        html_url: "",
+        followers_url: "",
+        following_url: "",
+        gists_url: "",
+        starred_url: "",
+        subscriptions_url: "",
+        organizations_url: "",
+        repos_url: "",
+        events_url: "",
+        received_events_url: "",
+        type: "User",
+        site_admin: false,
+      },
+      url: "",
+      forks_url: "",
+      keys_url: "",
+      collaborators_url: "",
+      teams_url: "",
+      hooks_url: "",
+      issue_events_url: "",
+      events_url: "",
+      assignees_url: "",
+      branches_url: "",
+      tags_url: "",
+      blobs_url: "",
+      git_tags_url: "",
+      git_refs_url: "",
+      trees_url: "",
+      statuses_url: "",
+      languages_url: "",
+      stargazers_url: "",
+      contributors_url: "",
+      subscribers_url: "",
+      subscription_url: "",
+      commits_url: "",
+      git_commits_url: "",
+      comments_url: "",
+      issue_comment_url: "",
+      contents_url: "",
+      compare_url: "",
+      merges_url: "",
+      archive_url: "",
+      downloads_url: "",
+      issues_url: "",
+      pulls_url: "",
+      milestones_url: "",
+      notifications_url: "",
+      labels_url: "",
+      releases_url: "",
+      deployments_url: "",
+      created_at: "2024-01-01T00:00:00Z",
+      pushed_at: new Date().toISOString(),
+      git_url: "",
+      ssh_url: "",
+      clone_url: "",
+      svn_url: "",
+      size: 1000,
+      default_branch: "main",
+      open_issues_count: 0,
+      is_template: false,
+      topics: ["nextjs", "typescript", "portfolio"],
+      has_issues: true,
+      has_projects: true,
+      has_wiki: true,
+      has_pages: true,
+      has_downloads: true,
+      archived: false,
+      disabled: false,
+      visibility: "public",
+      fork: false,
+      forks: 5,
+      open_issues: 0,
+      watchers: 42,
+      watchers_count: 42,
+      license: null,
+      allow_forking: true,
+      web_commit_signoff_required: false,
+    },
+    {
+      id: 2,
+      name: "awesome-project",
+      full_name: "testuser/awesome-project",
+      description: "An awesome open source project",
+      html_url: "https://github.com/testuser/awesome-project",
+      homepage: null,
+      stargazers_count: 128,
+      forks_count: 23,
+      updated_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 1 week ago
+      private: false,
+      mirror_url: null,
+      language: "TypeScript",
+      node_id: "mock-node-2",
+      owner: {
+        login: "testuser",
+        id: 1,
+        node_id: "mock-owner-node",
+        avatar_url: "",
+        gravatar_id: "",
+        url: "",
+        html_url: "",
+        followers_url: "",
+        following_url: "",
+        gists_url: "",
+        starred_url: "",
+        subscriptions_url: "",
+        organizations_url: "",
+        repos_url: "",
+        events_url: "",
+        received_events_url: "",
+        type: "User",
+        site_admin: false,
+      },
+      url: "",
+      forks_url: "",
+      keys_url: "",
+      collaborators_url: "",
+      teams_url: "",
+      hooks_url: "",
+      issue_events_url: "",
+      events_url: "",
+      assignees_url: "",
+      branches_url: "",
+      tags_url: "",
+      blobs_url: "",
+      git_tags_url: "",
+      git_refs_url: "",
+      trees_url: "",
+      statuses_url: "",
+      languages_url: "",
+      stargazers_url: "",
+      contributors_url: "",
+      subscribers_url: "",
+      subscription_url: "",
+      commits_url: "",
+      git_commits_url: "",
+      comments_url: "",
+      issue_comment_url: "",
+      contents_url: "",
+      compare_url: "",
+      merges_url: "",
+      archive_url: "",
+      downloads_url: "",
+      issues_url: "",
+      pulls_url: "",
+      milestones_url: "",
+      notifications_url: "",
+      labels_url: "",
+      releases_url: "",
+      deployments_url: "",
+      created_at: "2023-06-01T00:00:00Z",
+      pushed_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      git_url: "",
+      ssh_url: "",
+      clone_url: "",
+      svn_url: "",
+      size: 2500,
+      default_branch: "main",
+      open_issues_count: 3,
+      is_template: false,
+      topics: ["typescript", "react", "open-source"],
+      has_issues: true,
+      has_projects: true,
+      has_wiki: true,
+      has_pages: false,
+      has_downloads: true,
+      archived: false,
+      disabled: false,
+      visibility: "public",
+      fork: false,
+      forks: 23,
+      open_issues: 3,
+      watchers: 128,
+      watchers_count: 128,
+      license: null,
+      allow_forking: true,
+      web_commit_signoff_required: false,
+    },
+  ];
+
+  return {
+    totalCommits: 1234,
+    commitsLastMonth: 89,
+    totalRepos: mockRepos.length,
+    languages: {
+      TypeScript: 150000,
+      JavaScript: 50000,
+      CSS: 25000,
+      HTML: 10000,
+    },
+    repos: mockRepos,
+    repoLanguages: {
+      "testuser/portfolio": ["TypeScript", "CSS", "JavaScript"],
+      "testuser/awesome-project": ["TypeScript", "JavaScript", "HTML"],
+    },
+    repoCommits: {
+      "testuser/portfolio": 456,
+      "testuser/awesome-project": 778,
+    },
+    repoDeployments: {
+      "testuser/portfolio": 12,
+      "testuser/awesome-project": 5,
+    },
+  };
+}
+
+/**
  * Internal function to fetch GitHub statistics (not cached)
  */
 async function _fetchGitHubStatsInternal(): Promise<GitHubStats> {
+  // If using test/dummy token, return mock data for E2E tests
+  if (isTestToken()) {
+    return getMockGitHubStats();
+  }
+
   // Create authenticated Octokit instance
   const octokit = createOctokit();
 
-  // If no token, return empty stats (graceful degradation for tests/CI)
+  // If no token, return empty stats (graceful degradation)
   if (!octokit) {
     return {
       totalCommits: 0,

@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Overview Metrics', () => {
-  test('should display all metric cards on homepage', async ({ page }) => {
-    await page.goto('/');
+  test('should display all metric cards on overview page', async ({ page }) => {
+    await page.goto('/overview');
 
     // Check for main heading
     await expect(page.getByRole('heading', { name: 'Activity Overview' })).toBeVisible();
@@ -13,7 +13,7 @@ test.describe('Overview Metrics', () => {
   });
 
   test('should display metric values', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/overview');
 
     // Wait for metrics to load
     await page.waitForTimeout(2000);
@@ -35,14 +35,17 @@ test.describe('Overview Metrics', () => {
   });
 
   test('should show hover effects on metric cards', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/overview');
 
     // Wait for metrics to load
     await page.waitForTimeout(2000);
 
-    // Find a metric card
+    // Find a metric card by looking for the PROJECTS text and navigating to its card container
     const projectsMetric = page.getByText('PROJECTS', { exact: true });
-    const metricCard = projectsMetric.locator('..').locator('..').first();
+    await expect(projectsMetric).toBeVisible();
+
+    // Get the card that contains this text - use a more reliable selector
+    const metricCard = page.locator('[class*="card"]').filter({ hasText: 'PROJECTS' }).first();
 
     // Hover over the card
     await metricCard.hover();
@@ -52,7 +55,7 @@ test.describe('Overview Metrics', () => {
   });
 
   test('should display metric icons', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/overview');
 
     // Wait for metrics to load
     await page.waitForTimeout(2000);

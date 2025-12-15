@@ -98,7 +98,7 @@ test.describe('Responsive Design', () => {
   });
 
   test('should maintain readable text on all screen sizes', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/overview');
 
     const viewports = [
       { width: 375, height: 667 }, // Mobile
