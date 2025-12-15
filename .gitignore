@@ -47,6 +47,10 @@ next-env.d.ts
 # pre-commit
 .pre-commit
 
+# pre-push hook cache files
+.pre-push-test-cache
+.pre-push-build-cache
+
 # cursor (keep rules, ignore other files)
 .cursor/*
 !.cursor/rules/
