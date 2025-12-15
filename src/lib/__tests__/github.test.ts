@@ -160,8 +160,8 @@ describe("transformRepoToProject", () => {
 describe("fetchGitHubStats", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Set dummy token for tests
-    process.env.GITHUB_TOKEN = "test-token-dummy-value";
+    // Set a mock token for unit tests (NOT the CI dummy token which triggers mock data)
+    process.env.GITHUB_TOKEN = "ghp_mock_unit_test_token";
   });
 
   it("should fetch and aggregate GitHub stats", async () => {
