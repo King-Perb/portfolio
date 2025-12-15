@@ -29,7 +29,9 @@ fi
 # Check if cache matches current code state (ignoring whitespace)
 # This handles the case where tests passed, hooks fixed formatting, and we're pushing again
 if scripts/test-cache.sh check 2>/dev/null; then
-  echo "Skipping tests (cache hit - tests already passed for this code)"
+  echo "" >&2
+  echo ">>> SKIPPING TESTS (cache hit - tests already passed for this code) <<<" >&2
+  echo "" >&2
   exit 0
 fi
 
@@ -38,7 +40,9 @@ commits_being_pushed=$(git rev-list "$upstream_branch"..HEAD 2>/dev/null)
 
 if [ -z "$commits_being_pushed" ]; then
   # No commits being pushed (shouldn't happen, but handle it)
-  echo "No commits to push, skipping tests"
+  echo "" >&2
+  echo ">>> SKIPPING TESTS (no commits to push) <<<" >&2
+  echo "" >&2
   exit 0
 fi
 
@@ -71,6 +75,8 @@ if [ "$has_code_changes" = true ]; then
   exit $test_result
 else
   # Only formatting changes, skip tests
-  echo "Skipping tests (only formatting changes detected)"
+  echo "" >&2
+  echo ">>> SKIPPING TESTS (only formatting changes detected) <<<" >&2
+  echo "" >&2
   exit 0
 fi

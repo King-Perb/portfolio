@@ -74,7 +74,9 @@ if (-not $branchExists) {
 
 # Check if cache matches current code state (ignoring whitespace)
 if (Test-BuildCache) {
-    Write-Host "Skipping build (cache hit - build already passed for this code)"
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine(">>> SKIPPING BUILD (cache hit - build already passed for this code) <<<")
+    [Console]::Error.WriteLine("")
     exit 0
 }
 
@@ -83,7 +85,9 @@ $commitsBeingPushed = git rev-list "$upstreamBranch..HEAD" 2>$null
 
 if ([string]::IsNullOrWhiteSpace($commitsBeingPushed)) {
     # No commits being pushed (shouldn't happen, but handle it)
-    Write-Host "No commits to push, skipping build"
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine(">>> SKIPPING BUILD (no commits to push) <<<")
+    [Console]::Error.WriteLine("")
     exit 0
 }
 
@@ -123,6 +127,8 @@ if ($hasCodeChanges) {
     exit $buildResult
 } else {
     # Only formatting changes, skip build
-    Write-Host "Skipping build (only formatting changes detected)"
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine(">>> SKIPPING BUILD (only formatting changes detected) <<<")
+    [Console]::Error.WriteLine("")
     exit 0
 }

@@ -35,7 +35,9 @@ if (-not $branchExists) {
 # This handles the case where tests passed, hooks fixed formatting, and we're pushing again
 & $cacheScript -Command "check" 2>$null
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "Skipping tests (cache hit - tests already passed for this code)"
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine(">>> SKIPPING TESTS (cache hit - tests already passed for this code) <<<")
+    [Console]::Error.WriteLine("")
     exit 0
 }
 
@@ -44,7 +46,9 @@ $commitsBeingPushed = git rev-list "$upstreamBranch..HEAD" 2>$null
 
 if ([string]::IsNullOrWhiteSpace($commitsBeingPushed)) {
     # No commits being pushed (shouldn't happen, but handle it)
-    Write-Host "No commits to push, skipping tests"
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine(">>> SKIPPING TESTS (no commits to push) <<<")
+    [Console]::Error.WriteLine("")
     exit 0
 }
 
@@ -84,6 +88,8 @@ if ($hasCodeChanges) {
     exit $testResult
 } else {
     # Only formatting changes, skip tests
-    Write-Host "Skipping tests (only formatting changes detected)"
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine(">>> SKIPPING TESTS (only formatting changes detected) <<<")
+    [Console]::Error.WriteLine("")
     exit 0
 }

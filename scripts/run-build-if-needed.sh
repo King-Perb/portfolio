@@ -58,7 +58,9 @@ fi
 
 # Check if cache matches current code state (ignoring whitespace)
 if check_build_cache "$upstream_branch"; then
-  echo "Skipping build (cache hit - build already passed for this code)"
+  echo "" >&2
+  echo ">>> SKIPPING BUILD (cache hit - build already passed for this code) <<<" >&2
+  echo "" >&2
   exit 0
 fi
 
@@ -67,7 +69,9 @@ commits_being_pushed=$(git rev-list "$upstream_branch"..HEAD 2>/dev/null)
 
 if [ -z "$commits_being_pushed" ]; then
   # No commits being pushed (shouldn't happen, but handle it)
-  echo "No commits to push, skipping build"
+  echo "" >&2
+  echo ">>> SKIPPING BUILD (no commits to push) <<<" >&2
+  echo "" >&2
   exit 0
 fi
 
@@ -100,6 +104,8 @@ if [ "$has_code_changes" = true ]; then
   exit $build_result
 else
   # Only formatting changes, skip build
-  echo "Skipping build (only formatting changes detected)"
+  echo "" >&2
+  echo ">>> SKIPPING BUILD (only formatting changes detected) <<<" >&2
+  echo "" >&2
   exit 0
 fi

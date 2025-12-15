@@ -133,5 +133,3 @@ The hooks are configured in `.pre-commit-config.yaml`:
 - **Unix/Linux/macOS**: Uses bash scripts (`.sh`)
 - **Windows**: Uses PowerShell scripts (`.ps1`)
 - Pre-commit framework automatically selects the appropriate script
-
-   # Test comment
