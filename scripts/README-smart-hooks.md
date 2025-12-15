@@ -135,4 +135,3 @@ The hooks are configured in `.pre-commit-config.yaml`:
 - Pre-commit framework automatically selects the appropriate script
 
    # Test comment
-   
