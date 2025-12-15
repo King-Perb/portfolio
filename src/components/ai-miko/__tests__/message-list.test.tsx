@@ -89,9 +89,10 @@ describe("MessageList", () => {
 
     render(<MessageList messages={userOnlyMessages} isTyping={true} />);
 
-    // Should show typing indicator with avatar
-    const typingIndicator = screen.getByAltText("Miko AI");
-    expect(typingIndicator).toBeInTheDocument();
+    // Should show typing indicator with avatar and 'Thinking...' text
+    const typingAvatar = screen.getByAltText("Miko AI");
+    expect(typingAvatar).toBeInTheDocument();
+    expect(screen.getByText("Thinking...")).toBeInTheDocument();
   });
 
   // Note: Clear button was moved to ChatContainer, so it's no longer in MessageList

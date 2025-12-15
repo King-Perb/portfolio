@@ -67,7 +67,6 @@ test.describe('AI Miko Chat', () => {
     // Only count bubbles that are actually visible (CSS may hide some on mobile)
     let visibleCount = 0;
     for (let i = 0; i < totalCount; i++) {
-      // eslint-disable-next-line no-await-in-loop
       const isVisible = await starterBubbles.nth(i).isVisible().catch(() => false);
       if (isVisible) visibleCount += 1;
     }

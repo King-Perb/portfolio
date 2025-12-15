@@ -529,7 +529,7 @@ These rules ensure maintainability and "premium" code quality.
     - Streaming response support with abort capability
     - Auto-scroll with manual scroll detection (prevents glitches during streaming)
     - Stop generation button (toggles from send to stop during streaming)
-    - Typing indicator positioned below avatar icon (not in message text)
+    - Typing indicator and "Thinking..." state surfaced consistently in the message bubble layout
     - Refactored streaming logic into reusable hook
   - **Navigation:** Added "AI Miko" to navigation menu with Bot icon
   - **Status:** UI complete, OpenAI API integrated with streaming support

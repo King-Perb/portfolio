@@ -109,19 +109,6 @@ describe("MessageBubble", () => {
     expect(dots.length).toBeGreaterThan(0);
   });
 
-  it("shows 'Thinking...' when content is empty and isTyping is true", () => {
-    const emptyMessage: ChatMessage = {
-      id: "assistant-1",
-      role: "assistant",
-      content: "",
-      timestamp: new Date(),
-    };
-
-    render(<MessageBubble message={emptyMessage} isTyping={true} />);
-
-    expect(screen.getByText("Thinking...")).toBeInTheDocument();
-  });
-
   it("displays timestamp", () => {
     render(<MessageBubble message={mockUserMessage} />);
 
@@ -143,19 +130,6 @@ describe("MessageBubble", () => {
 
     expect(screen.getByText("Document 1")).toBeInTheDocument();
     expect(screen.getByText("Document 2")).toBeInTheDocument();
-  });
-
-  it("does not render content bubble when content is empty and not typing", () => {
-    const emptyMessage: ChatMessage = {
-      id: "assistant-1",
-      role: "assistant",
-      content: "",
-      timestamp: new Date(),
-    };
-
-    render(<MessageBubble message={emptyMessage} />);
-
-    expect(screen.queryByText("Thinking...")).not.toBeInTheDocument();
   });
 
   it("uses user avatar image for user messages", () => {

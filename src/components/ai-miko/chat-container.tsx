@@ -41,7 +41,7 @@ export function ChatContainer({ initialMessages = [] }: ChatContainerProps) {
 
       {visiblePrompts.length > 0 && (
         <div
-          className="flex flex-wrap gap-2 px-4 pt-2 pb-3 border-t border-primary/20 bg-background"
+          className="flex flex-wrap justify-center md:justify-start gap-2 px-4 pt-2 pb-3 border-t border-primary/20 bg-background"
           aria-label="Suggested questions"
         >
           {visiblePrompts.map((prompt, index) => {
