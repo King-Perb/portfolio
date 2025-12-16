@@ -1,12 +1,12 @@
 # Research & Decisions: Miko Starter Question Bubbles
 
-**Feature**: `002-miko-starter-bubbles`  
-**Date**: 2025-12-15  
+**Feature**: `002-miko-starter-bubbles`
+**Date**: 2025-12-15
 **Spec**: `specs/002-miko-starter-bubbles/spec.md`
 
 ## Overview
 
-This feature is primarily a frontend UX enhancement for the existing Miko AI chat page at `/ai-miko`.  
+This feature is primarily a frontend UX enhancement for the existing Miko AI chat page at `/ai-miko`.
 There are no new external integrations, APIs, or backend services required. The key unknowns are UX behavior and data modeling for starter prompts.
 
 ## Decisions
@@ -52,5 +52,3 @@ There are no new external integrations, APIs, or backend services required. The 
 ## Unresolved / Deferred Items
 
 No critical technical clarifications remain for this feature. Any future changes (e.g. A/B testing different prompts, tracking analytics on prompt usage) can be layered on top of the current design without modifying the core model.
-
-

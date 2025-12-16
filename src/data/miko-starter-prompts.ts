@@ -140,5 +140,3 @@ export const MIKO_STARTER_PROMPTS: readonly MikoStarterPrompt[] = [
     category: "reflection",
   },
 ] as const;
-
-

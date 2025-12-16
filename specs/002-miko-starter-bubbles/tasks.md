@@ -1,7 +1,7 @@
 # Tasks: Miko Starter Question Bubbles
 
-**Feature**: `002-miko-starter-bubbles`  
-**Spec**: `specs/002-miko-starter-bubbles/spec.md`  
+**Feature**: `002-miko-starter-bubbles`
+**Spec**: `specs/002-miko-starter-bubbles/spec.md`
 **Plan**: `specs/002-miko-starter-bubbles/plan.md`
 
 ## Phase 1 – Setup
@@ -76,5 +76,3 @@ The MVP for this feature is **User Story 1**:
 
 - Implement Phases 1–3 (T001–T009) so that new users on `/ai-miko` see starter bubbles and can start a conversation by clicking them.
 - US2 and US3 can be delivered as follow-up increments to improve persistence behavior and maintainability.
-
-

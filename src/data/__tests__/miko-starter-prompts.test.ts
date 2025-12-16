@@ -18,5 +18,3 @@ describe("MIKO_STARTER_PROMPTS", () => {
     expect(categories.has("projects")).toBe(true);
   });
 });
-
-

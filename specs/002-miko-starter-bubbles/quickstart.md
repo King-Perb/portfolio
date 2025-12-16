@@ -1,12 +1,12 @@
 # Quickstart: Implementing Miko Starter Question Bubbles
 
-**Feature**: `002-miko-starter-bubbles`  
-**Spec**: `specs/002-miko-starter-bubbles/spec.md`  
+**Feature**: `002-miko-starter-bubbles`
+**Spec**: `specs/002-miko-starter-bubbles/spec.md`
 **Plan**: `specs/002-miko-starter-bubbles/plan.md`
 
 ## Goal
 
-Add a row of up to three clickable “starter question” bubbles above the Miko AI text input on `/ai-miko`.  
+Add a row of up to three clickable “starter question” bubbles above the Miko AI text input on `/ai-miko`.
 Clicking a bubble sends the question as a user message and permanently hides that prompt for the current conversation, even after reload.
 
 ## Implementation Steps
@@ -116,5 +116,3 @@ From repo root:
 - `npm run test:e2e` (at least the `/ai-miko` subset)
 
 All must pass before opening a PR.
-
-

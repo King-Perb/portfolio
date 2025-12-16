@@ -1,7 +1,7 @@
 # Data Model: Miko Starter Question Bubbles
 
-**Feature**: `002-miko-starter-bubbles`  
-**Date**: 2025-12-15  
+**Feature**: `002-miko-starter-bubbles`
+**Date**: 2025-12-15
 **Spec**: `specs/002-miko-starter-bubbles/spec.md`
 
 ## Entities
@@ -54,11 +54,11 @@ Derived state for the current conversation used to determine which starter bubbl
 
 ## Relationships
 
-- `StarterPrompt 1..* → 0..* ConversationMessage`  
+- `StarterPrompt 1..* → 0..* ConversationMessage`
   - A single `StarterPrompt` may correspond to zero or many `ConversationMessage` instances across time.
   - Within a single conversation, each `StarterPrompt` should only produce at most one `ConversationMessage` with `source === "starter-prompt"`.
 
-- `ConversationMessage 0..1 → 0..1 StarterPrompt`  
+- `ConversationMessage 0..1 → 0..1 StarterPrompt`
   - Only messages with `source === "starter-prompt"` and a `promptId` pointing to an existing `StarterPrompt` participate in this relationship.
 
 - `StarterPromptState` depends on both `StarterPrompt` list and current conversation messages; it is **derived**, not persisted separately.
@@ -102,5 +102,3 @@ Derived state for the current conversation used to determine which starter bubbl
    - `usedPromptIds` contains all `StarterPrompt.id` values.
    - `unusedPrompts` and `visiblePrompts` are empty.
    - UI hides or collapses the starter bubble row.
-
-

@@ -1,7 +1,7 @@
 # Specification Quality Checklist: Miko Starter Question Bubbles
 
-**Purpose**: Validate specification completeness and quality before proceeding to planning  
-**Created**: 2025-12-15  
+**Purpose**: Validate specification completeness and quality before proceeding to planning
+**Created**: 2025-12-15
 **Feature**: `specs/002-miko-starter-bubbles/spec.md`
 
 ## Content Quality
@@ -32,5 +32,3 @@
 ## Notes
 
 - Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
-
-
