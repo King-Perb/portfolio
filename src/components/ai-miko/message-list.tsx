@@ -161,8 +161,8 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
 
         {/* Show typing indicator if typing but no assistant message exists yet */}
         {isTyping && messages.length > 0 && messages[messages.length - 1]?.role !== "assistant" && (
-          <div className="flex gap-4 px-4 py-6">
-            <div className="flex flex-col items-center gap-2 shrink-0">
+          <div className="flex gap-4 px-4 py-6" aria-label="Miko is thinking">
+            <div className="flex flex-col items-start gap-2 shrink-0">
               <div className="h-8 w-8 border border-primary/20 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center relative">
                 <Image
                   src={USER_PROFILE.avatarUrl}
@@ -173,10 +173,13 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
                   priority
                 />
               </div>
-              <div className="flex items-center gap-1">
-                <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce" />
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce" />
+                </div>
+                <span className="text-xs text-muted-foreground">Thinking...</span>
               </div>
             </div>
           </div>

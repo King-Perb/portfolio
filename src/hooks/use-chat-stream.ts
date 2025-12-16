@@ -67,7 +67,10 @@ function saveThreadIdToStorage(threadId: string | null): void {
 interface UseChatStreamResult {
   messages: ChatMessage[];
   isTyping: boolean;
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: (
+    content: string,
+    options?: { source?: ChatMessage["source"]; promptId?: string }
+  ) => Promise<void>;
   stopGeneration: () => void;
   clearMessages: () => void;
 }
@@ -119,7 +122,11 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
     }
   }, []);
 
-  const sendMessage = useCallback(async (content: string) => {
+  const sendMessage = useCallback(
+    async (
+      content: string,
+      options?: { source?: ChatMessage["source"]; promptId?: string }
+    ) => {
     // Abort any ongoing request
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -134,6 +141,8 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
       role: "user",
       content,
       timestamp: new Date(),
+      ...(options?.source && { source: options.source }),
+      ...(options?.promptId && { promptId: options.promptId }),
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -143,11 +152,11 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
       const response = await fetch("/api/ai-miko/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: content,
-          conversationHistory: messages,
-          threadId: threadId
-        }),
+          body: JSON.stringify({
+            message: content,
+            conversationHistory: messages,
+            threadId: threadId,
+          }),
         signal: abortController.signal,
       });
 
@@ -182,7 +191,8 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
         timestamp: new Date(),
       }]);
     }
-  }, [messages, threadId]);
+  },
+  [messages, threadId]);
 
   const clearMessages = useCallback(() => {
     setMessages([]);

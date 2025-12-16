@@ -83,6 +83,32 @@ describe("ChatContainer", () => {
     expect(screen.getByTestId("chat-input")).toBeInTheDocument();
   });
 
+  it("renders starter bubbles when there are unused prompts", () => {
+    render(<ChatContainer />);
+
+    const bubbles = screen.getAllByTestId("miko-starter-bubble");
+    expect(bubbles.length).toBeGreaterThanOrEqual(1);
+    expect(bubbles.length).toBeLessThanOrEqual(3);
+  });
+
+  it("sends starter prompt message and hides bubble when clicked (via sendMessage)", async () => {
+    render(<ChatContainer />);
+
+    const bubbles = screen.getAllByTestId("miko-starter-bubble");
+    const firstBubble = bubbles[0];
+    const text = firstBubble.textContent;
+
+    expect(text).toBeTruthy();
+
+    firstBubble.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+
+    expect(mockSendMessage).toHaveBeenCalledTimes(1);
+    expect(mockSendMessage).toHaveBeenCalledWith(text, {
+      source: "starter-prompt",
+      promptId: expect.any(String),
+    });
+  });
+
   it("does not render clear button when there are no messages", () => {
     render(<ChatContainer />);
 
