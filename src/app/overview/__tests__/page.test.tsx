@@ -45,13 +45,6 @@ describe("OverviewPage", () => {
     expect(screen.getByTestId("easter-egg-button")).toBeInTheDocument();
   });
 
-  it("renders Separator component", () => {
-    render(<OverviewPage />);
-
-    const separator = screen.getByTestId("separator");
-    expect(separator).toBeInTheDocument();
-    expect(separator).toHaveClass("my-2", "opacity-50");
-  });
 
   it("renders Featured Projects section", () => {
     render(<OverviewPage />);

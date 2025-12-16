@@ -20,4 +20,5 @@ export interface Project {
   source: ProjectSource;
   featured?: boolean;
   isPrivate?: boolean; // Whether the repository is private (GitHub repos only)
+  displayOrder?: number; // Custom display order (lower numbers appear first)
 }

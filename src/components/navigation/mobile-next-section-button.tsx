@@ -34,7 +34,7 @@ export function MobileNextSectionButton() {
   }
 
   return (
-    <div className="md:hidden flex justify-center pt-8 pb-4">
+    <div className="md:hidden flex justify-center -mt-4 pt-2 pb-12">
       <Button
         variant="outline"
         onClick={handleClick}

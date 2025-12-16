@@ -31,31 +31,31 @@ export function MessageBubble({ message, isTyping = false }: MessageBubbleProps)
         <div
           className={cn(
             "flex w-full items-center gap-2",
-            isUser ? "justify-end" : "justify-start"
-          )}
-        >
-          {!isUser && (
+        isUser ? "justify-end" : "justify-start"
+      )}
+    >
+      {!isUser && (
             <div className="flex flex-col items-start gap-2 shrink-0">
-              {/* Use Next/Image for immediate display with priority loading */}
-              <div className="h-8 w-8 border border-primary/20 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center relative">
-                <Image
-                  src={USER_PROFILE.avatarUrl}
-                  alt="AI Miko"
-                  fill
-                  sizes="32px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              {isTyping && (
-                <div className="flex items-center gap-1">
-                  <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce" />
-                </div>
-              )}
+          {/* Use Next/Image for immediate display with priority loading */}
+          <div className="h-8 w-8 border border-primary/20 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center relative">
+            <Image
+              src={USER_PROFILE.avatarUrl}
+              alt="AI Miko"
+              fill
+              sizes="32px"
+              className="object-cover"
+              priority
+            />
+          </div>
+          {isTyping && (
+            <div className="flex items-center gap-1">
+              <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
+              <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
+              <div className="h-1.5 w-1.5 bg-primary/50 rounded-full animate-bounce" />
             </div>
           )}
+        </div>
+      )}
 
           {isUser && (
             <Avatar className="h-8 w-8 border border-primary/20 shrink-0">

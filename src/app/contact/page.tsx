@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, Copy, Check } from "lucide-react";
+import { Mail, Copy, Check, Send } from "lucide-react";
 import { CONTACT_INFO } from "@/lib/constants";
 import { SocialLinkComponent } from "@/components/contact/social-link";
 import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
@@ -61,6 +61,16 @@ export default function ContactPage() {
                   Copy Email
                 </>
               )}
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="w-full gap-2 hover:bg-primary/10 hover:border-primary/50 hover:text-primary"
+            >
+              <a href={`mailto:${CONTACT_INFO.email}`}>
+                <Send className="h-4 w-4" />
+                Send Email
+              </a>
             </Button>
           </CardContent>
         </Card>

@@ -27,7 +27,7 @@ export const MANUAL_PROJECTS: Project[] = [
 
   // Wordpress website
   {
-    title: "langexpress",
+    title: "langexpress.pl",
     description: "WordPress website built for personal language and career coaching",
     tags: ["WordPress", "PHP", "CSS", "Cloudflare", "Elementor", "SEO", "Google Analytics"],
     stars: 0,
@@ -44,15 +44,15 @@ export const MANUAL_PROJECTS: Project[] = [
 
   // AI Miko
   {
-    title: "AI Miko",
-    description: "An AI chatbot that can answer questions about the portfolio, projects, and tech stack.",
-    tags: ["OpenAI", "Vector Store", "Custom AI Assistant"],
+    title: "Miko AI",
+    description: "An AI chatbot that can answer questions about Miko's portfolio, projects, experience, and tech stack.",
+    tags: ["OpenAI", "Vector Store", "Custom AI Assistant", "Speckit"],
     stars: 0,
     forks: 0,
     status: "Active",
     statusColor: "text-primary border-primary/20 bg-primary/10",
-    liveUrl: "http://localhost:3000/ai-miko",
-    screenshot: undefined,
+    liveUrl: "/ai-miko",
+    screenshot: "/screenshots/miko-ai-desktop-wide.png",
     source: "manual",
     featured: true,
     commitCount: 0,

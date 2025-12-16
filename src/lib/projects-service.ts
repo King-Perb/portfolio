@@ -32,7 +32,9 @@ function extractProjectOverrides(
     deploymentCount: stats.repoDeployments?.[repo.full_name],
     featuredImage: override?.featuredImage,
     customDescription: override?.description,
+    customTitle: override?.title,
     clickUrl: override?.clickUrl,
+    displayOrder: override?.displayOrder,
   };
 }
 
@@ -75,7 +77,9 @@ export async function getAllProjects(): Promise<Project[]> {
         deploymentCount: overrideData.deploymentCount,
         featuredImage: overrideData.featuredImage,
         customDescription: overrideData.customDescription,
+        customTitle: overrideData.customTitle,
         clickUrl: overrideData.clickUrl,
+        displayOrder: overrideData.displayOrder,
       });
       projects.push(project);
     }

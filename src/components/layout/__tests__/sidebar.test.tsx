@@ -71,11 +71,11 @@ describe("Sidebar", () => {
   });
 
   it("highlights active navigation item based on pathname", () => {
-    mockUsePathname.mockReturnValue("/projects");
+    mockUsePathname.mockReturnValue("/overview");
     render(<Sidebar />);
 
     const projectsLink = screen.getByText("Projects").closest("a");
-    expect(projectsLink).toHaveAttribute("href", "/projects");
+    expect(projectsLink).toHaveAttribute("href", "/overview");
 
     // Check that the button has active styling (we can't easily test className, but we can check it exists)
     const projectsButton = screen.getByText("Projects").closest("button");
@@ -87,7 +87,7 @@ describe("Sidebar", () => {
     render(<Sidebar />);
 
     const projectsLink = screen.getByText("Projects").closest("a");
-    expect(projectsLink).toHaveAttribute("href", "/projects");
+    expect(projectsLink).toHaveAttribute("href", "/overview");
   });
 
   it("sets up to call onClose callback on mobile after animation completes", async () => {
@@ -243,9 +243,9 @@ describe("Sidebar", () => {
     const user = userEvent.setup();
     render(<Sidebar onClose={onClose} />);
 
-    // Click on the current route (Overview)
-    const overviewLink = screen.getByText("Overview");
-    await user.click(overviewLink);
+    // Click on the current route (Projects, which links to /overview)
+    const projectsLink = screen.getByText("Projects");
+    await user.click(projectsLink);
 
     // onClose should be called immediately for same route
     expect(onClose).toHaveBeenCalled();

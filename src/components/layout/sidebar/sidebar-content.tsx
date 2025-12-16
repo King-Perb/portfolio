@@ -40,15 +40,20 @@ export function SidebarContent({
         style={{ width: `${SIDEBAR_CONFIG.CONTENT_WIDTH}px` }}
       >
         {/* Player Card Header */}
-        <div className="flex flex-col gap-4">
+        <a
+          href="https://github.com/King-Perb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col gap-4 rounded-lg border border-transparent hover:border-primary/30 hover:bg-primary/5 hover:shadow-[0_0_8px] hover:shadow-primary/10 transition-all cursor-pointer group -ml-2 -mt-2 -mb-2 pl-2 pt-2 pb-2"
+        >
           <Avatar className="h-16 w-16 border-2 border-primary/20">
             <AvatarImage src={USER_PROFILE.avatarUrl} alt={USER_PROFILE.name} />
             <AvatarFallback className="text-lg font-bold">SB</AvatarFallback>
           </Avatar>
 
           <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-tight">{USER_PROFILE.name}</h2>
-            <p className="text-sm text-muted-foreground font-mono">{USER_PROFILE.handle}</p>
+            <h2 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors">{USER_PROFILE.name}</h2>
+            <p className="text-sm text-muted-foreground font-mono group-hover:text-primary/80 transition-colors">{USER_PROFILE.handle}</p>
           </div>
 
           <p className="text-sm text-muted-foreground leading-relaxed">{USER_PROFILE.bio}</p>
@@ -60,7 +65,7 @@ export function SidebarContent({
             </span>
             {USER_PROFILE.status}
           </div>
-        </div>
+        </a>
 
         <Separator className="bg-border/50" />
 

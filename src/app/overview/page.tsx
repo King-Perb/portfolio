@@ -1,7 +1,6 @@
 import { OverviewMetrics } from "@/components/dashboard/overview-metrics";
 import { ProjectsGrid } from "@/components/dashboard/projects-grid";
 import { EasterEggButton } from "@/components/dashboard/easter-egg-button";
-import { Separator } from "@/components/ui/separator";
 import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
 
 export default function OverviewPage() {
@@ -24,9 +23,7 @@ export default function OverviewPage() {
         <EasterEggButton />
       </div>
 
-      <Separator className="my-2 opacity-50" />
-
-      <div className="space-y-4">
+      <div className="space-y-4 mt-10">
         <h2 className="text-xl font-bold tracking-tight text-foreground">Featured Projects</h2>
         <ProjectsGrid />
       </div>

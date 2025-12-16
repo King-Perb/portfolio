@@ -516,7 +516,9 @@ export interface TransformRepoOptions {
   deploymentCount?: number;
   featuredImage?: string;
   customDescription?: string;
+  customTitle?: string;
   clickUrl?: string;
+  displayOrder?: number;
 }
 
 /**
@@ -533,7 +535,9 @@ export function transformRepoToProject(
     deploymentCount,
     featuredImage,
     customDescription,
+    customTitle,
     clickUrl,
+    displayOrder,
   } = options;
 
   // Determine status based on updated_at
@@ -541,7 +545,7 @@ export function transformRepoToProject(
   const { status, statusColor } = calculateProjectStatus(updatedAt, customDescription || repo.description);
 
   return {
-    title: repo.name,
+    title: customTitle || repo.name,
     description: customDescription || repo.description || "No description available",
     tags: languages.slice(0, 15), // Top 15 languages
     stars: repo.stargazers_count,
@@ -558,5 +562,6 @@ export function transformRepoToProject(
     source: "github",
     featured: featuredRepos?.includes(repo.full_name) ?? false,
     isPrivate: repo.private,
+    displayOrder: displayOrder,
   };
 }

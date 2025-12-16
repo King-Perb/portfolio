@@ -2,10 +2,12 @@
  * Unified configuration for GitHub project overrides
  *
  * This file consolidates all GitHub project customizations in one place:
+ * - Title: Custom title to override GitHub repository name
  * - Tags: Additional technologies not detected from repository languages
  * - Featured images: Custom images for project cards
  * - Descriptions: Custom descriptions to override GitHub repository descriptions
  * - Click URL: Custom URL to open when the project card is clicked (overrides liveUrl/githubUrl)
+ * - Display Order: Custom display order (lower numbers appear first, projects without order come after)
  * - Featured: Whether the project should appear in the featured section
  * - Excluded: Whether the project should be excluded from all stats and displays
  *
@@ -13,6 +15,8 @@
  * Value: Override configuration object
  */
 export interface GitHubProjectOverride {
+  /** Custom title to override GitHub repository name */
+  title?: string;
   /** Additional technology tags to merge with auto-detected languages */
   tags?: string[];
   /** URL path to featured image (e.g., "/screenshots/project.jpg") */
@@ -21,6 +25,8 @@ export interface GitHubProjectOverride {
   description?: string;
   /** Custom URL to open when project card is clicked (overrides liveUrl/githubUrl priority) */
   clickUrl?: string;
+  /** Custom display order (lower numbers appear first, projects without order come after) */
+  displayOrder?: number;
   /** Whether this project should be featured on the homepage */
   featured?: boolean;
   /** Whether this project should be excluded from all stats and displays */
@@ -29,13 +35,17 @@ export interface GitHubProjectOverride {
 
 export const GITHUB_PROJECT_OVERRIDES: Record<string, GitHubProjectOverride> = {
   "King-Perb/portfolio": {
+    title: "Portfolio",
+    displayOrder: 2,
     tags: ["Next.js", "Vercel", "Tailwind", "Shadcn", "React", "TypeScript", "Vitest", "Playwright", "Git", "Cursor"],
-    featuredImage: "/screenshots/portfolio-dektop-wide.png",
+    featuredImage: "/screenshots/portfolio-desktop-wide.png",
     description: "A modern portfolio website showcasing my projects and skills",
     clickUrl: "https://portfolio-henna-eight-14.vercel.app",
     featured: true,
   },
   "King-Perb/suiperb-main": {
+    title: "suiperb.com",
+    displayOrder: 1,
     tags: ["Web3", "Move", "Node.js", "PostreSQL", "React", "Next.js", "Vercel", "Tailwind", "Redux", "GCP", "Docker", "Git", "Cursor", "Postman"],
     featuredImage: "/screenshots/desktop-wide.png",
     description: "A Web3 platform allowing creators minting NFTs and competing in meme contests",
@@ -59,9 +69,11 @@ export const GITHUB_PROJECT_OVERRIDES: Record<string, GitHubProjectOverride> = {
   },
   // Add more project overrides here:
   // "owner/repo-name": {
+  //   title: "Custom Project Title",
   //   tags: ["Technology1", "Technology2"],
   //   featuredImage: "/screenshots/repo-name.jpg",
   //   description: "Custom description",
+  //   displayOrder: 1, // Lower numbers appear first
   //   featured: true,
   //   excluded: false,
   // },

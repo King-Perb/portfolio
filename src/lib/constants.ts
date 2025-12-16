@@ -17,15 +17,15 @@ export const NAV_ITEMS = [
         icon: Bot,
     },
     {
-        label: "Overview",
+        label: "Projects",
         href: "/overview",
         icon: LayoutDashboard,
     },
-    {
-        label: "Projects",
-        href: "/projects",
-        icon: FolderKanban,
-    },
+    // {
+    //     label: "Projects",
+    //     href: "/projects",
+    //     icon: FolderKanban,
+    // },
     {
         label: "Stack",
         href: "/stack",
