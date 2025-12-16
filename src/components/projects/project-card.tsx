@@ -80,7 +80,7 @@ export function ProjectCard({ project, showScreenshot = false }: ProjectCardProp
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="pt-4">
+          <CardContent className="pt-8">
             <div className="flex gap-2 mb-4 flex-wrap">
               {project.tags.map(tag => (
                 <span key={tag} className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-sm font-mono">
