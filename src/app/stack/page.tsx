@@ -1,4 +1,5 @@
 import { StackCard } from "@/components/stack/stack-card";
+import { TechnologyCard } from "@/components/stack/technology-card";
 import { MANUAL_TECHNOLOGIES } from "@/data/manual-technologies";
 import { fetchGitHubStats } from "@/lib/github";
 import { MobileNextSectionButton } from "@/components/navigation/mobile-next-section-button";
@@ -10,21 +11,11 @@ async function getStackData() {
     const stats = await fetchGitHubStats();
     const githubLanguages: { [key: string]: number } = stats.languages || {};
 
-    // Prepare manual technologies
-    // If bytes not provided, calculate a default based on average GitHub language size
-    const avgGitHubBytes = Object.values(githubLanguages).length > 0
-      ? Object.values(githubLanguages).reduce((sum, bytes) => sum + bytes, 0) / Object.values(githubLanguages).length
-      : 1000; // Default fallback
-
-    const manualTechs: { [key: string]: number } = {};
-    MANUAL_TECHNOLOGIES.forEach((tech) => {
-      // Use provided bytes or calculate default
-      const bytes = tech.bytes ?? Math.max(100, avgGitHubBytes * 0.5);
-      // Only add if not already in GitHub languages
-      if (!githubLanguages[tech.name]) {
-        manualTechs[tech.name] = bytes;
-      }
-    });
+    // Get manual technologies (just names, no bytes)
+    // Filter out any that are already in GitHub languages
+    const manualTechs = MANUAL_TECHNOLOGIES
+      .filter((tech) => !githubLanguages[tech.name])
+      .map((tech) => tech.name);
 
     return {
       github: githubLanguages,
@@ -34,10 +25,7 @@ async function getStackData() {
     console.error("Failed to fetch stack data:", error);
 
     // Fallback to manual technologies only if GitHub API fails
-    const fallbackManual: { [key: string]: number } = {};
-    MANUAL_TECHNOLOGIES.forEach((tech) => {
-      fallbackManual[tech.name] = tech.bytes ?? 1000;
-    });
+    const fallbackManual = MANUAL_TECHNOLOGIES.map((tech) => tech.name);
     return {
       github: {},
       manual: fallbackManual,
@@ -48,18 +36,14 @@ async function getStackData() {
 export default async function StackPage() {
   const { github, manual } = await getStackData();
   const githubEntries = Object.entries(github) as [string, number][];
-  const manualEntries = Object.entries(manual) as [string, number][];
 
-  // Sort by bytes (most used first)
+  // Sort GitHub languages by bytes (most used first)
   githubEntries.sort((a, b) => b[1] - a[1]);
-  manualEntries.sort((a, b) => b[1] - a[1]);
 
-  // Calculate total bytes for percentage calculation
+  // Calculate total bytes for percentage calculation (GitHub languages only)
   const githubTotalBytes = githubEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
-  const manualTotalBytes = manualEntries.reduce((sum, [, bytes]) => sum + bytes, 0);
-  const allTotalBytes = githubTotalBytes + manualTotalBytes;
 
-  const hasAnyData = githubEntries.length > 0 || manualEntries.length > 0;
+  const hasAnyData = githubEntries.length > 0 || manual.length > 0;
 
   return (
     <div className="flex flex-col gap-8 fade-in-bottom md:pb-8">
@@ -75,30 +59,30 @@ export default async function StackPage() {
       {hasAnyData ? (
         <>
           {githubEntries.length > 0 && (
-            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {githubEntries.map(([language, bytes], index) => (
-                <StackCard
-                  key={language}
-                  language={language}
-                  bytes={bytes}
-                  totalBytes={allTotalBytes}
-                  index={index}
-                />
-              ))}
-            </section>
-          )}
-
-          {manualEntries.length > 0 && (
             <section className="flex flex-col gap-4">
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">Other technologies</h2>
+              <h2 className="text-xl font-semibold tracking-tight text-foreground">Repository Languages</h2>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {manualEntries.map(([language, bytes], index) => (
+                {githubEntries.map(([language, bytes], index) => (
                   <StackCard
                     key={language}
                     language={language}
                     bytes={bytes}
-                    totalBytes={allTotalBytes}
-                    index={githubEntries.length + index}
+                    totalBytes={githubTotalBytes}
+                    index={index}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {manual.length > 0 && (
+            <section className="flex flex-col gap-4">
+              <h2 className="text-xl font-semibold tracking-tight text-foreground">Technologies & Tools</h2>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {manual.map((name) => (
+                  <TechnologyCard
+                    key={name}
+                    name={name}
                   />
                 ))}
               </div>

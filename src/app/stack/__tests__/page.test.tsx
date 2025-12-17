@@ -15,8 +15,15 @@ vi.mock("@/components/stack/stack-card", () => ({
   ),
 }));
 
+// Mock TechnologyCard
+vi.mock("@/components/stack/technology-card", () => ({
+  TechnologyCard: ({ name }: { name: string }) => (
+    <div data-testid="technology-card">{name}</div>
+  ),
+}));
+
 // Mock manual technologies
-const mockManualTechnologies: Array<{ name: string; bytes?: number }> = [];
+const mockManualTechnologies: Array<{ name: string }> = [];
 vi.mock("@/data/manual-technologies", () => ({
   get MANUAL_TECHNOLOGIES() {
     return mockManualTechnologies;
@@ -61,11 +68,11 @@ describe("StackPage", () => {
     expect(screen.getByText("Python")).toBeInTheDocument();
   });
 
-  it("displays manual technologies in 'Other technologies' subsection", async () => {
+  it("displays manual technologies in 'Technologies & Tools' subsection", async () => {
     mockManualTechnologies.length = 0;
     mockManualTechnologies.push(
-      { name: "Docker", bytes: 1000 },
-      { name: "Kubernetes", bytes: 500 }
+      { name: "Docker" },
+      { name: "Kubernetes" }
     );
 
     mockFetchGitHubStats.mockResolvedValueOnce({ languages: {} });
@@ -73,7 +80,7 @@ describe("StackPage", () => {
     const component = await StackPage();
     render(component);
 
-    expect(screen.getByText("Other technologies")).toBeInTheDocument();
+    expect(screen.getByText("Technologies & Tools")).toBeInTheDocument();
     expect(screen.getByText("Docker")).toBeInTheDocument();
     expect(screen.getByText("Kubernetes")).toBeInTheDocument();
   });
@@ -81,8 +88,8 @@ describe("StackPage", () => {
   it("displays both GitHub languages and manual technologies", async () => {
     mockManualTechnologies.length = 0;
     mockManualTechnologies.push(
-      { name: "Docker", bytes: 1000 },
-      { name: "AWS", bytes: 2000 }
+      { name: "Docker" },
+      { name: "AWS" }
     );
 
     const mockLanguages = {
@@ -95,12 +102,13 @@ describe("StackPage", () => {
     const component = await StackPage();
     render(component);
 
-    // GitHub languages should be in main section
+    // GitHub languages should be in "Repository Languages" section
+    expect(screen.getByText("Repository Languages")).toBeInTheDocument();
     expect(screen.getByText("TypeScript")).toBeInTheDocument();
     expect(screen.getByText("JavaScript")).toBeInTheDocument();
 
-    // Manual technologies should be in "Other technologies" subsection
-    expect(screen.getByText("Other technologies")).toBeInTheDocument();
+    // Manual technologies should be in "Technologies & Tools" subsection
+    expect(screen.getByText("Technologies & Tools")).toBeInTheDocument();
     expect(screen.getByText("Docker")).toBeInTheDocument();
     expect(screen.getByText("AWS")).toBeInTheDocument();
   });

@@ -17,6 +17,7 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
   const userScrolledUpRef = useRef(false);
   const lastMessageIdsRef = useRef<Set<string>>(new Set());
   const isAutoScrollingRef = useRef(false);
+  const isInitialLoadRef = useRef(true);
 
   // Check if user is at the bottom of the scroll container
   const isAtBottom = () => {
@@ -84,13 +85,22 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
     // 1. A new message was added (not just content update)
     // 2. User hasn't manually scrolled up
     if (hasNewMessage && !userScrolledUpRef.current) {
+      // Use instant scroll on initial load (when loading existing messages from storage)
+      // Use smooth scroll for actual new messages during active session
+      const scrollBehavior = isInitialLoadRef.current ? "auto" : "smooth";
+
       // Use double requestAnimationFrame to ensure DOM is fully updated
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           // Check again if user scrolled up (in case they did during the frame)
           if (!userScrolledUpRef.current) {
             isAutoScrollingRef.current = true;
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            messagesEndRef.current?.scrollIntoView({ behavior: scrollBehavior });
+
+            // Mark that initial load is complete after first scroll
+            if (isInitialLoadRef.current) {
+              isInitialLoadRef.current = false;
+            }
 
             // Reset flag after scroll completes
             setTimeout(() => {
@@ -99,7 +109,22 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
               if (isAtBottom()) {
                 userScrolledUpRef.current = false;
               }
-            }, 500);
+            }, scrollBehavior === "auto" ? 0 : 500);
+          }
+        });
+      });
+    } else if (isInitialLoadRef.current && messages.length > 0) {
+      // If this is initial load with existing messages but no "new" messages detected,
+      // still scroll to bottom instantly (this handles edge cases)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (scrollContainerRef.current && messagesEndRef.current) {
+            isAutoScrollingRef.current = true;
+            messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+            isInitialLoadRef.current = false;
+            setTimeout(() => {
+              isAutoScrollingRef.current = false;
+            }, 0);
           }
         });
       });

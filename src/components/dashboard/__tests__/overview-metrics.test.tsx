@@ -48,7 +48,8 @@ describe("OverviewMetrics", () => {
     // Should render metrics from GitHub
     expect(screen.getByText("COMMITS")).toBeInTheDocument();
     expect(screen.getByText("PROJECTS")).toBeInTheDocument();
-    expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
+    // Total Commits is commented out
+    // expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
     expect(screen.getByText("DEPLOYMENTS")).toBeInTheDocument();
   });
 
@@ -73,7 +74,8 @@ describe("OverviewMetrics", () => {
     // and toLocaleString() for < 1000
     expect(screen.getByText("1.5k")).toBeInTheDocument(); // commitsLastMonth: 1500
     expect(screen.getByText("2.5k")).toBeInTheDocument(); // totalRepos: 2500
-    expect(screen.getByText("5.0k")).toBeInTheDocument(); // totalCommits: 5000
+    // Total Commits is commented out
+    // expect(screen.getByText("5.0k")).toBeInTheDocument(); // totalCommits: 5000
   });
 
   it("handles zero values correctly", async () => {
@@ -93,7 +95,8 @@ describe("OverviewMetrics", () => {
     // Check for specific metric labels to ensure we're testing the right values
     expect(screen.getByText("COMMITS")).toBeInTheDocument();
     expect(screen.getByText("PROJECTS")).toBeInTheDocument();
-    expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
+    // Total Commits is commented out
+    // expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
     expect(screen.getByText("DEPLOYMENTS")).toBeInTheDocument();
     // Values should be 0 (formatNumber returns "0" for zero values)
     const zeroValues = screen.getAllByText("0");
@@ -120,7 +123,8 @@ describe("OverviewMetrics", () => {
     // Should not crash and should display metrics
     expect(screen.getByText("COMMITS")).toBeInTheDocument();
     expect(screen.getByText("PROJECTS")).toBeInTheDocument();
-    expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
+    // Total Commits is commented out
+    // expect(screen.getByText("TOTAL COMMITS")).toBeInTheDocument();
     expect(screen.getByText("DEPLOYMENTS")).toBeInTheDocument();
   });
 });

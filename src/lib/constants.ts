@@ -11,31 +11,32 @@ export const USER_PROFILE = {
 };
 
 export const NAV_ITEMS = [
-    {
-        label: "AI Miko",
-        href: "/ai-miko",
-        icon: Bot,
-    },
-    {
-        label: "Projects",
-        href: "/overview",
-        icon: LayoutDashboard,
-    },
-    // {
-    //     label: "Projects",
-    //     href: "/projects",
-    //     icon: FolderKanban,
-    // },
-    {
-        label: "Stack",
-        href: "/stack",
-        icon: Layers,
-    },
-    {
-        label: "Contact",
-        href: "/contact",
-        icon: User,
-    },
+  {
+    label: "AI Miko",
+    href: "/ai-miko",
+    icon: Bot,
+  },
+  {
+    label: "Projects",
+    href: "/overview",
+    icon: LayoutDashboard,
+  },
+  // Commented out: Old Projects tab (separate /projects page)
+  // {
+  //   label: "Projects",
+  //   href: "/projects",
+  //   icon: FolderKanban,
+  // },
+  {
+    label: "Stack",
+    href: "/stack",
+    icon: Layers,
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+    icon: User,
+  },
 ];
 
 export interface SocialLink {

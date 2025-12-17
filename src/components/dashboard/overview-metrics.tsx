@@ -58,13 +58,14 @@ export async function OverviewMetrics() {
           icon: Rocket,
           trend: githubData.totalDeployments > 0 ? "up" : "neutral",
         },
-        {
-          label: "Total Commits",
-          value: formatNumber(githubData.totalCommits),
-          subtext: "All time",
-          icon: GitCommitHorizontal,
-          trend: githubData.totalCommits > 0 ? "up" : "neutral",
-        },
+        // Commented out: Total Commits
+        // {
+        //   label: "Total Commits",
+        //   value: formatNumber(githubData.totalCommits),
+        //   subtext: "All time",
+        //   icon: GitCommitHorizontal,
+        //   trend: githubData.totalCommits > 0 ? "up" : "neutral",
+        // },
         {
           label: "Commits",
           value: formatNumber(githubData.commits),

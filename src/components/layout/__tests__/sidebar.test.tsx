@@ -178,7 +178,7 @@ describe("Sidebar", () => {
   });
 
   it("handles different active paths correctly", () => {
-    const paths = ["/", "/projects", "/stack", "/contact"];
+    const paths = ["/", "/overview", "/stack", "/contact"];
 
     paths.forEach((path) => {
       mockUsePathname.mockReturnValue(path);

@@ -16,7 +16,7 @@ test.describe('Navigation', () => {
       await expect(page.locator('[role="dialog"][data-state="open"]')).toBeVisible();
     }
 
-    // Navigate to Projects
+    // Navigate to Projects (which now goes to /overview)
     // On mobile, get link from inside the nav sheet; on desktop, get from sidebar
     let projectsLink;
     if (isMobile) {
@@ -29,9 +29,9 @@ test.describe('Navigation', () => {
 
     await projectsLink.click();
 
-    // Wait for navigation to complete
-    await expect(page).toHaveURL(/\/projects/, { timeout: 5000 });
-    await expect(page.getByRole('heading', { name: /all projects/i })).toBeVisible();
+    // Wait for navigation to complete - Projects link now goes to /overview
+    await expect(page).toHaveURL(/\/overview/, { timeout: 5000 });
+    await expect(page.getByRole('heading', { name: 'Activity Overview' })).toBeVisible();
 
     // On mobile, open navigation again
     if (isMobile) {
@@ -66,15 +66,22 @@ test.describe('Navigation', () => {
       await expect(page.locator('[role="dialog"][data-state="open"]')).toBeVisible();
     }
 
-    // Navigate back to Overview
-    const overviewLink = page.getByRole('link', { name: /overview/i }).first();
-    await overviewLink.click();
+    // Navigate back to Projects (which goes to /overview)
+    let projectsLinkBack;
+    if (isMobile) {
+      const navSheet = page.locator('[role="dialog"][data-state="open"]');
+      await page.waitForTimeout(500); // Give sheet time to fully open
+      projectsLinkBack = navSheet.getByRole('link', { name: /projects/i });
+    } else {
+      projectsLinkBack = page.getByRole('link', { name: /projects/i }).first();
+    }
+    await projectsLinkBack.click();
     await expect(page).toHaveURL('/overview');
     await expect(page.getByRole('heading', { name: 'Activity Overview' })).toBeVisible();
   });
 
   test('should highlight active navigation link', async ({ page, viewport }) => {
-    await page.goto('/projects');
+    await page.goto('/overview');
 
     // On mobile, open navigation first
     const isMobile = (viewport?.width || 1920) < 768;
@@ -84,7 +91,7 @@ test.describe('Navigation', () => {
       await expect(page.locator('[role="dialog"][data-state="open"]')).toBeVisible();
     }
 
-    // Projects link should be active (button inside the link has active classes)
+    // Projects link should be active when on /overview (button inside the link has active classes)
     const projectsLink = page.getByRole('link', { name: /projects/i }).first();
     await expect(projectsLink).toBeVisible();
 
