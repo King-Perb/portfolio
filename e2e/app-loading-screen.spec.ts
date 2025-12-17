@@ -85,8 +85,8 @@ test.describe('App Loading Screen', () => {
       await projectsLink.click();
     }
 
-    // Wait for navigation to complete
-    await expect(page).toHaveURL(/\/projects/, { timeout: 5000 });
+    // Wait for navigation to complete - Projects link now goes to /overview
+    await expect(page).toHaveURL(/\/overview/, { timeout: 5000 });
 
     // Loading screen should NOT appear again on SPA navigation
     // Give it a moment to ensure it doesn't appear
