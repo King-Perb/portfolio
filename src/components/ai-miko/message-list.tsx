@@ -88,7 +88,7 @@ export function MessageList({ messages, isTyping = false }: MessageListProps) {
       // Use instant scroll on initial load (when loading existing messages from storage)
       // Use smooth scroll for actual new messages during active session
       const scrollBehavior = isInitialLoadRef.current ? "auto" : "smooth";
-      
+
       // Use double requestAnimationFrame to ensure DOM is fully updated
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {

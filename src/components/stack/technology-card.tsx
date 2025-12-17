@@ -17,4 +17,3 @@ export function TechnologyCard({ name }: TechnologyCardProps) {
     </Card>
   );
 }
-
