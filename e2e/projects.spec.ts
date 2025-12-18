@@ -8,8 +8,9 @@ test.describe('Projects Page', () => {
     await expect(page.getByRole('heading', { name: /all projects/i })).toBeVisible();
 
     // Check for project count
-    // Use optional 's' instead of alternation to prevent ReDoS vulnerability
-    const projectCount = page.getByText(/\d+ projects? total/);
+    // Use bounded quantifier to prevent ReDoS vulnerability
+    // Limit to reasonable number of digits (1-10) for project count
+    const projectCount = page.getByText(/\d{1,10} projects? total/);
     await expect(projectCount).toBeVisible();
   });
 
