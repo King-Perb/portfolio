@@ -16,7 +16,7 @@ interface ProjectCardProps {
   showScreenshot?: boolean;
 }
 
-export function ProjectCard({ project, showScreenshot = false }: ProjectCardProps) {
+export function ProjectCard({ project, showScreenshot = false }: Readonly<ProjectCardProps>) {
   const [isHovered, setIsHovered] = useState(false);
   const imageUrl = getProjectImageUrl(project);
 

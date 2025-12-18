@@ -13,10 +13,10 @@ import { cn } from "@/lib/utils";
 interface SidebarProps {
     className?: string;
     onClose?: () => void;
-  onAnimationPhaseChange?: (phase: typeof ANIMATION_PHASE[keyof typeof ANIMATION_PHASE]) => void;
+    onAnimationPhaseChange?: (phase: typeof ANIMATION_PHASE[keyof typeof ANIMATION_PHASE]) => void;
 }
 
-export function Sidebar({ className, onClose, onAnimationPhaseChange }: SidebarProps) {
+export function Sidebar({ className, onClose, onAnimationPhaseChange }: Readonly<SidebarProps>) {
     const pathname = usePathname();
   const router = useRouter();
   const isDesktop = useIsDesktop();
