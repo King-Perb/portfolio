@@ -38,12 +38,31 @@ test.describe('Navigation', () => {
       const menuButton = page.locator('button[class*="md:hidden"]').first();
       await menuButton.click();
       await expect(page.locator('[role="dialog"][data-state="open"]')).toBeVisible();
+      await page.waitForTimeout(500); // Give sheet time to fully open
     }
 
     // Navigate to Stack
-    const stackLink = page.getByRole('link', { name: /stack/i }).first();
+    // On mobile, get link from inside the nav sheet; on desktop, get from sidebar
+    let stackLink;
+    if (isMobile) {
+      const navSheet = page.locator('[role="dialog"][data-state="open"]');
+      stackLink = navSheet.getByRole('link', { name: /stack/i });
+    } else {
+      stackLink = page.getByRole('link', { name: /stack/i }).first();
+    }
+    
+    await expect(stackLink).toBeVisible();
+    
+    // Click and wait for navigation (animation-based navigation may take longer)
     await stackLink.click();
-    await expect(page).toHaveURL(/\/stack/);
+    
+    // Wait for URL change and page to fully load
+    await Promise.all([
+      page.waitForURL(/\/stack/, { timeout: 10000 }),
+      page.waitForLoadState('networkidle'), // Wait for page to fully load
+    ]);
+    
+    await expect(page).toHaveURL(/\/stack/, { timeout: 5000 });
     await expect(page.getByRole('heading', { name: /tech stack/i })).toBeVisible();
 
     // On mobile, open navigation again

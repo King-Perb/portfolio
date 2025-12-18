@@ -76,13 +76,30 @@ test.describe('App Loading Screen', () => {
       const navSheet = page.locator('[role="dialog"][data-state="open"]');
       await page.waitForTimeout(500); // Give sheet time to fully open
       const projectsLink = navSheet.getByRole('link', { name: /projects/i });
+      await expect(projectsLink).toBeVisible();
+      
+      // Click and wait for navigation (animation-based navigation may take longer)
       await projectsLink.click();
+      
+      // Wait for URL change and specific page content to appear
+      await Promise.all([
+        page.waitForURL(/\/overview/, { timeout: 10000 }),
+        page.waitForLoadState('networkidle'), // Wait for page to fully load
+      ]);
     } else {
       // On desktop, get link from sidebar (inside aside element)
       const sidebar = page.locator('aside');
       const projectsLink = sidebar.getByRole('link', { name: /projects/i });
       await expect(projectsLink).toBeVisible();
+      
+      // Click and wait for navigation (animation-based navigation may take longer)
       await projectsLink.click();
+      
+      // Wait for URL change and specific page content to appear
+      await Promise.all([
+        page.waitForURL(/\/overview/, { timeout: 10000 }),
+        page.waitForLoadState('networkidle'), // Wait for page to fully load
+      ]);
     }
 
     // Wait for navigation to complete - Projects link now goes to /overview

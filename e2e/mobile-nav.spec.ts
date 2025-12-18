@@ -39,10 +39,19 @@ test.describe('Mobile Navigation', () => {
 
     // Click on Projects link inside the mobile nav sheet
     const projectsLink = navSheet.getByRole('link', { name: /projects/i });
+    await expect(projectsLink).toBeVisible();
+    
+    // Click and wait for navigation (animation-based navigation may take longer)
     await projectsLink.click();
+    
+    // Wait for URL change and page to fully load
+    await Promise.all([
+      page.waitForURL(/\/overview/, { timeout: 10000 }),
+      page.waitForLoadState('networkidle'), // Wait for page to fully load
+    ]);
 
     // Should navigate to overview page (Projects link now goes to /overview)
-    await expect(page).toHaveURL(/\/overview/);
+    await expect(page).toHaveURL(/\/overview/, { timeout: 5000 });
     await expect(page.getByRole('heading', { name: 'Activity Overview' })).toBeVisible();
 
     // Navigation should close after clicking
