@@ -20,7 +20,8 @@ jobs:
           fetch-depth: 0  # Fetch all history for full scan
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        # Use commit SHA instead of tag for security (prevents tag manipulation)
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
