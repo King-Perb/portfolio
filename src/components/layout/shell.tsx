@@ -9,7 +9,7 @@ interface ShellProps {
     children: React.ReactNode;
 }
 
-function ShellContent({ children }: ShellProps) {
+function ShellContent({ children }: Readonly<ShellProps>) {
     const { animationPhase } = useNavigation();
 
     return (
@@ -41,7 +41,7 @@ function ShellContent({ children }: ShellProps) {
     );
 }
 
-export function Shell({ children }: ShellProps) {
+export function Shell({ children }: Readonly<ShellProps>) {
     return (
         <NavigationProvider>
             <ShellContent>{children}</ShellContent>

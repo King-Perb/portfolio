@@ -16,7 +16,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Miko's Portfolio",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+  ),
+  title: "Miko Software",
   description: "Developer & AI builder exploring the future of human-computer interaction",
   openGraph: {
     title: "Miko Software",
@@ -26,7 +31,7 @@ export const metadata: Metadata = {
         url: "/screenshots/miko-ai-desktop-wide.png",
         width: 1200,
         height: 630,
-        alt: "Miko's Portfolio - AI Chat Interface",
+        alt: "Miko Software - AI Chat Interface",
       },
     ],
     type: "website",

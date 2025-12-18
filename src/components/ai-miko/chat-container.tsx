@@ -11,7 +11,7 @@ interface ChatContainerProps {
   initialMessages?: ChatMessage[];
 }
 
-export function ChatContainer({ initialMessages = [] }: ChatContainerProps) {
+export function ChatContainer({ initialMessages = [] }: Readonly<ChatContainerProps>) {
   const { messages, isTyping, sendMessage, stopGeneration, clearMessages } = useChatStream(initialMessages);
 
   // Derive which starter prompts have already been used in this conversation

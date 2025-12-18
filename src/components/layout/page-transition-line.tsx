@@ -28,7 +28,7 @@ export function PageTransitionLine({ animationPhase }: PageTransitionLineProps) 
   }, []);
 
   // Only show when animating and mounted
-  if (!mounted || typeof window === "undefined" || animationPhase === ANIMATION_PHASE.IDLE) {
+  if (!mounted || globalThis.window === undefined || animationPhase === ANIMATION_PHASE.IDLE) {
     return null;
   }
 
@@ -66,18 +66,17 @@ export function PageTransitionLine({ animationPhase }: PageTransitionLineProps) 
   const opacityKeyframes = getKeyframes(idleOpacity, animatingOpacity);
 
   // Keyframe times
-  const keyframeTimes = isMovingRight
-    ? [0, 0.1, 0.8, 1]
-    : isMovingBack
-    ? [0, 0.8, 1]
-    : undefined;
+  let keyframeTimes: number[] | undefined;
+  if (isMovingRight) {
+    keyframeTimes = [0, 0.1, 0.8, 1];
+  } else if (isMovingBack) {
+    keyframeTimes = [0, 0.8, 1];
+  } else {
+    keyframeTimes = undefined;
+  }
 
   // Overlay width: expands from 0 to 100vw as line moves right, shrinks back as line returns
-  const overlayWidth = isMovingRight
-    ? "100vw"
-    : isMovingBack
-    ? "0px"
-    : "0px";
+  const overlayWidth = isMovingRight ? "100vw" : "0px";
 
   const transitionElement = (
     <>
