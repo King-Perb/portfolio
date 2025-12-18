@@ -9,7 +9,7 @@ current_branch=$(git branch --show-current)
 upstream_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
 
 # If no upstream, try origin/current-branch
-if [ -z "$upstream_branch" ]; then
+if [[ -z "$upstream_branch" ]]; then
   upstream_branch="origin/$current_branch"
 fi
 
@@ -20,7 +20,7 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   echo "New branch detected, running tests"
   GITHUB_TOKEN="test-token-dummy-value" npm test
   test_result=$?
-  if [ $test_result -eq 0 ]; then
+  if [[ $test_result -eq 0 ]]; then
     scripts/test-cache.sh save
   fi
   exit $test_result
@@ -38,7 +38,7 @@ fi
 # Get the commits being pushed (commits in local but not in remote)
 commits_being_pushed=$(git rev-list "$upstream_branch"..HEAD 2>/dev/null)
 
-if [ -z "$commits_being_pushed" ]; then
+if [[ -z "$commits_being_pushed" ]]; then
   # No commits being pushed (shouldn't happen, but handle it)
   echo "" >&2
   echo ">>> SKIPPING TESTS (no commits to push) <<<" >&2
@@ -58,17 +58,15 @@ for commit in $commits_being_pushed; do
 done
 
 # If no individual commit check worked, fall back to comparing against remote
-if [ "$has_code_changes" = false ]; then
-  if scripts/check-code-changes.sh "$upstream_branch"; then
-    has_code_changes=true
-  fi
+if [[ "$has_code_changes" = false ]] && scripts/check-code-changes.sh "$upstream_branch"; then
+  has_code_changes=true
 fi
 
-if [ "$has_code_changes" = true ]; then
+if [[ "$has_code_changes" = true ]]; then
   # Code changes detected, run tests
   GITHUB_TOKEN="test-token-dummy-value" npm test
   test_result=$?
-  if [ $test_result -eq 0 ]; then
+  if [[ $test_result -eq 0 ]]; then
     # Tests passed, save cache
     scripts/test-cache.sh save
   fi
