@@ -69,8 +69,9 @@ export function AppLoadingScreen({ minimumDisplayTime = 1500 }: AppLoadingScreen
 
   // Render directly in the DOM tree (no portal) to prevent hydration mismatch
   // The fixed positioning and high z-index ensures it covers all content
+  // Use <output> element instead of role="status" for better accessibility
   return (
-    <div
+    <output
       className={`fixed inset-0 z-[999999] flex items-center justify-center bg-background transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
@@ -93,6 +94,6 @@ export function AppLoadingScreen({ minimumDisplayTime = 1500 }: AppLoadingScreen
           <div className="w-full h-full rounded-full bg-muted/30 animate-pulse" />
         )}
       </div>
-    </div>
+    </output>
   );
 }

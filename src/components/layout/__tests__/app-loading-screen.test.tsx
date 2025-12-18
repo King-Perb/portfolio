@@ -38,7 +38,7 @@ describe("AppLoadingScreen", () => {
   it("renders the loading screen initially", () => {
     render(<AppLoadingScreen />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toBeInTheDocument();
     expect(loadingScreen).toHaveClass("opacity-100");
   });
@@ -56,21 +56,22 @@ describe("AppLoadingScreen", () => {
   it("has correct accessibility attributes", () => {
     render(<AppLoadingScreen />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toHaveAttribute("aria-label", "Loading application");
+    expect(loadingScreen.tagName).toBe("OUTPUT");
   });
 
   it("applies fixed positioning and full screen coverage", () => {
     render(<AppLoadingScreen />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toHaveClass("fixed", "inset-0", "z-[999999]");
   });
 
   it("centers the animation on screen", () => {
     render(<AppLoadingScreen />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toHaveClass("flex", "items-center", "justify-center");
   });
 
@@ -84,7 +85,7 @@ describe("AppLoadingScreen", () => {
   it("uses default minimum display time when not provided", () => {
     render(<AppLoadingScreen />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toBeInTheDocument();
     // Component should be visible initially
     expect(loadingScreen).toHaveClass("opacity-100");
@@ -93,7 +94,7 @@ describe("AppLoadingScreen", () => {
   it("accepts custom minimum display time", () => {
     render(<AppLoadingScreen minimumDisplayTime={2000} />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toBeInTheDocument();
     expect(loadingScreen).toHaveClass("opacity-100");
   });
@@ -101,7 +102,7 @@ describe("AppLoadingScreen", () => {
   it("has transition classes for fade-out", () => {
     render(<AppLoadingScreen />);
 
-    const loadingScreen = screen.getByRole("status");
+    const loadingScreen = screen.getByLabelText("Loading application");
     expect(loadingScreen).toHaveClass("transition-opacity", "duration-300");
   });
 });
