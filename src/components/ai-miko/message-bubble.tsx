@@ -11,7 +11,7 @@ interface MessageBubbleProps {
   isTyping?: boolean;
 }
 
-export function MessageBubble({ message, isTyping = false }: MessageBubbleProps) {
+export function MessageBubble({ message, isTyping = false }: Readonly<MessageBubbleProps>) {
   const isUser = message.role === "user";
 
   return (
@@ -78,19 +78,20 @@ export function MessageBubble({ message, isTyping = false }: MessageBubbleProps)
               !message.content && "min-h-[44px] flex items-center"
             )}
           >
-            {message.content ? (
+            {message.content && (
               <div className="whitespace-pre-wrap break-words">{message.content}</div>
-            ) : isTyping ? (
+            )}
+            {!message.content && isTyping && (
               <div className="text-muted-foreground/50">Thinking...</div>
-            ) : null}
+            )}
           </div>
         )}
 
         {message.sources && message.sources.length > 0 && (
           <div className="flex flex-wrap gap-1 text-xs text-muted-foreground">
-            {message.sources.map((source, idx) => (
+            {message.sources.map((source) => (
               <span
-                key={idx}
+                key={source}
                 className="px-2 py-0.5 bg-secondary/50 rounded border border-primary/10"
               >
                 {source}
