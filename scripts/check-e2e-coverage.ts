@@ -8,8 +8,8 @@
  * - Coverage gaps
  */
 
-import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 interface RouteCoverage {
   route: string;
@@ -192,9 +192,10 @@ function printReport(report: CoverageReport): void {
 }
 
 // Run analysis
-analyzeE2ETests()
-  .then(printReport)
-  .catch(error => {
-    console.error('Error analyzing e2e tests:', error);
-    process.exit(1);
-  });
+try {
+  const results = await analyzeE2ETests();
+  printReport(results);
+} catch (error) {
+  console.error('Error analyzing e2e tests:', error);
+  process.exit(1);
+}
