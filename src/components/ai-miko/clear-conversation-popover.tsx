@@ -8,7 +8,7 @@ interface ClearConversationPopoverProps {
   onClear: () => void;
 }
 
-export function ClearConversationPopover({ onClear }: ClearConversationPopoverProps) {
+export function ClearConversationPopover({ onClear }: Readonly<ClearConversationPopoverProps>) {
   const [open, setOpen] = useState(false);
 
   const handleClear = () => {
