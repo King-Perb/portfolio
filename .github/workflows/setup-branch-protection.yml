@@ -11,10 +11,12 @@ jobs:
       contents: write
     steps:
       - name: Setup Branch Protection for main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl -X PUT \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
             https://api.github.com/repos/${{ github.repository }}/branches/main/protection \
             -d '{
               "required_status_checks": {
