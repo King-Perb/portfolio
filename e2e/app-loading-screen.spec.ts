@@ -77,10 +77,10 @@ test.describe('App Loading Screen', () => {
       await page.waitForTimeout(500); // Give sheet time to fully open
       const projectsLink = navSheet.getByRole('link', { name: /projects/i });
       await expect(projectsLink).toBeVisible();
-      
+
       // Click and wait for navigation (animation-based navigation may take longer)
       await projectsLink.click();
-      
+
       // Wait for URL change and specific page content to appear
       await Promise.all([
         page.waitForURL(/\/overview/, { timeout: 10000 }),
@@ -91,10 +91,10 @@ test.describe('App Loading Screen', () => {
       const sidebar = page.locator('aside');
       const projectsLink = sidebar.getByRole('link', { name: /projects/i });
       await expect(projectsLink).toBeVisible();
-      
+
       // Click and wait for navigation (animation-based navigation may take longer)
       await projectsLink.click();
-      
+
       // Wait for URL change and specific page content to appear
       await Promise.all([
         page.waitForURL(/\/overview/, { timeout: 10000 }),

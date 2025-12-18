@@ -50,18 +50,18 @@ test.describe('Navigation', () => {
     } else {
       stackLink = page.getByRole('link', { name: /stack/i }).first();
     }
-    
+
     await expect(stackLink).toBeVisible();
-    
+
     // Click and wait for navigation (animation-based navigation may take longer)
     await stackLink.click();
-    
+
     // Wait for URL change and page to fully load
     await Promise.all([
       page.waitForURL(/\/stack/, { timeout: 10000 }),
       page.waitForLoadState('networkidle'), // Wait for page to fully load
     ]);
-    
+
     await expect(page).toHaveURL(/\/stack/, { timeout: 5000 });
     await expect(page.getByRole('heading', { name: /tech stack/i })).toBeVisible();
 

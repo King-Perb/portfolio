@@ -40,10 +40,10 @@ test.describe('Mobile Navigation', () => {
     // Click on Projects link inside the mobile nav sheet
     const projectsLink = navSheet.getByRole('link', { name: /projects/i });
     await expect(projectsLink).toBeVisible();
-    
+
     // Click and wait for navigation (animation-based navigation may take longer)
     await projectsLink.click();
-    
+
     // Wait for URL change and page to fully load
     await Promise.all([
       page.waitForURL(/\/overview/, { timeout: 10000 }),
