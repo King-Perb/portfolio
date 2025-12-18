@@ -44,7 +44,18 @@ vi.mock("@/components/ui/dialog", () => ({
       return React.cloneElement(children, { onClick: handleClick } as Partial<unknown>);
     }
     return (
-      <div data-testid="dialog-trigger" onClick={handleClick}>
+      <div
+        data-testid="dialog-trigger"
+        role="button"
+        tabIndex={0}
+        onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+      >
         {children}
       </div>
     );

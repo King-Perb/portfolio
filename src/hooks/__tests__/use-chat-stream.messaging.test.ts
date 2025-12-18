@@ -235,8 +235,8 @@ describe("useChatStream - Messaging", () => {
     });
 
     const fetchCall = mockFetch.mock.calls[0];
-    if (fetchCall && fetchCall[1] && fetchCall[1].body) {
-      const body = JSON.parse(fetchCall[1].body);
+    const body = fetchCall?.[1]?.body ? JSON.parse(fetchCall[1].body) : null;
+    if (body) {
       expect(body.threadId).toBe("existing-thread-123");
     } else {
       throw new Error("Fetch was not called with expected parameters");

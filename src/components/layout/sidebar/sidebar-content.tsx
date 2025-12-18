@@ -79,6 +79,7 @@ export function SidebarContent({
               className="w-full justify-start gap-3 h-10 font-normal text-muted-foreground hover:text-foreground hover:bg-muted/50"
             >
               <span className="h-4 w-4">🧪</span>
+              {" "}
               Test Animation
             </Button>
           )}
