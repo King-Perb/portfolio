@@ -14,12 +14,12 @@ get_code_hash() {
 
 # Check if cache matches
 check_build_cache() {
-  if [ ! -f "$CACHE_FILE" ]; then
+  if [[ ! -f "$CACHE_FILE" ]]; then
     return 1
   fi
   local cached_hash=$(awk '{print $1}' "$CACHE_FILE")
   local current_hash=$(get_code_hash)
-  if [ "$cached_hash" = "$current_hash" ]; then
+  if [[ "$cached_hash" = "$current_hash" ]]; then
     echo "Build cache hit - build already passed for this code"
     return 0
   fi
@@ -39,7 +39,7 @@ current_branch=$(git branch --show-current)
 upstream_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
 
 # If no upstream, try origin/current-branch
-if [ -z "$upstream_branch" ]; then
+if [[ -z "$upstream_branch" ]]; then
   upstream_branch="origin/$current_branch"
 fi
 
@@ -50,7 +50,7 @@ if ! git rev-parse --verify "$upstream_branch" >/dev/null 2>&1; then
   echo "New branch detected, running build"
   GITHUB_TOKEN="test-token-dummy-value" npm run build
   build_result=$?
-  if [ $build_result -eq 0 ]; then
+  if [[ $build_result -eq 0 ]]; then
     save_build_cache
   fi
   exit $build_result
@@ -67,7 +67,7 @@ fi
 # Get the commits being pushed (commits in local but not in remote)
 commits_being_pushed=$(git rev-list "$upstream_branch"..HEAD 2>/dev/null)
 
-if [ -z "$commits_being_pushed" ]; then
+if [[ -z "$commits_being_pushed" ]]; then
   # No commits being pushed (shouldn't happen, but handle it)
   echo "" >&2
   echo ">>> SKIPPING BUILD (no commits to push) <<<" >&2
@@ -87,17 +87,17 @@ for commit in $commits_being_pushed; do
 done
 
 # If no individual commit check worked, fall back to comparing against remote
-if [ "$has_code_changes" = false ]; then
+if [[ "$has_code_changes" = false ]]; then
   if scripts/check-code-changes.sh "$upstream_branch"; then
     has_code_changes=true
   fi
 fi
 
-if [ "$has_code_changes" = true ]; then
+if [[ "$has_code_changes" = true ]]; then
   # Code changes detected, run build
   GITHUB_TOKEN="test-token-dummy-value" npm run build
   build_result=$?
-  if [ $build_result -eq 0 ]; then
+  if [[ $build_result -eq 0 ]]; then
     # Build passed, save cache
     save_build_cache
   fi

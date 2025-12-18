@@ -22,7 +22,7 @@ save_cache() {
 
 # Check if current code state matches cache
 check_cache() {
-  if [ ! -f "$CACHE_FILE" ]; then
+  if [[ ! -f "$CACHE_FILE" ]]; then
     # No cache exists
     return 1
   fi
@@ -30,7 +30,7 @@ check_cache() {
   local cached_hash=$(awk '{print $1}' "$CACHE_FILE")
   local current_hash=$(get_code_hash)
 
-  if [ "$cached_hash" = "$current_hash" ]; then
+  if [[ "$cached_hash" = "$current_hash" ]]; then
     echo "Code state matches cache - tests already passed for this code"
     return 0
   else
