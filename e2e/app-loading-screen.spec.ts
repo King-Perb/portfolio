@@ -5,7 +5,7 @@ test.describe('App Loading Screen', () => {
     await page.goto('/');
 
     // Check that loading screen appears (using output element for accessibility)
-    const loadingScreen = page.getByLabelText('Loading application');
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
   });
 
