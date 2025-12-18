@@ -75,7 +75,8 @@ export function AppLoadingScreen({ minimumDisplayTime = 1500 }: AppLoadingScreen
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       aria-label="Loading application"
-      role="status"
+      aria-live="polite"
+      aria-busy="true"
     >
       <div className="w-64 h-64 md:w-80 md:h-80">
         {/* Only render Lottie after client mount to prevent hydration mismatch */}

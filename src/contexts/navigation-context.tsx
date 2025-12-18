@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect, useRef, startTransition } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useRef, useMemo, startTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ANIMATION_CONFIG, ANIMATION_PHASE, type AnimationPhase } from "@/components/layout/sidebar/constants";
 
@@ -77,8 +77,13 @@ export function NavigationProvider({ children }: { children: React.ReactNode }) 
 
   const isAnimating = animationPhase !== ANIMATION_PHASE.IDLE;
 
+  const contextValue = useMemo(
+    () => ({ triggerNavigation, animationPhase, isAnimating }),
+    [triggerNavigation, animationPhase, isAnimating]
+  );
+
   return (
-    <NavigationContext.Provider value={{ triggerNavigation, animationPhase, isAnimating }}>
+    <NavigationContext.Provider value={contextValue}>
       {children}
     </NavigationContext.Provider>
   );

@@ -57,11 +57,12 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
   const opacityKeyframes = getKeyframes(idleOpacity, animatingOpacity);
 
   // Keyframe times - same for both width and opacity
-  const keyframeTimes = isMovingRight
-    ? [0, 0.1, 0.8, 1] // Start thin, quickly thick, stay thick, return thin at 80%
-    : isMovingBack
-    ? [0, 0.8, 1] // Start thick, stay thick, return thin at 80%
-    : undefined;
+  let keyframeTimes: number[] | undefined;
+  if (isMovingRight) {
+    keyframeTimes = [0, 0.1, 0.8, 1]; // Start thin, quickly thick, stay thick, return thin at 80%
+  } else if (isMovingBack) {
+    keyframeTimes = [0, 0.8, 1]; // Start thick, stay thick, return thin at 80%
+  }
 
   const lineElement = (
     <motion.div
