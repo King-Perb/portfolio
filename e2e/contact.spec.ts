@@ -17,7 +17,8 @@ test.describe('Contact Page', () => {
 
     // Check for email address (should be visible in monospace font)
     // Use more specific selector to get the email (not the handle)
-    const emailText = page.getByText(/@.*\.com/).first();
+    // Use non-greedy quantifier to prevent ReDoS vulnerability
+    const emailText = page.getByText(/@[^\s]+\.com/).first();
     await expect(emailText).toBeVisible();
   });
 
