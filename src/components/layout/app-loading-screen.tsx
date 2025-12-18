@@ -33,17 +33,24 @@ export function AppLoadingScreen({ minimumDisplayTime = 1500 }: AppLoadingScreen
     // Wait for both minimum display time and window load
     const startTime = Date.now();
 
-    const handleLoad = () => {
-      const elapsed = Date.now() - startTime;
-      const remainingTime = Math.max(0, minimumDisplayTime - elapsed);
+    // Helper function to remove from DOM after fade-out
+    const removeFromDOM = () => {
+      setShouldRender(false);
+    };
 
+    // Helper function to hide and remove after delay
+    const hideAndRemove = (remainingTime: number) => {
       setTimeout(() => {
         setIsVisible(false);
         // Remove from DOM after fade-out animation
-        setTimeout(() => {
-          setShouldRender(false);
-        }, 300); // Match fade-out duration
+        setTimeout(removeFromDOM, 300); // Match fade-out duration
       }, remainingTime);
+    };
+
+    const handleLoad = () => {
+      const elapsed = Date.now() - startTime;
+      const remainingTime = Math.max(0, minimumDisplayTime - elapsed);
+      hideAndRemove(remainingTime);
     };
 
     // Check if window is already loaded

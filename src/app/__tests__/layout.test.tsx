@@ -96,7 +96,7 @@ describe("RootLayout", () => {
     const themeProvider = container.querySelector('[data-testid="theme-provider"]');
     expect(themeProvider).toBeInTheDocument();
 
-    const props = JSON.parse(themeProvider?.getAttribute("data-props") || "{}");
+    const props = JSON.parse((themeProvider as HTMLElement)?.dataset.props || "{}");
     expect(props.attribute).toBe("class");
     expect(props.defaultTheme).toBe("dark");
     expect(props.enableSystem).toBe(true);

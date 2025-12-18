@@ -2,67 +2,14 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { ChatMessage } from "@/types/chat";
-
-const STORAGE_KEY = "ai-miko-conversation";
-const THREAD_ID_KEY = "ai-miko-thread-id";
-
-// Load messages from localStorage
-function loadMessagesFromStorage(): ChatMessage[] {
-  if (typeof window === "undefined") return [];
-
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return [];
-
-    const parsed = JSON.parse(stored);
-    // Convert timestamp strings back to Date objects
-    return parsed.map((msg: ChatMessage & { timestamp: string | Date }) => ({
-      ...msg,
-      timestamp: new Date(msg.timestamp),
-    }));
-  } catch (error) {
-    console.error("Error loading messages from storage:", error);
-    return [];
-  }
-}
-
-// Load thread ID from localStorage
-function loadThreadIdFromStorage(): string | null {
-  if (typeof window === "undefined") return null;
-
-  try {
-    return localStorage.getItem(THREAD_ID_KEY);
-  } catch (error) {
-    console.error("Error loading thread ID from storage:", error);
-    return null;
-  }
-}
-
-// Save messages to localStorage
-function saveMessagesToStorage(messages: ChatMessage[]): void {
-  if (typeof window === "undefined") return;
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-  } catch (error) {
-    console.error("Error saving messages to storage:", error);
-  }
-}
-
-// Save thread ID to localStorage
-function saveThreadIdToStorage(threadId: string | null): void {
-  if (typeof window === "undefined") return;
-
-  try {
-    if (threadId) {
-      localStorage.setItem(THREAD_ID_KEY, threadId);
-    } else {
-      localStorage.removeItem(THREAD_ID_KEY);
-    }
-  } catch (error) {
-    console.error("Error saving thread ID to storage:", error);
-  }
-}
+import {
+  loadMessagesFromStorage,
+  loadThreadIdFromStorage,
+  saveMessagesToStorage,
+  saveThreadIdToStorage,
+  clearChatStorage,
+} from "@/lib/storage/chat-storage";
+import { processStream } from "@/lib/stream/chat-stream-processor";
 
 interface UseChatStreamResult {
   messages: ChatMessage[];
@@ -85,7 +32,7 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
 
   // Load from localStorage after hydration (client-side only)
   useEffect(() => {
-    if (!hasLoadedFromStorageRef.current && typeof window !== "undefined") {
+    if (!hasLoadedFromStorageRef.current && globalThis.window !== undefined) {
       const storedMessages = loadMessagesFromStorage();
       const storedThreadId = loadThreadIdFromStorage();
       if (storedMessages.length > 0) {
@@ -197,103 +144,8 @@ export function useChatStream(initialMessages: ChatMessage[] = []): UseChatStrea
   const clearMessages = useCallback(() => {
     setMessages([]);
     setThreadId(null);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(THREAD_ID_KEY);
-    }
+    clearChatStorage();
   }, []);
 
   return { messages, isTyping, sendMessage, stopGeneration, clearMessages };
-}
-
-// Process SSE stream
-async function processStream(
-  reader: ReadableStreamDefaultReader<Uint8Array>,
-  abortController: AbortController,
-  assistantMessageId: string,
-  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
-  setThreadId: React.Dispatch<React.SetStateAction<string | null>>
-) {
-  const decoder = new TextDecoder();
-  let buffer = "";
-  let currentContent = "";
-  let currentSources: string[] | undefined;
-
-  try {
-    while (true) {
-      if (abortController.signal.aborted) break;
-
-      let readResult;
-      try {
-        readResult = await reader.read();
-      } catch (e) {
-        if (e instanceof Error && e.name === "AbortError") break;
-        throw e;
-      }
-
-      const { done, value } = readResult;
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() || "";
-
-      for (const line of lines) {
-        if (!line.startsWith("data: ")) continue;
-
-        const data = line.slice(6);
-        if (data === "[DONE]") return;
-
-        try {
-          const parsed = JSON.parse(data);
-
-          // Handle thread ID from server
-          if (parsed.threadId) {
-            setThreadId(parsed.threadId);
-            saveThreadIdToStorage(parsed.threadId);
-            continue;
-          }
-
-          // Handle error responses from OpenAI
-          if (parsed.error) {
-            console.error("OpenAI error:", parsed);
-            updateMessage(setMessages, assistantMessageId,
-              `Error: ${parsed.error}${parsed.details ? ` (${parsed.details})` : ""}`,
-              currentSources
-            );
-            return;
-          }
-
-          if (parsed.content) {
-            currentContent += parsed.content;
-            updateMessage(setMessages, assistantMessageId, currentContent, currentSources);
-          }
-          if (parsed.sources) {
-            currentSources = parsed.sources;
-            updateMessage(setMessages, assistantMessageId, currentContent, currentSources);
-          }
-        } catch {
-          // Skip invalid JSON
-        }
-      }
-    }
-  } finally {
-    try { reader.cancel(); } catch { /* ignore */ }
-  }
-}
-
-function updateMessage(
-  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
-  id: string,
-  content: string,
-  sources?: string[]
-) {
-  setMessages((prev) => {
-    const updated = [...prev];
-    const lastIndex = updated.length - 1;
-    if (updated[lastIndex]?.id === id) {
-      updated[lastIndex] = { ...updated[lastIndex], content, sources };
-    }
-    return updated;
-  });
 }

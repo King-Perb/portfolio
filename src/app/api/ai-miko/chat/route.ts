@@ -32,34 +32,108 @@ export async function POST(request: NextRequest) {
 
     const openai = getOpenAIClient();
 
+    // Helper function to create or reuse thread
+    async function getOrCreateThread(
+      openai: OpenAI,
+      existingThreadId: string | undefined,
+      controller: ReadableStreamDefaultController<Uint8Array>,
+      encoder: TextEncoder
+    ): Promise<string> {
+      if (existingThreadId) {
+        return existingThreadId;
+      }
+
+      const thread = await openai.beta.threads.create();
+      const threadData = JSON.stringify({ threadId: thread.id });
+      controller.enqueue(encoder.encode(`data: ${threadData}\n\n`));
+      return thread.id;
+    }
+
+    // Helper function to add conversation history to thread
+    async function addConversationHistory(
+      openai: OpenAI,
+      threadId: string,
+      conversationHistory: Array<{ role: string; content: string }>
+    ): Promise<void> {
+      if (conversationHistory.length === 0) return;
+
+      for (const msg of conversationHistory) {
+        await openai.beta.threads.messages.create(threadId, {
+          role: msg.role === "user" ? "user" : "assistant",
+          content: msg.content,
+        });
+      }
+    }
+
+    // Helper function to extract text value from delta
+    function extractTextValue(delta: { type: string; text?: unknown }): string | undefined {
+      if (delta.type !== "text" || !delta.text) {
+        return undefined;
+      }
+
+      if (typeof delta.text === "string") {
+        return delta.text;
+      }
+
+      if (delta.text && typeof delta.text === "object") {
+        const textObj = delta.text as { value?: string; [key: string]: unknown };
+        return textObj.value;
+      }
+
+      return undefined;
+    }
+
+    // Helper function to handle stream events
+    async function handleStreamEvents(
+      run: AsyncIterable<unknown>,
+      controller: ReadableStreamDefaultController<Uint8Array>,
+      encoder: TextEncoder
+    ): Promise<void> {
+      for await (const event of run) {
+        const streamEvent = event as {
+          event: string;
+          data?: { delta?: { content?: Array<{ type: string; text?: unknown }> } };
+        };
+
+        if (streamEvent.event === "thread.message.delta") {
+          const contentDeltas = streamEvent.data?.delta?.content || [];
+          for (const delta of contentDeltas) {
+            const textValue = extractTextValue(delta);
+            if (textValue && typeof textValue === "string") {
+              const data = JSON.stringify({ content: textValue });
+              controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+            }
+          }
+        } else if (streamEvent.event === "thread.run.completed") {
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+          controller.close();
+          return;
+        } else if (streamEvent.event === "thread.run.failed") {
+          throw new Error("Assistant run failed");
+        }
+      }
+
+      // Send completion signal if we didn't already
+      controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+      controller.close();
+    }
+
     // Create a ReadableStream for streaming response
     const stream = new ReadableStream({
       async start(controller) {
         const encoder = new TextEncoder();
 
         try {
-          let currentThreadId = threadId;
-
-          // Create a new thread if we don't have one
-          if (!currentThreadId) {
-            const thread = await openai.beta.threads.create();
-            currentThreadId = thread.id;
-
-            // Send thread ID to client so they can reuse it
-            const threadData = JSON.stringify({ threadId: currentThreadId });
-            controller.enqueue(encoder.encode(`data: ${threadData}\n\n`));
-          }
+          const currentThreadId = await getOrCreateThread(
+            openai,
+            threadId,
+            controller,
+            encoder
+          );
 
           // Add conversation history to thread if it's a new thread
-          // (existing threads already have their history)
-          if (!threadId && conversationHistory.length > 0) {
-            // Add all previous messages to the thread
-            for (const msg of conversationHistory) {
-              await openai.beta.threads.messages.create(currentThreadId, {
-                role: msg.role === "user" ? "user" : "assistant",
-                content: msg.content,
-              });
-            }
+          if (!threadId) {
+            await addConversationHistory(openai, currentThreadId, conversationHistory);
           }
 
           // Add the new user message to the thread
@@ -75,43 +149,7 @@ export async function POST(request: NextRequest) {
           });
 
           // Stream the run events
-          for await (const event of run) {
-            if (event.event === "thread.message.delta") {
-              const contentDeltas = event.data.delta.content || [];
-              for (const delta of contentDeltas) {
-                // Check if it's a text delta
-                if (delta.type === "text" && delta.text) {
-                  // Extract text value - in Assistants API, text is an object with a 'value' property
-                  let textValue: string | undefined;
-
-                  if (typeof delta.text === "string") {
-                    textValue = delta.text;
-                  } else if (delta.text && typeof delta.text === "object") {
-                    // Try accessing .value property
-                    const textObj = delta.text as { value?: string; [key: string]: unknown };
-                    textValue = textObj.value;
-                  }
-
-                  if (textValue && typeof textValue === "string") {
-                    // Transform to our SSE format
-                    const data = JSON.stringify({ content: textValue });
-                    controller.enqueue(encoder.encode(`data: ${data}\n\n`));
-                  }
-                }
-              }
-            } else if (event.event === "thread.run.completed") {
-              // Run completed successfully
-              controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-              controller.close();
-              return;
-            } else if (event.event === "thread.run.failed") {
-              throw new Error("Assistant run failed");
-            }
-          }
-
-          // Send completion signal if we didn't already
-          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-          controller.close();
+          await handleStreamEvents(run, controller, encoder);
         } catch (error) {
           console.error("OpenAI API error:", error);
           const errorMessage = error instanceof Error ? error.message : "Unknown error";
