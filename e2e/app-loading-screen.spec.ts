@@ -13,7 +13,7 @@ test.describe('App Loading Screen', () => {
     await page.goto('/');
 
     // Wait for loading screen to appear
-    const loadingScreen = page.getByLabelText('Loading application');
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Check that animation container exists (Lottie animation should be inside)
@@ -24,7 +24,7 @@ test.describe('App Loading Screen', () => {
   test('should cover full screen with fixed positioning', async ({ page }) => {
     await page.goto('/');
 
-    const loadingScreen = page.getByLabelText('Loading application');
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Check that loading screen has fixed positioning and covers full screen
@@ -38,7 +38,7 @@ test.describe('App Loading Screen', () => {
   test('should fade out and dismiss after minimum display time', async ({ page }) => {
     await page.goto('/');
 
-    const loadingScreen = page.getByLabelText('Loading application');
+    const loadingScreen = page.getByLabel('Loading application');
 
     // Wait for loading screen to appear
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
@@ -51,7 +51,7 @@ test.describe('App Loading Screen', () => {
   test('should only appear on initial load, not on SPA navigation', async ({ page, viewport }) => {
     // Initial load - should see loading screen (homepage redirects to /ai-miko)
     await page.goto('/');
-    const loadingScreen = page.getByLabelText('Loading application');
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Wait for it to dismiss
@@ -114,7 +114,7 @@ test.describe('App Loading Screen', () => {
   test('should have correct accessibility attributes', async ({ page }) => {
     await page.goto('/');
 
-    const loadingScreen = page.getByLabelText('Loading application');
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Verify accessibility attributes
