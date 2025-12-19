@@ -1,6 +1,23 @@
 /**
  * Shared navigation mocks for tests
  * Reduces code duplication across test files
+ *
+ * IMPORTANT: When using these mocks, you MUST call vi.mock("next/navigation", ...)
+ * at the top level of your test file BEFORE importing any modules that depend on
+ * next/navigation. Vitest hoists mocks, so vi.mock cannot be called inside functions.
+ *
+ * @example
+ * ```ts
+ * import { vi } from "vitest";
+ * import { createNextNavigationMocks } from "@/test/mocks/navigation";
+ *
+ * // Set up mocks BEFORE imports
+ * const { mockUsePathname, mockRouter, mocks } = createNextNavigationMocks("/");
+ * vi.mock("next/navigation", () => mocks);
+ *
+ * // Now import modules that use next/navigation
+ * import { MyComponent } from "./my-component";
+ * ```
  */
 
 import { vi } from "vitest";
@@ -40,6 +57,19 @@ export function createMockUseRouter() {
 
 /**
  * Creates complete next/navigation mocks with controllable pathname
+ *
+ * @example
+ * ```ts
+ * import { vi } from "vitest";
+ * import { createNextNavigationMocks } from "@/test/mocks/navigation";
+ *
+ * // IMPORTANT: Call vi.mock BEFORE importing any modules that use next/navigation
+ * const { mockUsePathname, mockRouter, mocks } = createNextNavigationMocks("/");
+ * vi.mock("next/navigation", () => mocks);
+ *
+ * // Now import modules that use next/navigation
+ * import { MyComponent } from "./my-component";
+ * ```
  */
 export function createNextNavigationMocks(initialPath = "/") {
   const { mockUsePathname } = createMockUsePathname(initialPath);
@@ -54,13 +84,4 @@ export function createNextNavigationMocks(initialPath = "/") {
       useSearchParams: () => new URLSearchParams(),
     },
   };
-}
-
-/**
- * Sets up next/navigation mocks globally (for use in setup files)
- */
-export function setupNextNavigationMocks(initialPath = "/") {
-  const { mocks } = createNextNavigationMocks(initialPath);
-  vi.mock("next/navigation", () => mocks);
-  return mocks;
 }
