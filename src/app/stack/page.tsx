@@ -35,7 +35,7 @@ async function getStackData() {
 
 export default async function StackPage() {
   const { github, manual } = await getStackData();
-  const githubEntries = Object.entries(github) as [string, number][];
+  const githubEntries = Object.entries(github);
 
   // Sort GitHub languages by bytes (most used first)
   githubEntries.sort((a, b) => b[1] - a[1]);

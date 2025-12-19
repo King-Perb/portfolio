@@ -18,7 +18,7 @@ export function AnimatedWrapper({
   isInitialMount,
   children,
 }: AnimatedWrapperProps) {
-  if (!mounted || typeof window === "undefined") {
+  if (!mounted || typeof globalThis.window === "undefined") {
     return null;
   }
 

@@ -92,7 +92,7 @@ describe("Sidebar", () => {
 
   it("sets up to call onClose callback on mobile after animation completes", async () => {
     // Mock mobile viewport (width < 768px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 375,
@@ -113,7 +113,7 @@ describe("Sidebar", () => {
 
   it("does not call onClose callback on desktop when navigation link is clicked", async () => {
     // Mock desktop viewport (width >= 768px)
-    Object.defineProperty(window, "innerWidth", {
+    Object.defineProperty(globalThis.window, "innerWidth", {
       writable: true,
       configurable: true,
       value: 1024,

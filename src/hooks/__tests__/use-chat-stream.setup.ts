@@ -2,7 +2,7 @@ import { vi } from "vitest";
 
 // Mock fetch
 export const mockFetch = vi.fn();
-global.fetch = mockFetch;
+globalThis.fetch = mockFetch;
 
 // Mock localStorage
 export const mockLocalStorage = {
@@ -12,7 +12,7 @@ export const mockLocalStorage = {
   clear: vi.fn(),
 };
 
-Object.defineProperty(window, "localStorage", {
+Object.defineProperty(globalThis.window, "localStorage", {
   value: mockLocalStorage,
   writable: true,
 });

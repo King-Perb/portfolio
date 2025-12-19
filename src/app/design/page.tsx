@@ -74,7 +74,7 @@ export default function DesignPage() {
   )
 }
 
-function ColorCard({ name, className }: { name: string; className: string }) {
+function ColorCard({ name, className }: { readonly name: string; readonly className: string }) {
   return (
     <div className={`h-24 rounded-lg flex items-center justify-center text-sm font-medium ${className}`}>
       {name}

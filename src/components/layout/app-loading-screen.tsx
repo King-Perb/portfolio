@@ -4,7 +4,7 @@ import { useEffect, useState, startTransition } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface AppLoadingScreenProps {
-  minimumDisplayTime?: number; // Minimum time to show loading screen in ms
+  readonly minimumDisplayTime?: number; // Minimum time to show loading screen in ms
 }
 
 /**

@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface TechnologyCardProps {
-  name: string;
+  readonly name: string;
 }
 
 export function TechnologyCard({ name }: TechnologyCardProps) {

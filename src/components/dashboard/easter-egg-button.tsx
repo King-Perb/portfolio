@@ -36,6 +36,7 @@ export function EasterEggButton() {
             autoPlay
             src="/Portfolio_Presentation.mp4"
           >
+            <track kind="captions" />
             Your browser does not support the video tag.
           </video>
         </div>

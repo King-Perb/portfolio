@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import type { SocialLink } from "@/lib/constants";
 
 interface SocialLinkProps {
-  link: SocialLink;
+  readonly link: SocialLink;
 }
 
 export function SocialLinkComponent({ link }: SocialLinkProps) {

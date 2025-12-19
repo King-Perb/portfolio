@@ -46,7 +46,7 @@ describe("MessageList", () => {
 
   beforeEach(() => {
     // Mock IntersectionObserver
-    global.IntersectionObserver = class IntersectionObserver {
+    globalThis.IntersectionObserver = class IntersectionObserver {
       observe = vi.fn();
       disconnect = vi.fn();
       unobserve = vi.fn();

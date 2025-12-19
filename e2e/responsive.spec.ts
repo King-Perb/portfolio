@@ -115,7 +115,7 @@ test.describe('Responsive Design', () => {
 
       // Check text contrast (basic check - text should be visible)
       const textColor = await heading.evaluate((el) => {
-        const styles = window.getComputedStyle(el);
+        const styles = globalThis.window.getComputedStyle(el);
         return styles.color;
       });
       expect(textColor).not.toBe('transparent');

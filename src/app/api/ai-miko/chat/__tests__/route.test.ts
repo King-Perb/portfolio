@@ -15,7 +15,7 @@ vi.mock("openai", () => {
     messageCreate: ReturnType<typeof vi.fn>;
     runCreate: ReturnType<typeof vi.fn>;
   }
-  (global as typeof globalThis & { __openaiMocks?: OpenAIMocks }).__openaiMocks = {
+  (globalThis as typeof globalThis & { __openaiMocks?: OpenAIMocks }).__openaiMocks = {
     threadCreate,
     messageCreate,
     runCreate,
@@ -50,7 +50,7 @@ interface OpenAIMocks {
   runCreate: ReturnType<typeof vi.fn>;
 }
 const getMocks = (): OpenAIMocks => {
-  const mocks = (global as typeof globalThis & { __openaiMocks?: OpenAIMocks }).__openaiMocks;
+  const mocks = (globalThis as typeof globalThis & { __openaiMocks?: OpenAIMocks }).__openaiMocks;
   if (!mocks) {
     throw new Error("OpenAI mocks not initialized");
   }

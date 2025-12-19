@@ -35,7 +35,7 @@ type GitHubRepo = Awaited<ReturnType<Octokit["rest"]["repos"]["listForAuthentica
 
 describe("transformRepoToProject", () => {
   // Create a minimal mock repo with only the fields we actually use
-  // Using type assertion since we only need the fields used by transformRepoToProject
+  // Using satisfies to ensure type safety without unnecessary assertion
   const mockRepo = {
     id: 1,
     name: "test-repo",
@@ -49,7 +49,7 @@ describe("transformRepoToProject", () => {
     language: "TypeScript",
     languages_url: "https://api.github.com/repos/user/test-repo/languages",
     private: false,
-  } as GitHubRepo;
+  } satisfies Partial<GitHubRepo> as GitHubRepo;
 
   it("should transform GitHub repo to Project with correct basic fields", () => {
     const languages = ["TypeScript", "JavaScript"];
@@ -69,7 +69,7 @@ describe("transformRepoToProject", () => {
     const repoWithoutDescription = {
       ...mockRepo,
       description: null,
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(repoWithoutDescription, { languages: [] });
 
     expect(project.description).toBe("No description available");
@@ -79,7 +79,7 @@ describe("transformRepoToProject", () => {
     const recentRepo = {
       ...mockRepo,
       updated_at: new Date().toISOString(), // Today
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(recentRepo, { languages: [] });
 
     expect(project.status).toBe("Active");
@@ -92,7 +92,7 @@ describe("transformRepoToProject", () => {
     const oldRepo = {
       ...mockRepo,
       updated_at: oldDate.toISOString(),
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(oldRepo, { languages: [] });
 
     expect(project.status).toBe("Archived");
@@ -105,7 +105,7 @@ describe("transformRepoToProject", () => {
     const maintainedRepo = {
       ...mockRepo,
       updated_at: sixMonthsAgo.toISOString(),
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(maintainedRepo, { languages: [] });
 
     expect(project.status).toBe("Maintained");
@@ -116,7 +116,7 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       description: "This is a beta project",
       updated_at: new Date().toISOString(),
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(betaRepo, { languages: [] });
 
     expect(project.status).toBe("Beta");
@@ -127,7 +127,7 @@ describe("transformRepoToProject", () => {
       ...mockRepo,
       description: "WIP project - work in progress",
       updated_at: new Date().toISOString(),
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(wipRepo, { languages: [] });
 
     expect(project.status).toBe("Beta");
@@ -144,7 +144,7 @@ describe("transformRepoToProject", () => {
     const repoWithoutHomepage = {
       ...mockRepo,
       homepage: null,
-    } as GitHubRepo;
+    } satisfies Partial<GitHubRepo> as GitHubRepo;
     const project = transformRepoToProject(repoWithoutHomepage, { languages: [] });
 
     expect(project.liveUrl).toBeUndefined();

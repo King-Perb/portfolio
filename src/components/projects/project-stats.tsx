@@ -3,13 +3,13 @@ import type { Project } from "@/types";
 import type { LucideIcon } from "lucide-react";
 
 interface ProjectStatsProps {
-  project: Project;
+  readonly project: Project;
 }
 
 interface StatItemProps {
-  icon: LucideIcon;
-  value: number;
-  title: string;
+  readonly icon: LucideIcon;
+  readonly value: number;
+  readonly title: string;
 }
 
 function StatItem({ icon: Icon, value, title }: StatItemProps) {

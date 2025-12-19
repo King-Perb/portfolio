@@ -3,10 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface StackCardProps {
-  language: string;
-  bytes: number;
-  totalBytes: number;
-  index: number;
+  readonly language: string;
+  readonly bytes: number;
+  readonly totalBytes: number;
+  readonly index: number;
 }
 
 export function StackCard({ language, bytes, totalBytes, index }: StackCardProps) {

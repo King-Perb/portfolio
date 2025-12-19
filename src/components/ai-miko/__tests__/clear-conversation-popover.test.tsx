@@ -52,20 +52,12 @@ vi.mock("@/components/ui/popover", () => ({
     }
 
     return (
-      <div
+      <button
         data-testid="popover-trigger"
-        role="button"
-        tabIndex={0}
         onClick={handleClick}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleClick();
-          }
-        }}
       >
         {children}
-      </div>
+      </button>
     );
   },
   PopoverContent: ({ children, align, __popoverOpen }: {
