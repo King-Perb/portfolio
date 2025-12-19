@@ -58,10 +58,8 @@ for commit in $commits_being_pushed; do
 done
 
 # If no individual commit check worked, fall back to comparing against remote
-if [[ "$has_code_changes" = false ]]; then
-  if scripts/check-code-changes.sh "$upstream_branch"; then
-    has_code_changes=true
-  fi
+if [[ "$has_code_changes" = false ]] && scripts/check-code-changes.sh "$upstream_branch"; then
+  has_code_changes=true
 fi
 
 if [[ "$has_code_changes" = true ]]; then

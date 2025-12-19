@@ -74,7 +74,6 @@ describe("TypingIndicator", () => {
     // Check for animation delay classes
     const firstDot = dots[0] as HTMLElement;
     const secondDot = dots[1] as HTMLElement;
-    const thirdDot = dots[2] as HTMLElement;
 
     expect(firstDot).toHaveClass("[animation-delay:-0.3s]");
     expect(secondDot).toHaveClass("[animation-delay:-0.15s]");

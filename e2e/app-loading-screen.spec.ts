@@ -4,8 +4,8 @@ test.describe('App Loading Screen', () => {
   test('should display loading screen on initial page load', async ({ page }) => {
     await page.goto('/');
 
-    // Check that loading screen appears with role="status"
-    const loadingScreen = page.getByRole('status', { name: 'Loading application' });
+    // Check that loading screen appears (using output element for accessibility)
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
   });
 
@@ -13,7 +13,7 @@ test.describe('App Loading Screen', () => {
     await page.goto('/');
 
     // Wait for loading screen to appear
-    const loadingScreen = page.getByRole('status', { name: 'Loading application' });
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Check that animation container exists (Lottie animation should be inside)
@@ -24,7 +24,7 @@ test.describe('App Loading Screen', () => {
   test('should cover full screen with fixed positioning', async ({ page }) => {
     await page.goto('/');
 
-    const loadingScreen = page.getByRole('status', { name: 'Loading application' });
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Check that loading screen has fixed positioning and covers full screen
@@ -38,7 +38,7 @@ test.describe('App Loading Screen', () => {
   test('should fade out and dismiss after minimum display time', async ({ page }) => {
     await page.goto('/');
 
-    const loadingScreen = page.getByRole('status', { name: 'Loading application' });
+    const loadingScreen = page.getByLabel('Loading application');
 
     // Wait for loading screen to appear
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
@@ -51,7 +51,7 @@ test.describe('App Loading Screen', () => {
   test('should only appear on initial load, not on SPA navigation', async ({ page, viewport }) => {
     // Initial load - should see loading screen (homepage redirects to /ai-miko)
     await page.goto('/');
-    const loadingScreen = page.getByRole('status', { name: 'Loading application' });
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Wait for it to dismiss
@@ -114,11 +114,15 @@ test.describe('App Loading Screen', () => {
   test('should have correct accessibility attributes', async ({ page }) => {
     await page.goto('/');
 
-    const loadingScreen = page.getByRole('status', { name: 'Loading application' });
+    const loadingScreen = page.getByLabel('Loading application');
     await expect(loadingScreen).toBeVisible({ timeout: 2000 });
 
     // Verify accessibility attributes
-    await expect(loadingScreen).toHaveAttribute('role', 'status');
+    // <output> element is used instead of role="status" for better accessibility
     await expect(loadingScreen).toHaveAttribute('aria-label', 'Loading application');
+    await expect(loadingScreen).toHaveAttribute('aria-live', 'polite');
+    await expect(loadingScreen).toHaveAttribute('aria-busy', 'true');
+    // Verify it's an output element
+    await expect(loadingScreen).toHaveJSProperty('tagName', 'OUTPUT');
   });
 });

@@ -93,8 +93,8 @@ export async function OverviewMetrics() {
 
     return (
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {metrics.map((metric: Metric, index: number) => (
-                <Card key={index} className="bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:shadow-[0_0_12px] hover:shadow-primary/15 group">
+            {metrics.map((metric: Metric) => (
+                <Card key={metric.label} className="bg-card/80 backdrop-blur border border-primary/20 hover:border-primary/50 transition-all hover:shadow-[0_0_12px] hover:shadow-primary/15 group">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium text-muted-foreground font-mono group-hover:text-primary transition-colors">
                             {metric.label.toUpperCase()}

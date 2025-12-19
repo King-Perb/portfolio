@@ -39,9 +39,7 @@ export function AnimatedWrapper({
         width:
           animationPhase === ANIMATION_PHASE.MOVING_RIGHT
             ? "100vw" // Show full width when border reaches right edge
-            : animationPhase === ANIMATION_PHASE.MOVING_BACK
-            ? `${SIDEBAR_CONFIG.WIDTH}px` // Shrink back to sidebar width as line returns
-            : `${SIDEBAR_CONFIG.WIDTH}px`, // Show only sidebar width when idle
+            : `${SIDEBAR_CONFIG.WIDTH}px`, // Show sidebar width when idle or moving back
       }}
       transition={{
         duration: isInitialMount ? 0 : ANIMATION_CONFIG.DURATION / 1000, // No transition on initial mount

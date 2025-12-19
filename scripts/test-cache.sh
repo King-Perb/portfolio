@@ -10,6 +10,7 @@ get_code_hash() {
   # Get all tracked files, cat their contents (ignoring whitespace), and hash
   # This gives us a stable hash that doesn't change based on what's on remote
   git ls-files -z | xargs -0 cat 2>/dev/null | tr -d '[:space:]' | md5sum | awk '{print $1}'
+  return 0
 }
 
 # Save the current code hash to cache
@@ -18,6 +19,7 @@ save_cache() {
   local timestamp=$(date +%s)
   echo "$code_hash $timestamp" > "$CACHE_FILE"
   echo "Test cache saved: $code_hash"
+  return 0
 }
 
 # Check if current code state matches cache
@@ -43,6 +45,7 @@ check_cache() {
 clear_cache() {
   rm -f "$CACHE_FILE"
   echo "Test cache cleared"
+  return 0
 }
 
 # Main command handler

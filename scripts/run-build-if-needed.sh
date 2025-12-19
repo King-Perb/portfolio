@@ -10,6 +10,7 @@ get_code_hash() {
   # Get all tracked files, cat their contents (ignoring whitespace), and hash
   # This gives us a stable hash that doesn't change based on what's on remote
   git ls-files -z | xargs -0 cat 2>/dev/null | tr -d '[:space:]' | md5sum | awk '{print $1}'
+  return 0
 }
 
 # Check if cache matches
@@ -30,6 +31,7 @@ check_build_cache() {
 save_build_cache() {
   local code_hash=$(get_code_hash)
   echo "$code_hash $(date +%s)" > "$CACHE_FILE"
+  return 0
 }
 
 # Get the current branch
@@ -87,10 +89,8 @@ for commit in $commits_being_pushed; do
 done
 
 # If no individual commit check worked, fall back to comparing against remote
-if [[ "$has_code_changes" = false ]]; then
-  if scripts/check-code-changes.sh "$upstream_branch"; then
-    has_code_changes=true
-  fi
+if [[ "$has_code_changes" = false ]] && scripts/check-code-changes.sh "$upstream_branch"; then
+  has_code_changes=true
 fi
 
 if [[ "$has_code_changes" = true ]]; then
