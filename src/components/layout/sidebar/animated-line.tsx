@@ -2,7 +2,7 @@
 
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { ANIMATION_CONFIG, ANIMATION_PHASE, SIDEBAR_CONFIG, type AnimationPhase } from "./constants";
+import { ANIMATION_CONFIG, ANIMATION_PHASE, LINE_CONFIG, SIDEBAR_CONFIG, type AnimationPhase } from "./constants";
 
 interface AnimatedLineProps {
   readonly animationPhase: AnimationPhase;
@@ -13,7 +13,7 @@ interface AnimatedLineProps {
 // Line styling matches project card default (non-hover): border-primary/20, no shadow
 
 export function AnimatedLine({ animationPhase, mounted, isMobile = false }: AnimatedLineProps) {
-  if (!mounted || typeof globalThis.window === "undefined") {
+  if (!mounted || globalThis.window === undefined) {
     return null;
   }
 
@@ -25,12 +25,12 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
   const isAnimating = isMovingRight || isMovingBack;
 
   // Width: thin in idle, thick during animation (controlled by CSS transition with offset timing)
-  const idleWidth = isMobile ? 0.5 : 1; // px
-  const animatingWidth = isMobile ? 1.5 : 4; // px - thinner on mobile, thicker on desktop
+  const idleWidth = isMobile ? LINE_CONFIG.IDLE_WIDTH_MOBILE : LINE_CONFIG.IDLE_WIDTH_DESKTOP;
+  const animatingWidth = isMobile ? LINE_CONFIG.ANIMATING_WIDTH_MOBILE : LINE_CONFIG.ANIMATING_WIDTH_DESKTOP;
 
   // Opacity: matches project card default (20%) in idle, increases during animation
-  const idleOpacity = 0.2; // 20% - matches bg-primary/20
-  const animatingOpacity = 0.5; // 50% - more visible during animation
+  const idleOpacity = LINE_CONFIG.IDLE_OPACITY;
+  const animatingOpacity = LINE_CONFIG.ANIMATING_OPACITY;
 
   // Calculate x position based on phase
   const xPosition = isMovingRight
@@ -59,9 +59,14 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
   // Keyframe times - same for both width and opacity
   let keyframeTimes: number[] | undefined;
   if (isMovingRight) {
-    keyframeTimes = [0, 0.1, 0.8, 1]; // Start thin, quickly thick, stay thick, return thin at 80%
+    keyframeTimes = [
+      0,
+      LINE_CONFIG.KEYFRAME_TIME_THICK,
+      LINE_CONFIG.KEYFRAME_TIME_THIN,
+      LINE_CONFIG.KEYFRAME_TIME_END,
+    ]; // Start thin, quickly thick, stay thick, return thin at 80%
   } else if (isMovingBack) {
-    keyframeTimes = [0, 0.8, 1]; // Start thick, stay thick, return thin at 80%
+    keyframeTimes = [0, LINE_CONFIG.KEYFRAME_TIME_THIN, LINE_CONFIG.KEYFRAME_TIME_END]; // Start thick, stay thick, return thin at 80%
   }
 
   const lineElement = (
@@ -70,7 +75,7 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
       style={{
         left: `${SIDEBAR_CONFIG.WIDTH}px`,
         // No shadow - matches project card default state (shadow only on hover)
-        zIndex: isMobile ? 100 : SIDEBAR_CONFIG.Z_INDEX,
+        zIndex: isMobile ? SIDEBAR_CONFIG.MOBILE_Z_INDEX : SIDEBAR_CONFIG.Z_INDEX,
         pointerEvents: "none",
       }}
       initial={{
@@ -85,16 +90,16 @@ export function AnimatedLine({ animationPhase, mounted, isMobile = false }: Anim
       }}
       transition={{
         x: {
-          duration: ANIMATION_CONFIG.DURATION / 1000,
+          duration: ANIMATION_CONFIG.DURATION_SECONDS,
           ease: [0.4, 0, 0.2, 1],
         },
         width: {
-          duration: ANIMATION_CONFIG.DURATION / 1000,
+          duration: ANIMATION_CONFIG.DURATION_SECONDS,
           ease: "easeInOut",
           times: keyframeTimes,
         },
         opacity: {
-          duration: ANIMATION_CONFIG.DURATION / 1000,
+          duration: ANIMATION_CONFIG.DURATION_SECONDS,
           ease: "easeInOut",
           times: keyframeTimes,
         },

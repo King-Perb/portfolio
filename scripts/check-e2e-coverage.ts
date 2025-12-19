@@ -36,6 +36,13 @@ interface CoverageReport {
   testFiles: string[];
 }
 
+// Display constants
+const DISPLAY_CONFIG = {
+  REPORT_WIDTH: 60,
+  ROUTE_PADDING: 20,
+  FLOW_PADDING: 25,
+} as const;
+
 // Known routes in the application
 const KNOWN_ROUTES = [
   '/',
@@ -84,15 +91,22 @@ async function analyzeE2ETests(): Promise<CoverageReport> {
 
     // Check which routes are tested
     for (const routeCoverageItem of routeCoverage) {
+      const escapedRoute = routeCoverageItem.route.replaceAll('/', String.raw`\/`);
       const routePattern = new RegExp(
-        String.raw`(goto|navigate|visit|url).*['"]${routeCoverageItem.route.replaceAll('/', String.raw`\/`)}['"]`,
+        String.raw`(goto|navigate|visit|url).*['"]${escapedRoute}['"]`,
         'i'
       );
 
       if (routePattern.test(content) || content.includes(`'${routeCoverageItem.route}'`) || content.includes(`"${routeCoverageItem.route}"`)) {
         routeCoverageItem.tested = true;
         routeCoverageItem.testFiles.push(testFile);
-        routeCoverageItem.testCount += (content.match(routePattern) || []).length;
+        // Count matches using RegExp.exec() instead of match()
+        let matchCount = 0;
+        const regex = new RegExp(routePattern);
+        while (regex.exec(content) !== null) {
+          matchCount++;
+        }
+        routeCoverageItem.testCount += matchCount;
       }
     }
 
@@ -136,7 +150,7 @@ async function analyzeE2ETests(): Promise<CoverageReport> {
 
 function printReport(report: CoverageReport): void {
   console.log('\n📊 E2E Test Coverage Report\n');
-  console.log('═'.repeat(60));
+  console.log('═'.repeat(DISPLAY_CONFIG.REPORT_WIDTH));
 
   console.log('\n📈 Overall Coverage:');
   console.log(`   Routes Covered: ${report.coveredRoutes}/${report.totalRoutes} (${report.coveragePercentage.toFixed(1)}%)`);
@@ -146,7 +160,7 @@ function printReport(report: CoverageReport): void {
   report.routes
     .filter(r => r.tested)
     .forEach(route => {
-      console.log(`   ✓ ${route.route.padEnd(20)} (${route.testCount} test(s) in ${route.testFiles.length} file(s))`);
+      console.log(`   ✓ ${route.route.padEnd(DISPLAY_CONFIG.ROUTE_PADDING)} (${route.testCount} test(s) in ${route.testFiles.length} file(s))`);
       route.testFiles.forEach(file => console.log(`     └─ ${file}`));
     });
 
@@ -161,7 +175,7 @@ function printReport(report: CoverageReport): void {
   report.flows
     .filter(f => f.tested)
     .forEach(flow => {
-      console.log(`   ✓ ${flow.flow.padEnd(25)} (${flow.testFiles.length} file(s))`);
+      console.log(`   ✓ ${flow.flow.padEnd(DISPLAY_CONFIG.FLOW_PADDING)} (${flow.testFiles.length} file(s))`);
       flow.testFiles.forEach(file => console.log(`     └─ ${file}`));
     });
 
@@ -188,7 +202,7 @@ function printReport(report: CoverageReport): void {
     console.log(`   • Add e2e tests for user flows: ${missingFlows.join(', ')}`);
   }
 
-  console.log('\n' + '═'.repeat(60) + '\n');
+  console.log('\n' + '═'.repeat(DISPLAY_CONFIG.REPORT_WIDTH) + '\n');
 }
 
 // Run analysis
@@ -196,6 +210,10 @@ try {
   const results = await analyzeE2ETests();
   printReport(results);
 } catch (error) {
-  console.error('Error analyzing e2e tests:', error);
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  console.error('Error analyzing e2e tests:', errorMessage);
+  if (error instanceof Error && error.stack) {
+    console.error('Stack trace:', error.stack);
+  }
   process.exit(1);
 }
