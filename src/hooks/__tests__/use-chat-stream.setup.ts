@@ -2,7 +2,7 @@ import { vi } from "vitest";
 
 // Mock fetch
 export const mockFetch = vi.fn();
-global.fetch = mockFetch;
+globalThis.fetch = mockFetch;
 
 // Mock localStorage
 export const mockLocalStorage = {
@@ -12,7 +12,14 @@ export const mockLocalStorage = {
   clear: vi.fn(),
 };
 
-Object.defineProperty(window, "localStorage", {
+// Ensure window exists (create stub if in non-DOM environment)
+// Note: For full browser API support, ensure Vitest runs with a DOM environment
+// (e.g., jsdom or happy-dom) via vitest.config.ts: environment: 'jsdom'
+if (!globalThis.window) {
+  globalThis.window = {} as Window & typeof globalThis;
+}
+
+Object.defineProperty(globalThis.window, "localStorage", {
   value: mockLocalStorage,
   writable: true,
 });

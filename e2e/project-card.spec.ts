@@ -119,7 +119,7 @@ test.describe('Project Card Interactions', () => {
 
     // Check that hover classes are applied (border-primary/50, shadow, etc.)
     const hasHoverEffect = await firstCard.evaluate((el) => {
-      const styles = window.getComputedStyle(el);
+      const styles = globalThis.window.getComputedStyle(el);
       return styles.boxShadow !== 'none' || el.classList.toString().includes('hover');
     });
 

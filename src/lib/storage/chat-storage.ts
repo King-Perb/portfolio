@@ -5,7 +5,7 @@ const THREAD_ID_KEY = "ai-miko-thread-id";
 
 // Load messages from localStorage
 export function loadMessagesFromStorage(): ChatMessage[] {
-  if (typeof globalThis.window === "undefined") return [];
+  if (globalThis.window === undefined) return [];
 
   try {
     const stored = globalThis.window.localStorage.getItem(STORAGE_KEY);
@@ -25,7 +25,7 @@ export function loadMessagesFromStorage(): ChatMessage[] {
 
 // Load thread ID from localStorage
 export function loadThreadIdFromStorage(): string | null {
-  if (typeof globalThis.window === "undefined") return null;
+  if (globalThis.window === undefined) return null;
 
   try {
     return globalThis.window.localStorage.getItem(THREAD_ID_KEY);
@@ -37,7 +37,7 @@ export function loadThreadIdFromStorage(): string | null {
 
 // Save messages to localStorage
 export function saveMessagesToStorage(messages: ChatMessage[]): void {
-  if (typeof globalThis.window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   try {
     globalThis.window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
@@ -48,7 +48,7 @@ export function saveMessagesToStorage(messages: ChatMessage[]): void {
 
 // Save thread ID to localStorage
 export function saveThreadIdToStorage(threadId: string | null): void {
-  if (typeof globalThis.window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   try {
     if (threadId) {
@@ -63,7 +63,7 @@ export function saveThreadIdToStorage(threadId: string | null): void {
 
 // Clear all chat storage
 export function clearChatStorage(): void {
-  if (typeof globalThis.window === "undefined") return;
+  if (globalThis.window === undefined) return;
 
   try {
     globalThis.window.localStorage.removeItem(STORAGE_KEY);

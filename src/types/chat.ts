@@ -9,7 +9,7 @@ export interface ChatMessage {
    * bubble in the Miko AI chat. When present, promptId should match one of the
    * IDs in `MIKO_STARTER_PROMPTS`.
    */
-  source?: "starter-prompt" | "user" | "assistant" | string;
+  source?: "starter-prompt" | "user" | "assistant";
   promptId?: string;
 }
 

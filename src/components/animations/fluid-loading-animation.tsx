@@ -3,10 +3,10 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 interface FluidLoadingAnimationProps {
-  className?: string;
-  style?: React.CSSProperties;
-  width?: number | string;
-  height?: number | string;
+  readonly className?: string;
+  readonly style?: React.CSSProperties;
+  readonly width?: number | string;
+  readonly height?: number | string;
 }
 
 /**

@@ -1,4 +1,4 @@
-export type MikoStarterPromptCategory = "experience" | "projects" | "help" | string;
+export type MikoStarterPromptCategory = "experience" | "projects" | "help" | "frontend" | "fullstack" | "collaboration" | "growth" | "reflection";
 
 export interface MikoStarterPrompt {
   id: string;

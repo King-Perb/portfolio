@@ -7,14 +7,14 @@ import { USER_PROFILE, NAV_ITEMS } from "@/lib/constants";
 import { SIDEBAR_CONFIG } from "./constants";
 
 interface SidebarContentProps {
-  pathname: string;
-  pendingRoute?: string | null;
-  onClose?: () => void;
-  onNavClick: (href: string, e: React.MouseEvent<HTMLAnchorElement>) => void;
-  onTestClick?: () => void;
-  showTestButton?: boolean;
-  isAnimating?: boolean;
-  className?: string;
+  readonly pathname: string;
+  readonly pendingRoute?: string | null;
+  readonly onClose?: () => void;
+  readonly onNavClick: (href: string, e: React.MouseEvent<HTMLAnchorElement>) => void;
+  readonly onTestClick?: () => void;
+  readonly showTestButton?: boolean;
+  readonly isAnimating?: boolean;
+  readonly className?: string;
 }
 
 export function SidebarContent({

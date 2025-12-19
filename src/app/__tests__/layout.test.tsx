@@ -37,7 +37,7 @@ vi.mock("@/components/layout/app-loading-screen", () => ({
 vi.mock("../globals.css", () => ({}));
 
 // Mock IntersectionObserver (required by Lottie)
-global.IntersectionObserver = class IntersectionObserver {
+globalThis.IntersectionObserver = class IntersectionObserver {
   observe = vi.fn();
   disconnect = vi.fn();
   unobserve = vi.fn();

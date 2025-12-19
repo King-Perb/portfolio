@@ -85,7 +85,7 @@ async function analyzeE2ETests(): Promise<CoverageReport> {
     // Check which routes are tested
     for (const routeCoverageItem of routeCoverage) {
       const routePattern = new RegExp(
-        `(goto|navigate|visit|url).*['"]${routeCoverageItem.route.replace(/\//g, '\\/')}['"]`,
+        String.raw`(goto|navigate|visit|url).*['"]${routeCoverageItem.route.replaceAll('/', String.raw`\/`)}['"]`,
         'i'
       );
 

@@ -12,7 +12,7 @@ interface NavigationContextValue {
 
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
-export function NavigationProvider({ children }: { children: React.ReactNode }) {
+export function NavigationProvider({ children }: { readonly children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [animationPhase, setAnimationPhase] = useState<AnimationPhase>(ANIMATION_PHASE.IDLE);

@@ -5,15 +5,15 @@ import { motion } from "framer-motion";
 import { ANIMATION_CONFIG, ANIMATION_PHASE, SIDEBAR_CONFIG, type AnimationPhase } from "./constants";
 
 interface AnimatedLineProps {
-  animationPhase: AnimationPhase;
-  mounted: boolean;
-  isMobile?: boolean;
+  readonly animationPhase: AnimationPhase;
+  readonly mounted: boolean;
+  readonly isMobile?: boolean;
 }
 
 // Line styling matches project card default (non-hover): border-primary/20, no shadow
 
 export function AnimatedLine({ animationPhase, mounted, isMobile = false }: AnimatedLineProps) {
-  if (!mounted || typeof window === "undefined") {
+  if (!mounted || typeof globalThis.window === "undefined") {
     return null;
   }
 

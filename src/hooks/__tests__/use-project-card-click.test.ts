@@ -2,13 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useProjectCardClick } from "../use-project-card-click";
 import type { Project } from "@/types";
+import { mockWindowOpen } from "@/test/mocks/window";
 
 // Mock window.open
-const mockWindowOpen = vi.fn();
-Object.defineProperty(window, "open", {
-  writable: true,
-  value: mockWindowOpen,
-});
+const mockWindowOpenFn = mockWindowOpen();
 
 // Mock getProjectClickUrl
 vi.mock("@/lib/project-utils", () => ({
@@ -90,7 +87,7 @@ describe("useProjectCardClick", () => {
       result.current.handleClick();
     });
 
-    expect(mockWindowOpen).toHaveBeenCalledWith(
+    expect(mockWindowOpenFn).toHaveBeenCalledWith(
       "https://example.com",
       "_blank",
       "noopener,noreferrer"
@@ -106,7 +103,7 @@ describe("useProjectCardClick", () => {
       result.current.handleClick();
     });
 
-    expect(mockWindowOpen).not.toHaveBeenCalled();
+    expect(mockWindowOpenFn).not.toHaveBeenCalled();
   });
 
   it("calls handleClick when Enter key is pressed", () => {
@@ -126,7 +123,7 @@ describe("useProjectCardClick", () => {
     });
 
     expect(mockEvent.preventDefault).toHaveBeenCalled();
-    expect(mockWindowOpen).toHaveBeenCalledWith(
+    expect(mockWindowOpenFn).toHaveBeenCalledWith(
       "https://example.com",
       "_blank",
       "noopener,noreferrer"
@@ -150,7 +147,7 @@ describe("useProjectCardClick", () => {
     });
 
     expect(mockEvent.preventDefault).toHaveBeenCalled();
-    expect(mockWindowOpen).toHaveBeenCalledWith(
+    expect(mockWindowOpenFn).toHaveBeenCalledWith(
       "https://example.com",
       "_blank",
       "noopener,noreferrer"
@@ -174,7 +171,7 @@ describe("useProjectCardClick", () => {
     });
 
     expect(mockEvent.preventDefault).not.toHaveBeenCalled();
-    expect(mockWindowOpen).not.toHaveBeenCalled();
+    expect(mockWindowOpenFn).not.toHaveBeenCalled();
   });
 
   it("does not call handleClick when no URL is set", () => {
@@ -192,6 +189,6 @@ describe("useProjectCardClick", () => {
     });
 
     expect(mockEvent.preventDefault).not.toHaveBeenCalled();
-    expect(mockWindowOpen).not.toHaveBeenCalled();
+    expect(mockWindowOpenFn).not.toHaveBeenCalled();
   });
 });

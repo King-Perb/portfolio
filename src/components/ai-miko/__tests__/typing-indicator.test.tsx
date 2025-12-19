@@ -83,14 +83,14 @@ describe("TypingIndicator", () => {
   it("renders dots with correct styling", () => {
     const { container } = render(<TypingIndicator />);
 
-    const dots = container.querySelectorAll(".h-2.w-2.bg-primary\\/50.rounded-full");
+    const dots = container.querySelectorAll(String.raw`.h-2.w-2.bg-primary\/50.rounded-full`);
     expect(dots.length).toBeGreaterThanOrEqual(3);
   });
 
   it("renders message bubble container", () => {
     const { container } = render(<TypingIndicator />);
 
-    const bubble = container.querySelector(".bg-card\\/80.border.border-primary\\/20.rounded-2xl");
+    const bubble = container.querySelector(String.raw`.bg-card\/80.border.border-primary\/20.rounded-2xl`);
     expect(bubble).toBeInTheDocument();
   });
 
