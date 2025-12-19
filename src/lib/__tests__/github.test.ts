@@ -13,17 +13,20 @@ const mockListCommits = vi.fn();
 const mockListForAuthenticatedUser = vi.fn();
 
 vi.mock("@octokit/rest", () => {
-  return {
-    Octokit: vi.fn().mockImplementation(() => ({
-      rest: {
-        repos: {
-          listForAuthenticatedUser: mockListForAuthenticatedUser,
-          listLanguages: mockListLanguages,
-          listCommits: mockListCommits,
-        },
+  // Use a class constructor for Vitest 4 compatibility
+  class MockOctokit {
+    rest = {
+      repos: {
+        listForAuthenticatedUser: mockListForAuthenticatedUser,
+        listLanguages: mockListLanguages,
+        listCommits: mockListCommits,
       },
-      paginate: mockPaginate,
-    })),
+    };
+    paginate = mockPaginate;
+  }
+
+  return {
+    Octokit: MockOctokit,
   };
 });
 

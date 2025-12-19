@@ -21,8 +21,9 @@ vi.mock("openai", () => {
     runCreate,
   };
 
-  const MockOpenAI = vi.fn().mockImplementation(() => ({
-    beta: {
+  // Use a class constructor for Vitest 4 compatibility
+  class MockOpenAI {
+    beta = {
       threads: {
         create: threadCreate,
         messages: {
@@ -32,8 +33,8 @@ vi.mock("openai", () => {
           create: runCreate,
         },
       },
-    },
-  }));
+    };
+  }
 
   return {
     default: MockOpenAI,
