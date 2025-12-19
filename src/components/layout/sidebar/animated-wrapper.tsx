@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { ANIMATION_CONFIG, ANIMATION_PHASE, SIDEBAR_CONFIG, type AnimationPhase } from "./constants";
 import { FluidLoadingAnimation } from "@/components/animations/fluid-loading-animation";
 
+const VIEWPORT_CENTER = "50vw";
+
 interface AnimatedWrapperProps {
   animationPhase: AnimationPhase;
   mounted: boolean;
@@ -18,7 +20,7 @@ export function AnimatedWrapper({
   isInitialMount,
   children,
 }: AnimatedWrapperProps) {
-  if (!mounted || typeof globalThis.window === "undefined") {
+  if (!mounted || globalThis.window === undefined) {
     return null;
   }
 
@@ -42,7 +44,7 @@ export function AnimatedWrapper({
             : `${SIDEBAR_CONFIG.WIDTH}px`, // Show sidebar width when idle or moving back
       }}
       transition={{
-        duration: isInitialMount ? 0 : ANIMATION_CONFIG.DURATION / 1000, // No transition on initial mount
+        duration: isInitialMount ? 0 : ANIMATION_CONFIG.DURATION_SECONDS, // No transition on initial mount
         ease: [0.4, 0, 0.2, 1],
       }}
     >
@@ -54,10 +56,10 @@ export function AnimatedWrapper({
         <div
           className="absolute top-1/2"
           style={{
-            left: "50vw", // Center of viewport
+            left: VIEWPORT_CENTER, // Center of viewport
             transform: "translate(-50%, -50%)",
             pointerEvents: "none",
-            zIndex: 10, // Above sidebar content
+            zIndex: SIDEBAR_CONFIG.ANIMATION_OVERLAY_Z_INDEX, // Above sidebar content
           }}
         >
           <FluidLoadingAnimation />
